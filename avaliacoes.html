@@ -930,20 +930,47 @@ function mostrarTela(id){
   document.getElementById(id).classList.remove('hidden');
 }
 
-function voltarInicio(){
-  document.getElementById('telaInicial').classList.remove('hidden');
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getDatabase,
+    ref,
+    set,
+    push,
+    onValue
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-  const telas = [
-    'avaliacaoFisio',
-    'avaliacaoPilates',
-    'avaliacaoPelvica',
-    'avaliacaoRecovery'
-  ];
+  const firebaseConfig = {
+    apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
+    authDomain: "sistemaavaliacoes-26513.firebaseapp.com",
+    databaseURL: "https://sistemaavaliacoes-26513-default-rtdb.firebaseio.com",
+    projectId: "sistemaavaliacoes-26513",
+    storageBucket: "sistemaavaliacoes-26513.appspot.com",
+    messagingSenderId: "451297691104",
+    appId: "1:451297691104:web:1f886ad169a54c4f8fd785"
+  };
 
-  telas.forEach(tela => {
-    document.getElementById(tela).classList.add('hidden');
-  });
-}
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  console.log("🔥 Firebase conectado com sucesso!");
+
+  function voltarInicio(){
+    document.getElementById('telaInicial').classList.remove('hidden');
+
+    const telas = [
+      'avaliacaoFisio',
+      'avaliacaoPilates',
+      'avaliacaoPelvica',
+      'avaliacaoRecovery'
+    ];
+
+    telas.forEach(tela => {
+      document.getElementById(tela).classList.add('hidden');
+    });
+  }
+
+  window.voltarInicio = voltarInicio;
 </script>
 
 </body>
