@@ -946,10 +946,14 @@ function voltarInicio(){
 }
 </script>
 <script type="module">
-  // Importações
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, set, push, onValue } 
-    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import {
+    getDatabase,
+    ref,
+    set,
+    push,
+    onValue
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
   // Configuração do Firebase
   const firebaseConfig = {
@@ -962,10 +966,10 @@ function voltarInicio(){
     appId: "1:451297691104:web:1f886ad169a54c4f8fd785"
   };
 
-  // Inicializa Firebase
+  // Inicializa o Firebase
   const app = initializeApp(firebaseConfig);
 
-  // Inicializa Realtime Database
+  // Inicializa o Realtime Database
   const database = getDatabase(app);
 
   console.log("🔥 Firebase Realtime conectado com sucesso!");
@@ -973,4 +977,5 @@ function voltarInicio(){
 
 </body>
 </html>
+
 
