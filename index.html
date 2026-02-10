@@ -1052,38 +1052,38 @@ window.verAvaliacao = function(tipo,id){
     `;
   });
 }
+<script type="module">
+  // 🔥 Imports do Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getDatabase,
+    ref,
+    push,
+    set,
+    onValue,
+    update,
+    remove
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-window.editarAvaliacao = function(tipo,id){
-  const novoNome = prompt('Novo nome:');
-  if(!novoNome) return;
-
-  update(ref(db, `avaliacoes/${tipo}/${id}`), { nome: novoNome });
-}
-
-window.apagarAvaliacao = function(tipo,id){
-  if(confirm('Deseja apagar esta avaliação?')){
-    remove(ref(db, `avaliacoes/${tipo}/${id}`));
-  }
-}
-
-
-  // 🔥 Configuração do Firebase (A SUA – já correta)
+  // 🔥 Configuração do Firebase (SUA)
   const firebaseConfig = {
     apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
-    authDomain:  "sistemaavaliacoes-26513.firebaseapp.com",
+    authDomain: "sistemaavaliacoes-26513.firebaseapp.com",
     databaseURL: "https://sistemaavaliacoes-26513-default-rtdb.firebaseio.com",
     projectId: "sistemaavaliacoes-26513",
     storageBucket: "sistemaavaliacoes-26513.firebasestorage.app",
     messagingSenderId: "451297691104",
-    appId:"1:451297691104:web:1f886ad169a54c4f8fd785"
-     }; 
+    appId: "1:451297691104:web:1f886ad169a54c4f8fd785"
+  };
 
   // 🔥 Inicializa Firebase
   const app = initializeApp(firebaseConfig);
-  const database = getDatabase(app);
 
-  // 🔥 Torna disponível para o resto do sistema
-  window.database = database;
+  // 🔥 Conecta ao Realtime Database
+  const db = getDatabase(app);
+
+  // 🌍 Torna global (para o resto do sistema funcionar)
+  window.db = db;
   window.ref = ref;
   window.push = push;
   window.set = set;
@@ -1096,6 +1096,7 @@ window.apagarAvaliacao = function(tipo,id){
 
 </body>
 </html>
+
 
 
 
