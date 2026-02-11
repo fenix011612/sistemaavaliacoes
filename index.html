@@ -943,7 +943,7 @@ function mostrarTela(id){
     'avaliacaoRecovery'
   ];
 
-  telas.forEach(tela => {
+  telas.forEach(tela=>{
     document.getElementById(tela).classList.add('hidden');
   });
 
@@ -960,98 +960,19 @@ function voltarInicio(){
     'avaliacaoRecovery'
   ];
 
-  telas.forEach(tela => {
+  telas.forEach(tela=>{
     document.getElementById(tela).classList.add('hidden');
   });
 }
-  
-let tipoAtual = '';
-let avaliacaoAtualId = '';
 
 function voltarLista(){
   document.getElementById('detalheAvaliacao').classList.add('hidden');
   document.getElementById('listaAvaliacoes').classList.remove('hidden');
 }
-
-function abrirLista(tipo){
-  tipoAtual = tipo;
-
-  document.getElementById('telaInicial').classList.add('hidden');
-  document.getElementById('listaAvaliacoes').classList.remove('hidden');
-
-  const titulos = {
-    avaliacaoFisio:'🩺 Fisioterapia',
-    avaliacaoPilates:'🤸 Pilates',
-    avaliacaoPelvica:'🌸 Pélvica',
-    avaliacaoRecovery:'⚡ Recovery'
-  };
-
-  document.getElementById('tituloLista').innerText = titulos[tipo];
-  carregarAvaliacoes(tipo);
-}
-  
 </script>
+
 <script type="module">
-  // 🔥 Importações Firebase via CDN
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import {
-    getDatabase,
-    ref,
-    push,
-    set,
-    onValue,
-    update,
-    remove
-  } from https://sistemaavaliacoes-26513-default-rtdb.firebaseio.com;
-  
-  window.carregarAvaliacoes = function(tipo){
-  const lista = document.getElementById('listaContainer');
-  lista.innerHTML = 'Carregando...';
 
-  const caminho = ref(db, `avaliacoes/${tipo}`);
-
-  onValue(caminho, snapshot=>{
-    lista.innerHTML = '';
-
-    if(!snapshot.exists()){
-      lista.innerHTML = '<p>Nenhuma avaliação encontrada.</p>';
-      return;
-    }
-
-    snapshot.forEach(item=>{
-      const dados = item.val();
-      const id = item.key;
-
-      lista.innerHTML += `
-        <div class="card">
-          <h3>${dados.nome || 'Sem nome'}</h3>
-          <button onclick="verAvaliacao('${tipo}','${id}')">Ver completa</button>
-          <button onclick="editarAvaliacao('${tipo}','${id}')">Editar</button>
-          <button onclick="apagarAvaliacao('${tipo}','${id}')">Apagar</button>
-        </div>
-      `;
-    });
-  });
-}
-
-window.verAvaliacao = function(tipo,id){
-  document.getElementById('listaAvaliacoes').classList.add('hidden');
-  document.getElementById('detalheAvaliacao').classList.remove('hidden');
-
-  const detalhes = document.getElementById('detalhesContainer');
-  detalhes.innerHTML = 'Carregando...';
-
-  onValue(ref(db, `avaliacoes/${tipo}/${id}`), snap=>{
-    const d = snap.val();
-    detalhes.innerHTML = `
-      <div class="card">
-        <p><b>Nome:</b> ${d.nome}</p>
-        <p><b>Data:</b> ${d.data}</p>
-        <p><b>Queixa:</b> ${d.queixa || '-'}</p>
-      </div>
-    `;
-  });
-}<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getDatabase,
@@ -1076,21 +997,94 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-window.db = db;
-window.ref = ref;
-window.push = push;
-window.set = set;
-window.onValue = onValue;
-window.update = update;
-window.remove = remove;
-
 console.log("🔥 Firebase conectado com sucesso!");
+
+/* ================= CARREGAR LISTA ================= */
+
+window.carregarAvaliacoes = function(tipo){
+
+  const lista = document.getElementById('listaContainer');
+  lista.innerHTML = "Carregando...";
+
+  const caminho = ref(db, `avaliacoes/${tipo}`);
+
+  onValue(caminho, snapshot=>{
+
+    lista.innerHTML = "";
+
+    if(!snapshot.exists()){
+      lista.innerHTML = "<p>Nenhuma avaliação encontrada.</p>";
+      return;
+    }
+
+    snapshot.forEach(item=>{
+      const dados = item.val();
+      const id = item.key;
+
+      lista.innerHTML += `
+        <div class="card">
+          <h3>${dados.nome || "Sem nome"}</h3>
+          <button onclick="verAvaliacao('${tipo}','${id}')">Ver completa</button>
+          <button onclick="editarAvaliacao('${tipo}','${id}')">Editar</button>
+          <button onclick="apagarAvaliacao('${tipo}','${id}')">Apagar</button>
+        </div>
+      `;
+    });
+
+  });
+};
+
+/* ================= VER ================= */
+
+window.verAvaliacao = function(tipo,id){
+
+  document.getElementById('listaAvaliacoes').classList.add('hidden');
+  document.getElementById('detalheAvaliacao').classList.remove('hidden');
+
+  const detalhes = document.getElementById('detalhesContainer');
+  detalhes.innerHTML = "Carregando...";
+
+  onValue(ref(db, `avaliacoes/${tipo}/${id}`), snap=>{
+
+    const d = snap.val();
+
+    detalhes.innerHTML = `
+      <div class="card">
+        <p><b>Nome:</b> ${d.nome || "-"}</p>
+        <p><b>Data:</b> ${d.data || "-"}</p>
+        <p><b>Queixa:</b> ${d.queixa || "-"}</p>
+      </div>
+    `;
+  });
+};
+
+/* ================= EDITAR ================= */
+
+window.editarAvaliacao = function(tipo,id){
+
+  const novoNome = prompt("Novo nome:");
+  if(!novoNome) return;
+
+  update(ref(db, `avaliacoes/${tipo}/${id}`), {
+    nome: novoNome
+  });
+
+};
+
+/* ================= APAGAR ================= */
+
+window.apagarAvaliacao = function(tipo,id){
+
+  if(confirm("Deseja apagar esta avaliação?")){
+    remove(ref(db, `avaliacoes/${tipo}/${id}`));
+  }
+
+};
+
 </script>
 
 </body>
 </html>
-
-
 
 
 
