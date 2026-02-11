@@ -550,6 +550,7 @@ button:hover{
 
 <!-- ================= AVALIAÇÃO PÉLVICA ================= -->
 <section id="avaliacaoPelvica" class="hidden">
+  <form>
  <section id="pelvica" class="screen">
 
   <header>
@@ -725,6 +726,11 @@ button:hover{
       <div>Assinatura do Profissional</div>
     </div>
   </div>
+<div class="card">
+  <button type="submit">💾 Salvar Avaliação</button>
+</div>
+
+</form>
 
 </section>
 
@@ -732,6 +738,9 @@ button:hover{
 
 <!-- ================= AVALIAÇÃO RECOVERY ================= -->
 <section id="avaliacaoRecovery" class="hidden">
+  
+<form>
+  
  <section id="recovery" class="screen">
 
   <header>
@@ -927,6 +936,11 @@ button:hover{
       <div>Assinatura do Profissional</div>
     </div>
   </div>
+<div class="card">
+  <button type="submit">💾 Salvar Avaliação</button>
+</div>
+
+</form>
 
 </section>
 
@@ -998,6 +1012,43 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 console.log("🔥 Firebase conectado com sucesso!");
+  /* ================= SALVAR AVALIAÇÕES ================= */
+
+function salvarFormulario(form, tipo){
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const nomeInput = form.querySelector("input[type='text']");
+    const dataInput = form.querySelector("input[type='date']");
+    const queixaInput = form.querySelector("textarea");
+
+    const dados = {
+      nome: nomeInput ? nomeInput.value : "",
+      data: dataInput ? dataInput.value : "",
+      queixa: queixaInput ? queixaInput.value : "",
+      criadoEm: new Date().toLocaleString()
+    };
+
+    const caminho = ref(db, `avaliacoes/${tipo}`);
+    push(caminho, dados);
+
+    alert("✅ Avaliação salva com sucesso!");
+
+    form.reset();
+    voltarInicio();
+  });
+
+}
+
+/* Conectar formulários */
+
+const formFisio = document.querySelector("#avaliacaoFisio form");
+const formPilates = document.querySelector("#avaliacaoPilates form");
+
+if(formFisio) salvarFormulario(formFisio, "fisio");
+if(formPilates) salvarFormulario(formPilates, "pilates");
+
 
 /* ================= CARREGAR LISTA ================= */
 
@@ -1085,6 +1136,7 @@ window.apagarAvaliacao = function(tipo,id){
 
 </body>
 </html>
+
 
 
 
