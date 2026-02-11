@@ -1051,51 +1051,45 @@ window.verAvaliacao = function(tipo,id){
       </div>
     `;
   });
-}
-<script type="module">
-  // 🔥 Imports do Firebase
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import {
-    getDatabase,
-    ref,
-    push,
-    set,
-    onValue,
-    update,
-    remove
-  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+}<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  push,
+  set,
+  onValue,
+  update,
+  remove
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-  // 🔥 Configuração do Firebase (SUA)
-  const firebaseConfig = {
-    apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
-    authDomain: "sistemaavaliacoes-26513.firebaseapp.com",
-    databaseURL: "https://sistemaavaliacoes-26513-default-rtdb.firebaseio.com",
-    projectId: "sistemaavaliacoes-26513",
-    storageBucket: "sistemaavaliacoes-26513.firebasestorage.app",
-    messagingSenderId: "451297691104",
-    appId: "1:451297691104:web:1f886ad169a54c4f8fd785"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
+  authDomain: "sistemaavaliacoes-26513.firebaseapp.com",
+  databaseURL: "https://sistemaavaliacoes-26513-default-rtdb.firebaseio.com",
+  projectId: "sistemaavaliacoes-26513",
+  storageBucket: "sistemaavaliacoes-26513.firebasestorage.app",
+  messagingSenderId: "451297691104",
+  appId: "1:451297691104:web:1f886ad169a54c4f8fd785"
+};
 
-  // 🔥 Inicializa Firebase
-  const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-  // 🔥 Conecta ao Realtime Database
-  const db = getDatabase(app);
+window.db = db;
+window.ref = ref;
+window.push = push;
+window.set = set;
+window.onValue = onValue;
+window.update = update;
+window.remove = remove;
 
-  // 🌍 Torna global (para o resto do sistema funcionar)
-  window.db = db;
-  window.ref = ref;
-  window.push = push;
-  window.set = set;
-  window.onValue = onValue;
-  window.update = update;
-  window.remove = remove;
-
-  console.log("🔥 Firebase Realtime Database conectado com sucesso!");
+console.log("🔥 Firebase conectado com sucesso!");
 </script>
 
 </body>
 </html>
+
 
 
 
