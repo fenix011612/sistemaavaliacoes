@@ -1042,10 +1042,13 @@ function salvarFormulario(form, tipo){
 }
 
 /* Conectar formulários */
-
+const formPelvica = document.querySelector("#avaliacaoPelvica form");
+const formRecovery = document.querySelector("#avaliacaoRecovery form");
 const formFisio = document.querySelector("#avaliacaoFisio form");
 const formPilates = document.querySelector("#avaliacaoPilates form");
 
+if(formPelvica) salvarFormulario(formPelvica, "pelvica");
+if(formRecovery) salvarFormulario(formRecovery, "recovery");
 if(formFisio) salvarFormulario(formFisio, "fisio");
 if(formPilates) salvarFormulario(formPilates, "pilates");
 
@@ -1136,6 +1139,7 @@ window.apagarAvaliacao = function(tipo,id){
 
 </body>
 </html>
+
 
 
 
