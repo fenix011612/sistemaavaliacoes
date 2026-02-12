@@ -6,91 +6,115 @@
 <title>Sistema de Avaliações</title>
 
 <style>
-body{
-  font-family: Arial, sans-serif;
-  background:#f4f6f9;
-  margin:0;
-  padding:20px;
+:root{
+  --lilas:#7b6cf6;
+  --ciano:#00cfe8;
+  --bg:#f4f6fb;
 }
 
-h1{text-align:center;}
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:var(--bg);
+}
+
+header{
+  background:linear-gradient(135deg,var(--lilas),var(--ciano));
+  padding:25px;
+  color:white;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
 
 .container{
-  max-width:1000px;
-  margin:auto;
+  max-width:1100px;
+  margin:30px auto;
+  padding:20px;
 }
 
 .card{
   background:white;
+  border-radius:16px;
   padding:20px;
-  border-radius:12px;
-  margin-bottom:15px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  margin-bottom:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.08);
 }
+
+h3{
+  color:var(--lilas);
+  margin-top:0;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  margin:6px 0;
+}
+
+textarea{min-height:150px;}
 
 button{
-  padding:8px 12px;
-  margin:4px 2px;
+  padding:8px 14px;
   border:none;
-  border-radius:6px;
+  border-radius:8px;
   cursor:pointer;
+  margin:4px 2px;
 }
 
-.btn-primary{background:#4CAF50;color:white;}
+.btn-primary{
+  background:linear-gradient(135deg,var(--lilas),var(--ciano));
+  color:white;
+}
+
 .btn-danger{background:#e53935;color:white;}
 .btn-edit{background:#1e88e5;color:white;}
 .btn-secondary{background:#757575;color:white;}
 
-input,select,textarea{
-  padding:8px;
-  margin:5px 0;
-  width:100%;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-
-textarea{height:150px;}
-
-.filtros{
-  display:flex;
-  gap:10px;
-  margin-bottom:15px;
-}
-
-.evolucao-box{
-  background:#f1f1f1;
-  padding:10px;
-  border-radius:6px;
-  margin-bottom:10px;
+.modelo-box{
+  background:#f2f3ff;
+  padding:15px;
+  border-radius:10px;
+  margin-top:15px;
+  border-left:4px solid var(--ciano);
 }
 </style>
 </head>
 
 <body>
 
+<header>
+Sistema de Avaliações
+</header>
+
 <div class="container">
 
-<h1>Sistema de Avaliações</h1>
-
+<!-- NOVA AVALIAÇÃO -->
 <div class="card">
 <h3>Nova Avaliação</h3>
 
 <input type="text" id="nome" placeholder="Nome do paciente/aluno">
 
-<select id="tipo">
+<select id="tipo" onchange="mostrarModelo()">
 <option value="fisio">Fisioterapia</option>
 <option value="pilates">Pilates</option>
 <option value="pelvica">Pélvica</option>
 <option value="recovery">Recovery</option>
 </select>
 
+<!-- ÁREA DINÂMICA PARA MODELOS -->
+<div id="areaModelos"></div>
+
 <button class="btn-primary" onclick="salvar()">Salvar Avaliação</button>
 </div>
 
+<!-- LISTA -->
 <div class="card">
 <h3>Pesquisar Avaliações</h3>
 
-<div class="filtros">
 <input type="text" id="filtroNome" placeholder="Buscar por nome">
 <select id="filtroTipo">
 <option value="">Todos</option>
@@ -99,12 +123,12 @@ textarea{height:150px;}
 <option value="pelvica">Pélvica</option>
 <option value="recovery">Recovery</option>
 </select>
+
 <button class="btn-secondary" onclick="carregar()">Buscar</button>
-</div>
 
 <div id="listaContainer"></div>
-
 </div>
+
 </div>
 
 <script type="module">
@@ -125,24 +149,78 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+/* MOSTRAR MODELO CONFORME TIPO */
+window.mostrarModelo = function(){
+
+  const tipo = document.getElementById("tipo").value;
+  const area = document.getElementById("areaModelos");
+
+  let html = "";
+
+  if(tipo==="fisio"){
+    html = `
+      <div class="modelo-box">
+        <h4>Modelo Fisioterapia</h4>
+        <!-- FUTUROS CAMPOS FISIOTERAPIA AQUI -->
+        <p style="color:#888;">(Campos específicos da avaliação fisioterapêutica entrarão aqui)</p>
+      </div>
+    `;
+  }
+
+  if(tipo==="pilates"){
+    html = `
+      <div class="modelo-box">
+        <h4>Modelo Pilates</h4>
+        <!-- FUTUROS CAMPOS PILATES AQUI -->
+        <p style="color:#888;">(Campos específicos da avaliação de Pilates entrarão aqui)</p>
+      </div>
+    `;
+  }
+
+  if(tipo==="pelvica"){
+    html = `
+      <div class="modelo-box">
+        <h4>Modelo Pélvica</h4>
+        <!-- FUTUROS CAMPOS PÉLVICA AQUI -->
+        <p style="color:#888;">(Campos específicos da avaliação pélvica entrarão aqui)</p>
+      </div>
+    `;
+  }
+
+  if(tipo==="recovery"){
+    html = `
+      <div class="modelo-box">
+        <h4>Modelo Recovery</h4>
+        <!-- FUTUROS CAMPOS RECOVERY AQUI -->
+        <p style="color:#888;">(Campos específicos da avaliação Recovery entrarão aqui)</p>
+      </div>
+    `;
+  }
+
+  area.innerHTML = html;
+}
+
+/* SALVAR */
 window.salvar = function(){
 
   const nome = document.getElementById("nome").value;
   const tipo = document.getElementById("tipo").value;
 
-  if(!nome){ alert("Digite o nome!"); return; }
+  if(!nome){alert("Digite o nome!");return;}
 
-  const novaRef = push(ref(db, `avaliacoes/${tipo}`));
+  const novaRef = push(ref(db,`avaliacoes/${tipo}`));
 
   set(novaRef,{
     nome,
-    criadoEm: new Date().toLocaleString()
+    tipo,
+    criadoEm:new Date().toLocaleString()
   });
 
-  alert("Salvo!");
+  alert("Salvo com sucesso 💜");
   document.getElementById("nome").value="";
 }
 
+/* CARREGAR */
 window.carregar = function(){
 
   const listaDiv = document.getElementById("listaContainer");
@@ -157,23 +235,13 @@ window.carregar = function(){
     let todas=[];
 
     snapshot.forEach(child=>{
-
-      if(child.val().nome){
+      child.forEach(sub=>{
         todas.push({
-          id:child.key,
-          tipo:child.val().tipo || "fisio",
-          ...child.val()
+          id:sub.key,
+          tipo:child.key,
+          ...sub.val()
         });
-      }else{
-        child.forEach(sub=>{
-          todas.push({
-            id:sub.key,
-            tipo:child.key,
-            ...sub.val()
-          });
-        });
-      }
-
+      });
     });
 
     const filtradas = todas.filter(item=>{
@@ -183,7 +251,7 @@ window.carregar = function(){
     });
 
     if(filtradas.length===0){
-      listaDiv.innerHTML="Nenhuma encontrada.";
+      listaDiv.innerHTML="Nenhuma avaliação encontrada.";
       return;
     }
 
@@ -192,110 +260,29 @@ window.carregar = function(){
       <div class="card">
         <strong>${dados.nome}</strong><br>
         Tipo: ${dados.tipo}<br>
-        <small>${dados.criadoEm}</small><br>
+        <small>${dados.criadoEm}</small><br><br>
 
-        <button class="btn-primary" onclick="abrir('${dados.tipo}','${dados.id}')">Abrir</button>
-        <button class="btn-edit" onclick="editarAvaliacao('${dados.tipo}','${dados.id}','${dados.nome}')">Editar</button>
-        <button class="btn-danger" onclick="excluirAvaliacao('${dados.tipo}','${dados.id}')">Excluir</button>
+        <button class="btn-edit" onclick="editar('${dados.tipo}','${dados.id}','${dados.nome}')">Editar</button>
+        <button class="btn-danger" onclick="excluir('${dados.tipo}','${dados.id}')">Excluir</button>
       </div>
       `;
     });
 
   },{onlyOnce:true});
-
 }
 
-window.excluirAvaliacao = function(tipo,id){
+window.excluir = function(tipo,id){
   if(confirm("Excluir avaliação?")){
     remove(ref(db,`avaliacoes/${tipo}/${id}`));
     carregar();
   }
 }
 
-window.editarAvaliacao = function(tipo,id,nomeAtual){
+window.editar = function(tipo,id,nomeAtual){
   const novoNome = prompt("Editar nome:",nomeAtual);
   if(novoNome){
     update(ref(db,`avaliacoes/${tipo}/${id}`),{nome:novoNome});
     carregar();
-  }
-}
-
-window.abrir = function(tipo,id){
-
-  const listaDiv = document.getElementById("listaContainer");
-
-  onValue(ref(db,`avaliacoes/${tipo}/${id}`), snapshot=>{
-
-    const dados=snapshot.val();
-
-    let html=`
-    <div class="card">
-      <h2>${dados.nome}</h2>
-      <p>Tipo: ${tipo}</p>
-      <p>Criado em: ${dados.criadoEm}</p>
-
-      <h3>Nova Evolução</h3>
-      <textarea id="textoEvolucao"
-      placeholder="DATA:
-PROCEDIMENTOS:
-INTERCORRÊNCIA:
-EVOLUÇÃO DO ESTADO DE SAÚDE:
-PROFISSIONAL/REGISTRO:"></textarea>
-
-      <button class="btn-primary" onclick="salvarEvolucao('${tipo}','${id}')">Salvar Evolução</button>
-      <button class="btn-secondary" onclick="carregar()">Voltar</button>
-
-      <h3>Evoluções</h3>
-    `;
-
-    if(dados.evolucoes){
-      Object.entries(dados.evolucoes).forEach(([evId,ev])=>{
-        html+=`
-        <div class="evolucao-box">
-          <pre>${ev.texto}</pre>
-          <small>${ev.data}</small><br>
-          <button class="btn-edit" onclick="editarEvolucao('${tipo}','${id}','${evId}','${ev.texto.replace(/'/g,"")}')">Editar</button>
-          <button class="btn-danger" onclick="excluirEvolucao('${tipo}','${id}','${evId}')">Excluir</button>
-        </div>
-        `;
-      });
-    }else{
-      html+="Nenhuma evolução.";
-    }
-
-    html+="</div>";
-    listaDiv.innerHTML=html;
-
-  },{onlyOnce:true});
-}
-
-window.salvarEvolucao=function(tipo,id){
-  const texto=document.getElementById("textoEvolucao").value;
-  if(!texto){alert("Digite a evolução!");return;}
-
-  const novaRef=push(ref(db,`avaliacoes/${tipo}/${id}/evolucoes`));
-  set(novaRef,{
-    texto,
-    data:new Date().toLocaleString()
-  });
-
-  abrir(tipo,id);
-}
-
-window.excluirEvolucao=function(tipo,id,evId){
-  if(confirm("Excluir evolução?")){
-    remove(ref(db,`avaliacoes/${tipo}/${id}/evolucoes/${evId}`));
-    abrir(tipo,id);
-  }
-}
-
-window.editarEvolucao=function(tipo,id,evId,textoAtual){
-  const novoTexto=prompt("Editar evolução:",textoAtual);
-  if(novoTexto){
-    update(ref(db,`avaliacoes/${tipo}/${id}/evolucoes/${evId}`),{
-      texto:novoTexto
-    });
-    abrir(tipo,id);
   }
 }
 
