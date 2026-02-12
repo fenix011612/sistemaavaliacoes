@@ -6,998 +6,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root{
-  --lilas:#7e57c2;
-  --lilas-escuro:#5b2d8b;
-  --ciano:#26c6da;
-  --bg:linear-gradient(135deg,#f3e8ff,#e0f7fa);
-  --card:#ffffffee;
+body {
+  font-family: Arial;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
 }
-
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  padding:20px;
-  font-family:Arial, Helvetica, sans-serif;
-  background:var(--bg);
+.hidden { display: none; }
+button {
+  padding: 8px 12px;
+  margin: 5px 0;
+  cursor: pointer;
 }
-
-header{
-  background:linear-gradient(135deg,var(--lilas),var(--ciano));
-  color:#fff;
-  padding:20px;
-  border-radius:16px;
-  margin-bottom:20px;
+input, select {
+  width: 100%;
+  padding: 6px;
+  margin: 5px 0;
 }
-
-header h1{
-  margin:0;
-}
-
-button{
-  background:var(--lilas);
-  color:#fff;
-  border:none;
-  padding:12px 18px;
-  border-radius:10px;
-  cursor:pointer;
-  font-size:15px;
-}
-
-button:hover{
-  opacity:.9;
-}
-
-.card{
-  background:var(--card);
-  padding:24px;
-  border-radius:16px;
-  box-shadow:0 10px 25px rgba(0,0,0,.12);
-  margin-bottom:20px;
-}
-
-.hidden{
-  display:none;
-}
-
-.menu{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;
-}
-
-.menu button{
-  width:100%;
-  font-size:16px;
+.card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
 }
 </style>
-  <!-- ================= LISTA DE AVALIAÇÕES ================= -->
-<section id="listaAvaliacoes" class="hidden">
-  <div class="card">
-    <h2 id="tituloLista"></h2>
-    <button onclick="voltarInicio()">⬅ Voltar</button>
-  </div>
-
-  <div id="listaContainer"></div>
-</section>
-
-<!-- ================= DETALHE DA AVALIAÇÃO ================= -->
-<section id="detalheAvaliacao" class="hidden">
-  <div class="card">
-    <h2>📄 Avaliação Completa</h2>
-    <button onclick="voltarLista()">⬅ Voltar</button>
-  </div>
-
-  <div id="detalhesContainer"></div>
-</section>
-
 </head>
-
 <body>
 
-<header>
-  <h1>📋 Sistema de Avaliações</h1>
-</header>
+<h2>Sistema de Avaliações</h2>
 
-<!-- ================= TELA INICIAL ================= -->
-<section id="telaInicial" class="card">
-  <h2>🏠 Tela Inicial</h2>
-  <p>Selecione o tipo de avaliação:</p>
-
-  <div class="menu">
-    <button onclick="mostrarTela('avaliacaoFisio')">Avaliação Fisioterapia</button>
-    <button onclick="mostrarTela('avaliacaoPilates')">Avaliação Pilates</button>
-    <button onclick="mostrarTela('avaliacaoPelvica')">Avaliação Pélvica</button>
-    <button onclick="mostrarTela('avaliacaoRecovery')">Avaliação Recovery</button>
-  </div>
-</section>
-
-<!-- ================= AVALIAÇÃO FISIOTERAPIA ================= -->
-<section id="avaliacaoFisio" class="hidden">
-<div class="card">
-  <h2>🩺 Avaliação Fisioterapêutica</h2>
-
-  <button onclick="voltarInicio()">⬅ Voltar para tela inicial</button>
+<!-- MENU -->
+<div id="menu">
+<button onclick="mostrarFormulario()">Nova Avaliação</button>
+<button onclick="mostrarLista()">Ver Avaliações</button>
 </div>
 
-<form>
+<!-- FORM -->
+<div id="formulario" class="hidden">
+<h3>Nova Avaliação</h3>
 
-<div class="card">
-<h3>📌 IDENTIFICAÇÃO</h3>
+<form onsubmit="salvar(event)">
+<input name="nome" placeholder="Nome do paciente" required>
 
-<label>Nome completo</label>
-<input type="text">
+<select name="tipo" required>
+<option value="">Selecione o tipo</option>
+<option value="fisio">Fisioterapia</option>
+<option value="pilates">Pilates</option>
+<option value="pelvica">Pélvica</option>
+<option value="recovery">Recovery</option>
+</select>
 
-<div class="row">
-  <div class="col">
-    <label>Data de nascimento</label>
-    <input type="date">
-  </div>
-  <div class="col">
-    <label>Sexo</label>
-    <select>
-      <option></option>
-      <option>Masculino</option>
-      <option>Feminino</option>
-    </select>
-  </div>
-</div>
-
-<label>Telefone</label>
-<input type="text">
-
-<label>Email</label>
-<input type="email">
-
-<label>Data da Avaliação</label>
-<input type="date">
-</div>
-
-<div class="card">
-<h3>⚕️ QUEIXA PRINCIPAL</h3>
-<textarea></textarea>
-</div>
-
-<div class="card">
-<h3>📋 HISTÓRIA CLÍNICA</h3>
-<label>História da doença atual</label>
-<textarea></textarea>
-
-<label>Antecedentes pessoais</label>
-<textarea></textarea>
-
-<label>Antecedentes familiares</label>
-<textarea></textarea>
-
-<label>Uso de medicamentos</label>
-<textarea></textarea>
-</div>
-
-<div class="card">
-<h3>🏃 EXAME FÍSICO</h3>
-
-<div class="row">
-  <div class="col">
-    <label>Peso</label>
-    <input type="text">
-  </div>
-  <div class="col">
-    <label>Altura</label>
-    <input type="text">
-  </div>
-</div>
-
-<label>Postura</label>
-<textarea></textarea>
-
-<label>Marcha</label>
-<textarea></textarea>
-</div>
-
-<div class="card">
-<h3>⚙️ AVALIAÇÃO FUNCIONAL</h3>
-<label>Amplitude de movimento</label>
-<textarea></textarea>
-
-<label>Força muscular</label>
-<textarea></textarea>
-
-<label>Dor (EVA)</label>
-<input type="text">
-</div>
-
-<div class="card">
-<h3>📌 DIAGNÓSTICO FISIOTERAPÊUTICO</h3>
-<textarea></textarea>
-</div>
-
-<div class="card">
-<h3>🎯 OBJETIVOS DO TRATAMENTO</h3>
-<textarea></textarea>
-</div>
-
-<div class="card">
-<h3>🛠️ PLANO DE TRATAMENTO</h3>
-<textarea></textarea>
-</div>
-
-<div class="card">
-<h3>📝 EVOLUÇÃO DO PACIENTE</h3>
-
-<label>Data</label>
-<input type="date">
-
-<label>Evolução / Observações</label>
-<textarea placeholder="Descreva a evolução do paciente, progressos e intercorrências."></textarea>
-
-<label>Profissional responsável</label>
-<input type="text">
-</div>
-
-<div class="card">
-<button type="submit">💾 Salvar Avaliação</button>
-</div>
-
+<button type="submit">Salvar</button>
 </form>
 
-</section>
-
-<!-- ================= AVALIAÇÃO PILATES ================= -->
-<section id="avaliacaoPilates" class="hidden">
- <div class="card">
-  <h2>🤸 Avaliação de Pilates</h2>
-  <button onclick="voltarInicio()">⬅ Voltar para tela inicial</button>
+<button onclick="voltarMenu()">Voltar</button>
 </div>
 
-<form>
-
-<div class="card">
-<h3>📌 IDENTIFICAÇÃO</h3>
-
-<div class="opcoes">
-  <label><input type="checkbox"> Totalpass</label>
-  <label><input type="checkbox"> Gympass</label>
-  <label><input type="checkbox"> Gurupass</label>
-  <label><input type="checkbox"> Mensalidade</label>
+<!-- LISTA -->
+<div id="lista" class="hidden">
+<h3>Avaliações Salvas</h3>
+<div id="listaContainer"></div>
+<button onclick="voltarMenu()">Voltar</button>
 </div>
-
-<label>Parceria (se sim, qual?)</label>
-<input>
-
-<label>Nome completo</label>
-<input>
-
-<div class="row">
-  <div class="col">
-    <label>Data de nascimento</label>
-    <input type="date">
-  </div>
-  <div class="col">
-    <label>CPF</label>
-    <input>
-  </div>
-  <div class="col">
-    <label>Sexo</label>
-    <select>
-      <option></option>
-      <option>Masculino</option>
-      <option>Feminino</option>
-    </select>
-  </div>
-</div>
-
-<h4>Responsável (se menor)</h4>
-
-<label>Nome</label>
-<input>
-
-<div class="row">
-  <div class="col">
-    <label>Grau de parentesco</label>
-    <input>
-  </div>
-  <div class="col">
-    <label>CPF</label>
-    <input>
-  </div>
-</div>
-
-<label>Profissão / Ocupação</label>
-<input>
-
-<label>Endereço Residencial</label>
-<input>
-
-<div class="row">
-  <div class="col">
-    <label>Telefone</label>
-    <input>
-  </div>
-  <div class="col">
-    <label>E-mail</label>
-    <input type="email">
-  </div>
-  <div class="col">
-    <label>Data da Avaliação</label>
-    <input type="date">
-  </div>
-</div>
-
-<label>Diagnóstico Clínico</label>
-<textarea></textarea>
-
-<label>Diagnóstico Fisioterapêutico</label>
-<textarea></textarea>
-
-<label>CBDF</label>
-<input>
-</div>
-
-<div class="card">
-<h3>⚕️ HISTÓRIA CLÍNICA</h3>
-
-<label>Queixa Principal</label>
-<textarea></textarea>
-
-<label>História Patológica Pregressa (HPP)</label>
-<textarea></textarea>
-
-<label>Antecedentes Pessoais</label>
-<textarea></textarea>
-
-<label>Antecedentes Familiares</label>
-<textarea></textarea>
-
-<label>Tratamentos Realizados</label>
-<textarea></textarea>
-
-<label>Hábitos de vida</label>
-<textarea></textarea>
-
-<label>Acompanhamento médico/fisioterapêutico</label>
-<div class="opcoes">
-  <label><input type="radio" name="acomp"> Sim</label>
-  <label><input type="radio" name="acomp"> Não</label>
-</div>
-
-<label>Qual especialidade?</label>
-<input>
-</div>
-
-<div class="card">
-<h3>⚕️ APRESENTAÇÃO DO PACIENTE</h3>
-<div class="opcoes">
-  <label><input type="checkbox"> Deambulando e orientado</label>
-  <label><input type="checkbox"> Deambulando com apoio</label>
-  <label><input type="checkbox"> Confuso</label>
-  <label><input type="checkbox"> Desorientado</label>
-</div>
-</div>
-
-<div class="card">
-<h3>⚕️ EXAMES / MEDICAÇÕES / CIRURGIAS</h3>
-
-<label>Exames Complementares</label>
-<div class="opcoes">
-  <label><input type="radio" name="exames"> Sim</label>
-  <label><input type="radio" name="exames"> Não</label>
-</div>
-
-<label>Usa medicamentos?</label>
-<div class="opcoes">
-  <label><input type="radio" name="med"> Sim</label>
-  <label><input type="radio" name="med"> Não</label>
-</div>
-
-<label>Realizou cirurgia?</label>
-<div class="opcoes">
-  <label><input type="radio" name="cir"> Sim</label>
-  <label><input type="radio" name="cir"> Não</label>
-</div>
-
-<label>Se sim, quais?</label>
-<textarea></textarea>
-</div>
-
-<div class="card">
-<h3>⚕️ INSPEÇÃO / PALPAÇÃO</h3>
-<div class="opcoes">
-  <label><input type="checkbox"> Normal</label>
-  <label><input type="checkbox"> Edema</label>
-  <label><input type="checkbox"> Cicatrização incompleta</label>
-  <label><input type="checkbox"> Eritemas</label>
-  <label><input type="checkbox"> Outros</label>
-</div>
-
-<label>Semiologia</label>
-<textarea></textarea>
-
-<label>Pressão Arterial</label>
-<input>
-</div>
-
-<div class="card">
-<h3>🏃 AVALIAÇÃO FÍSICA</h3>
-<div class="row">
-  <div class="col">
-    <label>Peso</label>
-    <input>
-  </div>
-  <div class="col">
-    <label>Altura</label>
-    <input>
-  </div>
-</div>
-</div>
-
-<div class="card">
-<h3>📌 TESTES FISIOTERAPÊUTICOS</h3>
-
-<label>Y Balance – Assimetria</label>
-<div class="opcoes">
-  <label><input type="radio" name="y"> Sim com risco</label>
-  <label><input type="radio" name="y"> Não</label>
-</div>
-
-<label>Romberg</label>
-<div class="opcoes">
-  <label><input type="radio" name="rom"> Positivo</label>
-  <label><input type="radio" name="rom"> Negativo</label>
-</div>
-
-<label>Apoio Unipodal – TAU</label>
-<div class="opcoes">
-  <label><input type="radio" name="tau"> Menor risco</label>
-  <label><input type="radio" name="tau"> Maior risco</label>
-</div>
-
-<label>TUG</label>
-<div class="opcoes">
-  <label><input type="radio" name="tug"> Normal</label>
-  <label><input type="radio" name="tug"> Baixo</label>
-  <label><input type="radio" name="tug"> Médio</label>
-  <label><input type="radio" name="tug"> Alto</label>
-</div>
-
-<label>Marcha em Tandem</label>
-<div class="opcoes">
-  <label><input type="radio" name="tan"> Normal</label>
-  <label><input type="radio" name="tan"> Leve</label>
-  <label><input type="radio" name="tan"> Moderado</label>
-  <label><input type="radio" name="tan"> Grave</label>
-</div>
-
-<label>Lasègue</label>
-<div class="opcoes">
-  <label><input type="radio" name="las"> Positivo</label>
-  <label><input type="radio" name="las"> Negativo</label>
-</div>
-
-<label>Lasègue Invertido</label>
-<div class="opcoes">
-  <label><input type="radio" name="lasi"> Positivo</label>
-  <label><input type="radio" name="lasi"> Negativo</label>
-</div>
-
-<label>Spurling</label>
-<div class="opcoes">
-  <label><input type="radio" name="spur"> Positivo</label>
-  <label><input type="radio" name="spur"> Negativo</label>
-</div>
-</div>
-
-<div class="card">
-<h3>⚕️ ESCALA DE FORÇA MUSCULAR</h3>
-<div class="opcoes">
-  <label><input type="radio" name="forca"> Grau 0</label>
-  <label><input type="radio" name="forca"> Grau 1</label>
-  <label><input type="radio" name="forca"> Grau 2</label>
-  <label><input type="radio" name="forca"> Grau 3</label>
-  <label><input type="radio" name="forca"> Grau 4</label>
-  <label><input type="radio" name="forca"> Grau 5</label>
-</div>
-</div>
-
-<div class="card">
-<h3>⚕️ FORÇA E RESISTÊNCIA MUSCULAR</h3>
-<label>Abdominal Supra</label>
-<input>
-<label>Abdominal Infra</label>
-<input>
-<label>Prancha Isométrica</label>
-<input>
-</div>
-
-<div class="card">
-<h3>📌 PLANO TERAPÊUTICO</h3>
-<label>Objetivos do Tratamento</label>
-<textarea></textarea>
-
-<label>Recursos Terapêuticos</label>
-<textarea></textarea>
-
-<label>Plano do Tratamento</label>
-<textarea></textarea>
-</div>
-
-<div class="card">
-<h3>🗓️ EVOLUÇÃO DOS ATENDIMENTOS</h3>
-
-<label>Data</label>
-<input type="date">
-
-<label>Procedimentos</label>
-<textarea></textarea>
-
-<label>Intercorrência</label>
-<textarea></textarea>
-
-<label>Evolução do Estado de Saúde</label>
-<textarea></textarea>
-
-<label>Profissional / Registro Conselho</label>
-<input>
-</div>
-
-<div class="card">
-<button type="submit">💾 Salvar Avaliação</button>
-</div>
-
-</form>
-
-</section>
-
-<!-- ================= AVALIAÇÃO PÉLVICA ================= -->
-<section id="avaliacaoPelvica" class="hidden">
-  <form>
- <section id="pelvica" class="screen">
-
-  <header>
-    <h1>Avaliação Pélvica</h1>
-    <button class="btn-voltar" onclick="mostrarTela('home')">⬅ Voltar</button>
-  </header>
-
-  <!-- DADOS PESSOAIS -->
-  <div class="card">
-    <h2>Dados do Paciente</h2>
-
-    <label>Nome</label>
-    <input type="text">
-
-    <div class="row">
-      <div class="col">
-        <label>Data de Nascimento</label>
-        <input type="date">
-      </div>
-      <div class="col">
-        <label>Sexo</label>
-        <div class="check-group">
-          <label><input type="checkbox"> Feminino</label>
-          <label><input type="checkbox"> Masculino</label>
-        </div>
-      </div>
-    </div>
-
-    <label>Endereço</label>
-    <input type="text">
-
-    <div class="row">
-      <div class="col">
-        <label>Telefone</label>
-        <input type="tel">
-      </div>
-      <div class="col">
-        <label>Profissão</label>
-        <input type="text">
-      </div>
-    </div>
-
-    <label>Profissional Responsável</label>
-    <input type="text">
-  </div>
-
-  <!-- HISTÓRICO GERAL -->
-  <div class="card">
-    <h2>Histórico de Saúde</h2>
-
-    <label>Pratica atividade física?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Frequência semanal</label>
-    <input type="text">
-
-    <label>Possui alguma doença (diabetes, hipertensão, etc.)?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Faz uso de medicamentos?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Já realizou alguma cirurgia?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Possui algum tipo de alergia?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-  </div>
-
-  <!-- HISTÓRICO PÉLVICO -->
-  <div class="card">
-    <h2>Histórico Pélvico</h2>
-
-    <label>Queixa principal</label>
-    <input type="text">
-
-    <label>Gestação anterior?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Tipo de parto</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Normal</label>
-      <label><input type="checkbox"> Cesárea</label>
-    </div>
-
-    <label>Apresenta incontinência urinária?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Utiliza absorvente diário?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Sente dor pélvica?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Dor durante relação sexual?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-  </div>
-
-  <!-- AVALIAÇÃO FUNCIONAL -->
-  <div class="card">
-    <h2>Avaliação Funcional</h2>
-
-    <label>Força do assoalho pélvico</label>
-    <input type="text">
-
-    <label>Coordenação muscular</label>
-    <input type="text">
-
-    <label>Consciência perineal</label>
-    <input type="text">
-
-    <label>Observações</label>
-    <textarea></textarea>
-  </div>
-
-  <!-- EVOLUÇÃO -->
-  <div class="card">
-    <h2>Evolução do Paciente</h2>
-
-    <label>Evolução / Observações</label>
-    <textarea placeholder="Descreva a evolução do paciente ao longo das sessões"></textarea>
-
-    <div class="row">
-      <div class="col">
-        <label>Data</label>
-        <input type="date">
-      </div>
-      <div class="col">
-        <label>Profissional responsável</label>
-        <input type="text">
-      </div>
-    </div>
-  </div>
-
-  <!-- DECLARAÇÃO -->
-  <div class="card">
-    <p class="declaracao">
-      Declaro que todas as informações prestadas são verdadeiras e não omiti dados relevantes sobre minha saúde.
-    </p>
-
-    <div class="assinatura">
-      <div>Assinatura do Paciente</div>
-      <div>Assinatura do Profissional</div>
-    </div>
-  </div>
-<div class="card">
-  <button type="submit">💾 Salvar Avaliação</button>
-</div>
-
-</form>
-
-</section>
-
-</section>
-
-<!-- ================= AVALIAÇÃO RECOVERY ================= -->
-<section id="avaliacaoRecovery" class="hidden">
-  
-<form>
-  
- <section id="recovery" class="screen">
-
-  <header>
-    <h1>Programa MOV Recovery</h1>
-    <h2>Anamnese</h2>
-    <button class="btn-voltar" onclick="mostrarTela('home')">⬅ Voltar</button>
-  </header>
-
-  <!-- DADOS PESSOAIS -->
-  <div class="card">
-    <h2>Dados do Paciente</h2>
-
-    <label>Nome</label>
-    <input type="text">
-
-    <div class="row">
-      <div class="col">
-        <label>Nascimento</label>
-        <input type="date">
-      </div>
-      <div class="col">
-        <label>Sexo</label>
-        <div class="check-group">
-          <label><input type="checkbox"> Feminino</label>
-          <label><input type="checkbox"> Masculino</label>
-        </div>
-      </div>
-    </div>
-
-    <label>Endereço</label>
-    <input type="text">
-
-    <div class="row">
-      <div class="col">
-        <label>Telefone</label>
-        <input type="tel">
-      </div>
-      <div class="col">
-        <label>Fisioterapeuta</label>
-        <input type="text">
-      </div>
-    </div>
-  </div>
-
-  <!-- PERFIL -->
-  <div class="card">
-    <h2>Perfil</h2>
-
-    <div class="row">
-      <div class="col">
-        <label>Atleta</label>
-        <div class="check-group">
-          <label><input type="checkbox"> Amador</label>
-          <label><input type="checkbox"> Profissional</label>
-        </div>
-      </div>
-      <div class="col">
-        <label>Tabagismo?</label>
-        <div class="check-group">
-          <label><input type="checkbox"> Sim</label>
-          <label><input type="checkbox"> Não</label>
-        </div>
-      </div>
-    </div>
-
-    <label>Esporte praticado / Há quanto tempo?</label>
-    <input type="text">
-  </div>
-
-  <!-- HISTÓRICO DE SAÚDE -->
-  <div class="card">
-    <h2>Histórico de Saúde</h2>
-
-    <div class="row">
-      <div class="col">
-        <label>Alterações cardíacas?</label>
-        <div class="check-group">
-          <label><input type="checkbox"> Sim</label>
-          <label><input type="checkbox"> Não</label>
-        </div>
-      </div>
-      <div class="col">
-        <label>Uso de medicamentos?</label>
-        <div class="check-group">
-          <label><input type="checkbox"> Sim</label>
-          <label><input type="checkbox"> Não</label>
-        </div>
-      </div>
-    </div>
-
-    <label>Objetivos com o Programa MOV Recovery</label>
-    <input type="text">
-
-    <div class="row">
-      <div class="col">
-        <label>Diabetes?</label>
-        <div class="check-group">
-          <label><input type="checkbox"> Sim</label>
-          <label><input type="checkbox"> Não</label>
-        </div>
-      </div>
-      <div class="col">
-        <label>Hipertensão?</label>
-        <div class="check-group">
-          <label><input type="checkbox"> Sim</label>
-          <label><input type="checkbox"> Não</label>
-        </div>
-      </div>
-    </div>
-
-    <label>Pratica atividade física atualmente?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Frequência semanal</label>
-    <input type="text">
-
-    <label>Utiliza ou utilizou esteróides anabólicos?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Sofreu acidente ou lesão?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Alguma doença recente?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Já realizou cirurgia?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Possui alergias?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Sente tontura ou desmaios?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-
-    <label>Profissão</label>
-    <input type="text">
-
-    <label>Está em dieta para perder ou ganhar peso?</label>
-    <div class="check-group">
-      <label><input type="checkbox"> Sim</label>
-      <label><input type="checkbox"> Não</label>
-    </div>
-  </div>
-
-  <!-- EVOLUÇÃO -->
-  <div class="card">
-    <h2>Evolução do Paciente</h2>
-
-    <label>Evolução / Observações</label>
-    <textarea placeholder="Descreva a evolução do paciente, progressos e intercorrências"></textarea>
-
-    <div class="row">
-      <div class="col">
-        <label>Data</label>
-        <input type="date">
-      </div>
-      <div class="col">
-        <label>Profissional responsável</label>
-        <input type="text">
-      </div>
-    </div>
-  </div>
-
-  <!-- DECLARAÇÃO -->
-  <div class="card">
-    <p class="declaracao">
-      Declaro que todas as informações acima são verdadeiras e não omiti dados relevantes sobre minha saúde.
-    </p>
-
-    <div class="assinatura">
-      <div>Assinatura do Paciente</div>
-      <div>Assinatura do Profissional</div>
-    </div>
-  </div>
-<div class="card">
-  <button type="submit">💾 Salvar Avaliação</button>
-</div>
-
-</form>
-
-</section>
-
-</section>
-
-<script>
-function mostrarTela(id){
-  document.getElementById('telaInicial').classList.add('hidden');
-
-  const telas = [
-    'avaliacaoFisio',
-    'avaliacaoPilates',
-    'avaliacaoPelvica',
-    'avaliacaoRecovery'
-  ];
-
-  telas.forEach(tela=>{
-    document.getElementById(tela).classList.add('hidden');
-  });
-
-  document.getElementById(id).classList.remove('hidden');
-}
-
-function voltarInicio(){
-  document.getElementById('telaInicial').classList.remove('hidden');
-
-  const telas = [
-    'avaliacaoFisio',
-    'avaliacaoPilates',
-    'avaliacaoPelvica',
-    'avaliacaoRecovery'
-  ];
-
-  telas.forEach(tela=>{
-    document.getElementById(tela).classList.add('hidden');
-  });
-}
-
-function voltarLista(){
-  document.getElementById('detalheAvaliacao').classList.add('hidden');
-  document.getElementById('listaAvaliacoes').classList.remove('hidden');
-}
-</script>
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getDatabase,
-  ref,
-  push,
-  set,
-  onValue,
-  update,
-  remove
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
+/* 🔥 SEU FIREBASE */
 const firebaseConfig = {
   apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
   authDomain: "sistemaavaliacoes-26513.firebaseapp.com",
@@ -1012,136 +89,79 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 console.log("🔥 Firebase conectado com sucesso!");
-  /* ================= SALVAR AVALIAÇÕES ================= */
 
-function salvarFormulario(form, tipo){
+/* ===== NAVEGAÇÃO ===== */
 
-  form.addEventListener("submit", function(e){
-    e.preventDefault();
-
-    const nomeInput = form.querySelector("input[type='text']");
-    const dataInput = form.querySelector("input[type='date']");
-    const queixaInput = form.querySelector("textarea");
-
-    const dados = {
-      nome: nomeInput ? nomeInput.value : "",
-      data: dataInput ? dataInput.value : "",
-      queixa: queixaInput ? queixaInput.value : "",
-      criadoEm: new Date().toLocaleString()
-    };
-
-    const caminho = ref(db, `avaliacoes/${tipo}`);
-    push(caminho, dados);
-
-    alert("✅ Avaliação salva com sucesso!");
-
-    form.reset();
-    voltarInicio();
-  });
-
+window.mostrarFormulario = function(){
+  document.getElementById("menu").classList.add("hidden");
+  document.getElementById("formulario").classList.remove("hidden");
 }
 
-/* Conectar formulários */
-const formPelvica = document.querySelector("#avaliacaoPelvica form");
-const formRecovery = document.querySelector("#avaliacaoRecovery form");
-const formFisio = document.querySelector("#avaliacaoFisio form");
-const formPilates = document.querySelector("#avaliacaoPilates form");
+window.mostrarLista = function(){
+  document.getElementById("menu").classList.add("hidden");
+  document.getElementById("lista").classList.remove("hidden");
+  carregar();
+}
 
-if(formPelvica) salvarFormulario(formPelvica, "pelvica");
-if(formRecovery) salvarFormulario(formRecovery, "recovery");
-if(formFisio) salvarFormulario(formFisio, "fisio");
-if(formPilates) salvarFormulario(formPilates, "pilates");
+window.voltarMenu = function(){
+  document.getElementById("menu").classList.remove("hidden");
+  document.getElementById("formulario").classList.add("hidden");
+  document.getElementById("lista").classList.add("hidden");
+}
 
+/* ===== SALVAR ===== */
 
-/* ================= CARREGAR LISTA ================= */
+window.salvar = function(e){
+  e.preventDefault();
 
-window.carregarAvaliacoes = function(tipo){
+  const dados = Object.fromEntries(new FormData(e.target));
+  dados.criadoEm = new Date().toLocaleString();
 
-  const lista = document.getElementById('listaContainer');
+  push(ref(db, "avaliacoes"), dados)
+    .then(()=>{
+      alert("✅ Avaliação salva!");
+      e.target.reset();
+      voltarMenu();
+    })
+    .catch((erro)=>{
+      alert("Erro ao salvar: " + erro.message);
+    });
+}
+
+/* ===== CARREGAR ===== */
+
+function carregar(){
+
+  const lista = document.getElementById("listaContainer");
   lista.innerHTML = "Carregando...";
 
-  const caminho = ref(db, `avaliacoes/${tipo}`);
-
-  onValue(caminho, snapshot=>{
+  onValue(ref(db, "avaliacoes"), snapshot => {
 
     lista.innerHTML = "";
 
     if(!snapshot.exists()){
-      lista.innerHTML = "<p>Nenhuma avaliação encontrada.</p>";
+      lista.innerHTML = "Nenhuma avaliação encontrada.";
       return;
     }
 
-    snapshot.forEach(item=>{
-      const dados = item.val();
-      const id = item.key;
+    snapshot.forEach(child => {
+      const dados = child.val();
 
       lista.innerHTML += `
         <div class="card">
-          <h3>${dados.nome || "Sem nome"}</h3>
-          <button onclick="verAvaliacao('${tipo}','${id}')">Ver completa</button>
-          <button onclick="editarAvaliacao('${tipo}','${id}')">Editar</button>
-          <button onclick="apagarAvaliacao('${tipo}','${id}')">Apagar</button>
+          <strong>${dados.nome}</strong><br>
+          Tipo: ${dados.tipo}<br>
+          <small>${dados.criadoEm}</small>
         </div>
       `;
     });
 
   });
-};
 
-/* ================= VER ================= */
-
-window.verAvaliacao = function(tipo,id){
-
-  document.getElementById('listaAvaliacoes').classList.add('hidden');
-  document.getElementById('detalheAvaliacao').classList.remove('hidden');
-
-  const detalhes = document.getElementById('detalhesContainer');
-  detalhes.innerHTML = "Carregando...";
-
-  onValue(ref(db, `avaliacoes/${tipo}/${id}`), snap=>{
-
-    const d = snap.val();
-
-    detalhes.innerHTML = `
-      <div class="card">
-        <p><b>Nome:</b> ${d.nome || "-"}</p>
-        <p><b>Data:</b> ${d.data || "-"}</p>
-        <p><b>Queixa:</b> ${d.queixa || "-"}</p>
-      </div>
-    `;
-  });
-};
-
-/* ================= EDITAR ================= */
-
-window.editarAvaliacao = function(tipo,id){
-
-  const novoNome = prompt("Novo nome:");
-  if(!novoNome) return;
-
-  update(ref(db, `avaliacoes/${tipo}/${id}`), {
-    nome: novoNome
-  });
-
-};
-
-/* ================= APAGAR ================= */
-
-window.apagarAvaliacao = function(tipo,id){
-
-  if(confirm("Deseja apagar esta avaliação?")){
-    remove(ref(db, `avaliacoes/${tipo}/${id}`));
-  }
-
-};
+}
 
 </script>
 
 </body>
 </html>
-
-
-
-
-
 
