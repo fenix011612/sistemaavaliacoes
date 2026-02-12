@@ -3,11 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Teste Firebase Oficial</title>
+<title>Sistema Avaliações</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  padding:20px;
+  background:#f5f5f5;
+}
+
+h2{
+  margin-bottom:10px;
+}
+
+input, select, textarea{
+  padding:8px;
+  margin:5px 0;
+}
+
+button{
+  padding:6px 12px;
+  cursor:pointer;
+  margin-left:5px;
+}
+
+.card{
+  background:white;
+  padding:10px;
+  margin:10px 0;
+  border-radius:5px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+</style>
+
 </head>
 <body>
 
-<h2>Teste Sistema Avaliações</h2>
+<h2>Sistema de Avaliações</h2>
 
 <input type="text" id="nome" placeholder="Nome do paciente">
 <select id="tipo">
@@ -16,8 +48,7 @@
   <option value="pelvica">Pélvica</option>
   <option value="recovery">Recovery</option>
 </select>
-
-<button onclick="salvar()">Salvar</button>
+<button onclick="salvar()">Salvar Avaliação</button>
 
 <hr>
 
@@ -25,9 +56,12 @@
 
 <div id="lista"></div>
 
+<hr>
+
+<div id="detalheAvaliacao"></div>
+
 <script type="module">
 
-// 🔥 IMPORTS CORRETOS VIA CDN
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
   getDatabase, 
@@ -37,8 +71,6 @@ import {
   get 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-
-// 🔐 SUA CONFIGURAÇÃO
 const firebaseConfig = {
   apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
   authDomain: "sistemaavaliacoes-26513.firebaseapp.com",
@@ -49,12 +81,9 @@ const firebaseConfig = {
   appId: "1:451297691104:web:1f886ad169a54c4f8fd785"
 };
 
-// 🚀 INICIALIZAÇÃO
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-
-// 💾 SALVAR
 window.salvar = async function(){
 
   const nome = document.getElementById("nome").value;
@@ -73,12 +102,10 @@ window.salvar = async function(){
     criadoEm: new Date().toLocaleString()
   });
 
-  alert("Salvo com sucesso 💜");
   document.getElementById("nome").value="";
+  listar();
 }
 
-
-// 📄 LISTAR
 window.listar = async function(){
 
   const lista = document.getElementById("lista");
@@ -95,13 +122,85 @@ window.listar = async function(){
 
   snapshot.forEach(child=>{
     const dados = child.val();
+    const id = child.key;
 
     lista.innerHTML += `
-      <p>
-        <strong>${dados.nome}</strong> - 
-        ${dados.tipo} - 
-        ${dados.criadoEm}
-      </p>
+      <div class="card">
+        <strong>${dados.nome}</strong><br>
+        ${dados.tipo}<br>
+        <small>${dados.criadoEm}</small><br><br>
+        <button onclick="abrirAvaliacao('${id}')">Abrir</button>
+      </div>
+    `;
+  });
+
+}
+
+window.abrirAvaliacao = async function(id){
+
+  const detalhe = document.getElementById("detalheAvaliacao");
+  detalhe.innerHTML = "Carregando...";
+
+  const snapshot = await get(ref(db,"avaliacoes/"+id));
+  const dados = snapshot.val();
+
+  detalhe.innerHTML = `
+    <h3>${dados.nome} (${dados.tipo})</h3>
+    <p><small>Criado em: ${dados.criadoEm}</small></p>
+
+    <h4>Nova Evolução</h4>
+    <textarea id="textoEvolucao" rows="6" style="width:100%;"></textarea>
+    <br><br>
+    <button onclick="salvarEvolucao('${id}')">Salvar Evolução</button>
+
+    <h4>Histórico</h4>
+    <div id="historico"></div>
+  `;
+
+  carregarEvolucoes(id);
+}
+
+window.salvarEvolucao = async function(id){
+
+  const texto = document.getElementById("textoEvolucao").value;
+
+  if(!texto){
+    alert("Digite a evolução.");
+    return;
+  }
+
+  const novaRef = push(ref(db,"avaliacoes/"+id+"/evolucoes"));
+
+  await set(novaRef,{
+    data: new Date().toLocaleString(),
+    texto
+  });
+
+  document.getElementById("textoEvolucao").value="";
+  carregarEvolucoes(id);
+}
+
+async function carregarEvolucoes(id){
+
+  const historico = document.getElementById("historico");
+
+  const snapshot = await get(ref(db,"avaliacoes/"+id+"/evolucoes"));
+
+  if(!snapshot.exists()){
+    historico.innerHTML = "Nenhuma evolução registrada.";
+    return;
+  }
+
+  historico.innerHTML = "";
+
+  snapshot.forEach(child=>{
+    const dados = child.val();
+
+    historico.innerHTML += `
+      <div class="card">
+        <strong>DATA:</strong> ${dados.data}<br><br>
+        ${dados.texto}
+      </div>
     `;
   });
 
@@ -111,11 +210,3 @@ window.listar = async function(){
 
 </body>
 </html>
-
-
-
-
-
-
-
-
