@@ -29,6 +29,8 @@ header{
 
 .container{
   padding:20px;
+  max-width:900px;
+  margin:auto;
 }
 
 .card{
@@ -62,12 +64,10 @@ button:hover{
   opacity:0.9;
 }
 
-.hidden{
-  display:none;
-}
+.hidden{ display:none; }
 
 .lista-item{
-  padding:10px;
+  padding:12px;
   border-bottom:1px solid #eee;
   cursor:pointer;
 }
@@ -83,18 +83,20 @@ button:hover{
 
 <div class="container">
 
-<!-- TELA INICIAL -->
 <div id="telaInicial">
 
 <div class="card">
 <h3>Nova Avaliação</h3>
 
 <input type="text" id="nome" placeholder="Nome do paciente">
+
 <select id="tipo">
-<option value="Fisioterapia">Fisioterapia</option>
-<option value="Pilates">Pilates</option>
-<option value="Pelvica">Pélvica</option>
+<option value="fisioterapia">Fisioterapia</option>
+<option value="pilates">Pilates</option>
+<option value="pelvica">Pélvica</option>
+<option value="recovery">Recovery</option>
 </select>
+
 <input type="date" id="data">
 
 <button onclick="salvarAvaliacao()">Salvar Avaliação</button>
@@ -107,16 +109,19 @@ button:hover{
 
 </div>
 
-<!-- TELA DETALHE -->
 <div id="telaDetalhe" class="hidden">
 <div class="card">
+
 <button onclick="voltar()">⬅ Voltar</button>
+
 <h3 id="tituloDetalhe"></h3>
+
 <div id="evolucoes"></div>
 
 <h4>Nova Evolução</h4>
-<textarea id="textoEvolucao" rows="5" placeholder="Digite a evolução..."></textarea>
+<textarea id="textoEvolucao" rows="6" placeholder="Digite a evolução..."></textarea>
 <button onclick="salvarEvolucao()">Salvar Evolução</button>
+
 </div>
 </div>
 
@@ -141,16 +146,17 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 let avaliacaoAtualId = null;
+let tipoAtual = null;
 
 window.salvarAvaliacao = function(){
   const nome = document.getElementById("nome").value;
   const tipo = document.getElementById("tipo").value;
   const data = document.getElementById("data").value;
 
-  const novaRef = push(ref(db,"avaliacoes"));
+  const novaRef = push(ref(db,`avaliacoes/${tipo}`));
+
   set(novaRef,{
     nome,
-    tipo,
     data
   });
 
@@ -161,44 +167,50 @@ window.salvarAvaliacao = function(){
 
 function carregarAvaliacoes(){
   const lista = document.getElementById("listaAvaliacoes");
-  const avalRef = ref(db,"avaliacoes");
+  lista.innerHTML="";
 
-  onValue(avalRef, snapshot=>{
-    lista.innerHTML="";
-    if(!snapshot.exists()){
-      lista.innerHTML="Nenhuma avaliação encontrada.";
-      return;
-    }
+  const tipos = ["fisioterapia","pilates","pelvica","recovery"];
 
-    snapshot.forEach(child=>{
-      const dados = child.val();
-      const div = document.createElement("div");
-      div.className="lista-item";
-      div.innerHTML = `<strong>${dados.nome}</strong> - ${dados.tipo}`;
-      div.onclick = ()=> abrirDetalhe(child.key,dados);
-      lista.appendChild(div);
+  tipos.forEach(tipo=>{
+    const tipoRef = ref(db,`avaliacoes/${tipo}`);
+
+    onValue(tipoRef, snapshot=>{
+      if(snapshot.exists()){
+        snapshot.forEach(child=>{
+          const dados = child.val();
+          const div = document.createElement("div");
+          div.className="lista-item";
+          div.innerHTML = `<strong>${dados.nome}</strong> - ${tipo}`;
+          div.onclick = ()=> abrirDetalhe(tipo,child.key,dados);
+          lista.appendChild(div);
+        });
+      }
     });
   });
 }
 
-window.abrirDetalhe = function(id,dados){
+window.abrirDetalhe = function(tipo,id,dados){
   avaliacaoAtualId = id;
+  tipoAtual = tipo;
 
   document.getElementById("telaInicial").classList.add("hidden");
   document.getElementById("telaDetalhe").classList.remove("hidden");
 
   document.getElementById("tituloDetalhe").innerText =
-  `${dados.nome} - ${dados.tipo}`;
+  `${dados.nome} - ${tipo}`;
 
   carregarEvolucoes();
 }
 
 function carregarEvolucoes(){
   const div = document.getElementById("evolucoes");
-  const refEvo = ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`);
+  div.innerHTML="<h4>Evoluções</h4>";
+
+  const refEvo = ref(db,`avaliacoes/${tipoAtual}/${avaliacaoAtualId}/evolucoes`);
 
   onValue(refEvo,snapshot=>{
     div.innerHTML="<h4>Evoluções</h4>";
+
     if(!snapshot.exists()){
       div.innerHTML+="Nenhuma evolução.";
       return;
@@ -216,7 +228,7 @@ function carregarEvolucoes(){
 window.salvarEvolucao = function(){
   const texto = document.getElementById("textoEvolucao").value;
 
-  const novaRef = push(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`));
+  const novaRef = push(ref(db,`avaliacoes/${tipoAtual}/${avaliacaoAtualId}/evolucoes`));
 
   set(novaRef,{
     texto,
