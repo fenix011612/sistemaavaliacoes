@@ -2,237 +2,236 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<title>Sistema de Avaliações</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema Avaliações</title>
 
 <style>
 :root{
   --lilas:#7b6cf6;
   --ciano:#00cfe8;
-  --bg:#f4f6fb;
+  --fundo:#f4f6fb;
 }
 
 body{
-  font-family: Arial, sans-serif;
-  padding:20px;
-  background:var(--bg);
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:var(--fundo);
 }
 
-h2,h3,h4{
-  color:var(--lilas);
-}
-
-input, select, textarea{
-  padding:10px;
-  margin:6px 0;
-  border-radius:6px;
-  border:1px solid #ddd;
-  width:100%;
-  box-sizing:border-box;
-}
-
-button{
-  padding:8px 14px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  background:var(--lilas);
+header{
+  background:linear-gradient(90deg,var(--lilas),var(--ciano));
   color:white;
-  transition:0.3s;
+  padding:20px;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
 }
 
-button:hover{
-  background:var(--ciano);
+.container{
+  padding:20px;
 }
 
 .card{
   background:white;
-  padding:15px;
-  margin:12px 0;
-  border-radius:10px;
-  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+  padding:20px;
+  border-radius:15px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom:20px;
+}
+
+input, select, textarea{
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  margin-bottom:15px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+button{
+  background:var(--lilas);
+  color:white;
+  border:none;
+  padding:10px 15px;
+  border-radius:8px;
+  cursor:pointer;
+  margin-right:5px;
+}
+
+button:hover{
+  opacity:0.9;
 }
 
 .hidden{
   display:none;
 }
 
-.topo{
-  margin-bottom:20px;
+.lista-item{
+  padding:10px;
+  border-bottom:1px solid #eee;
+  cursor:pointer;
+}
+
+.lista-item:hover{
+  background:#f0f0ff;
 }
 </style>
 </head>
-
 <body>
 
+<header>Sistema de Avaliações</header>
+
+<div class="container">
+
+<!-- TELA INICIAL -->
 <div id="telaInicial">
 
-  <div class="topo">
-    <h2>Sistema de Avaliações</h2>
+<div class="card">
+<h3>Nova Avaliação</h3>
 
-    <input type="text" id="nome" placeholder="Nome do paciente">
+<input type="text" id="nome" placeholder="Nome do paciente">
+<select id="tipo">
+<option value="Fisioterapia">Fisioterapia</option>
+<option value="Pilates">Pilates</option>
+<option value="Pelvica">Pélvica</option>
+</select>
+<input type="date" id="data">
 
-    <select id="tipo">
-      <option value="fisio">Fisio</option>
-      <option value="pilates">Pilates</option>
-      <option value="pelvica">Pélvica</option>
-      <option value="recovery">Recovery</option>
-    </select>
+<button onclick="salvarAvaliacao()">Salvar Avaliação</button>
+</div>
 
-    <button onclick="salvar()">Salvar Avaliação</button>
-    <button onclick="listar()">Listar Avaliações</button>
-  </div>
-
-  <div id="lista"></div>
+<div class="card">
+<h3>Avaliações Salvas</h3>
+<div id="listaAvaliacoes">Carregando...</div>
+</div>
 
 </div>
 
-<div id="telaDetalhe" class="hidden"></div>
+<!-- TELA DETALHE -->
+<div id="telaDetalhe" class="hidden">
+<div class="card">
+<button onclick="voltar()">⬅ Voltar</button>
+<h3 id="tituloDetalhe"></h3>
+<div id="evolucoes"></div>
+
+<h4>Nova Evolução</h4>
+<textarea id="textoEvolucao" rows="5" placeholder="Digite a evolução..."></textarea>
+<button onclick="salvarEvolucao()">Salvar Evolução</button>
+</div>
+</div>
+
+</div>
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  databaseURL: "SEU_DATABASE_URL",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE_BUCKET",
-  messagingSenderId: "SEU_SENDER_ID",
-  appId: "SEU_APP_ID"
+  apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
+  authDomain: "sistemaavaliacoes-26513.firebaseapp.com",
+  databaseURL: "https://sistemaavaliacoes-26513-default-rtdb.firebaseio.com",
+  projectId: "sistemaavaliacoes-26513",
+  storageBucket: "sistemaavaliacoes-26513.firebasestorage.app",
+  messagingSenderId: "451297691104",
+  appId: "1:451297691104:web:1f886ad169a54c4f8fd785"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-window.salvar = async function(){
+let avaliacaoAtualId = null;
 
+window.salvarAvaliacao = function(){
   const nome = document.getElementById("nome").value;
   const tipo = document.getElementById("tipo").value;
-
-  if(!nome){
-    alert("Digite o nome!");
-    return;
-  }
+  const data = document.getElementById("data").value;
 
   const novaRef = push(ref(db,"avaliacoes"));
-
-  await set(novaRef,{
+  set(novaRef,{
     nome,
     tipo,
-    criadoEm: new Date().toLocaleString()
+    data
   });
 
+  alert("Avaliação salva!");
   document.getElementById("nome").value="";
-  listar();
+  carregarAvaliacoes();
 }
 
-window.listar = async function(){
+function carregarAvaliacoes(){
+  const lista = document.getElementById("listaAvaliacoes");
+  const avalRef = ref(db,"avaliacoes");
 
-  const lista = document.getElementById("lista");
-  lista.innerHTML = "Carregando...";
+  onValue(avalRef, snapshot=>{
+    lista.innerHTML="";
+    if(!snapshot.exists()){
+      lista.innerHTML="Nenhuma avaliação encontrada.";
+      return;
+    }
 
-  const snapshot = await get(ref(db,"avaliacoes"));
-
-  if(!snapshot.exists()){
-    lista.innerHTML = "Nenhuma avaliação encontrada.";
-    return;
-  }
-
-  lista.innerHTML = "";
-
-  snapshot.forEach(child=>{
-    const dados = child.val();
-    const id = child.key;
-
-    lista.innerHTML += `
-      <div class="card">
-        <strong>${dados.nome}</strong><br>
-        ${dados.tipo}<br>
-        <small>${dados.criadoEm}</small><br><br>
-        <button onclick="abrirAvaliacao('${id}')">Abrir</button>
-      </div>
-    `;
+    snapshot.forEach(child=>{
+      const dados = child.val();
+      const div = document.createElement("div");
+      div.className="lista-item";
+      div.innerHTML = `<strong>${dados.nome}</strong> - ${dados.tipo}`;
+      div.onclick = ()=> abrirDetalhe(child.key,dados);
+      lista.appendChild(div);
+    });
   });
 }
 
-window.abrirAvaliacao = async function(id){
+window.abrirDetalhe = function(id,dados){
+  avaliacaoAtualId = id;
 
   document.getElementById("telaInicial").classList.add("hidden");
-  const tela = document.getElementById("telaDetalhe");
-  tela.classList.remove("hidden");
+  document.getElementById("telaDetalhe").classList.remove("hidden");
 
-  const snapshot = await get(ref(db,"avaliacoes/"+id));
-  const dados = snapshot.val();
+  document.getElementById("tituloDetalhe").innerText =
+  `${dados.nome} - ${dados.tipo}`;
 
-  tela.innerHTML = `
-    <button onclick="voltar()">⬅ Voltar</button>
-
-    <h3>${dados.nome} (${dados.tipo})</h3>
-    <p><small>Criado em: ${dados.criadoEm}</small></p>
-
-    <h4>Nova Evolução</h4>
-    <textarea id="textoEvolucao" rows="5"></textarea>
-    <button onclick="salvarEvolucao('${id}')">Salvar Evolução</button>
-
-    <h4>Histórico</h4>
-    <div id="historico"></div>
-  `;
-
-  carregarEvolucoes(id);
+  carregarEvolucoes();
 }
 
-window.voltar = function(){
-  document.getElementById("telaDetalhe").classList.add("hidden");
-  document.getElementById("telaInicial").classList.remove("hidden");
+function carregarEvolucoes(){
+  const div = document.getElementById("evolucoes");
+  const refEvo = ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`);
+
+  onValue(refEvo,snapshot=>{
+    div.innerHTML="<h4>Evoluções</h4>";
+    if(!snapshot.exists()){
+      div.innerHTML+="Nenhuma evolução.";
+      return;
+    }
+
+    snapshot.forEach(child=>{
+      const evo = child.val();
+      const p = document.createElement("p");
+      p.innerHTML=`<strong>${evo.data}</strong><br>${evo.texto}<hr>`;
+      div.appendChild(p);
+    });
+  });
 }
 
-window.salvarEvolucao = async function(id){
-
+window.salvarEvolucao = function(){
   const texto = document.getElementById("textoEvolucao").value;
 
-  if(!texto){
-    alert("Digite a evolução.");
-    return;
-  }
+  const novaRef = push(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`));
 
-  const novaRef = push(ref(db,"avaliacoes/"+id+"/evolucoes"));
-
-  await set(novaRef,{
-    data: new Date().toLocaleString(),
-    texto
+  set(novaRef,{
+    texto,
+    data:new Date().toLocaleDateString()
   });
 
   document.getElementById("textoEvolucao").value="";
-  carregarEvolucoes(id);
 }
 
-async function carregarEvolucoes(id){
-
-  const historico = document.getElementById("historico");
-
-  const snapshot = await get(ref(db,"avaliacoes/"+id+"/evolucoes"));
-
-  if(!snapshot.exists()){
-    historico.innerHTML = "Nenhuma evolução registrada.";
-    return;
-  }
-
-  historico.innerHTML = "";
-
-  snapshot.forEach(child=>{
-    const dados = child.val();
-
-    historico.innerHTML += `
-      <div class="card">
-        <strong>${dados.data}</strong><br><br>
-        ${dados.texto}
-      </div>
-    `;
-  });
+window.voltar = function(){
+  document.getElementById("telaInicial").classList.remove("hidden");
+  document.getElementById("telaDetalhe").classList.add("hidden");
 }
+
+carregarAvaliacoes();
 
 </script>
 
