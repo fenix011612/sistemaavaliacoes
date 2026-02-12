@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Sistema de Avaliações</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Avaliações</title>
 
 <style>
 body{
@@ -13,9 +13,7 @@ body{
   padding:20px;
 }
 
-h1{
-  text-align:center;
-}
+h1{text-align:center;}
 
 .container{
   max-width:1000px;
@@ -23,26 +21,27 @@ h1{
 }
 
 .card{
-  background:#fff;
-  padding:15px;
-  margin-top:15px;
-  border-radius:10px;
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:15px;
   box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 
 button{
   padding:8px 12px;
+  margin:4px 2px;
   border:none;
   border-radius:6px;
   cursor:pointer;
-  margin:4px 2px;
 }
 
-.salvar{ background:#28a745; color:white; }
-.voltar{ background:#6c757d; color:white; }
-.filtro{ background:#007bff; color:white; }
+.btn-primary{background:#4CAF50;color:white;}
+.btn-danger{background:#e53935;color:white;}
+.btn-edit{background:#1e88e5;color:white;}
+.btn-secondary{background:#757575;color:white;}
 
-input, select{
+input,select,textarea{
   padding:8px;
   margin:5px 0;
   width:100%;
@@ -50,73 +49,68 @@ input, select{
   border:1px solid #ccc;
 }
 
-.hidden{ display:none; }
+textarea{height:150px;}
+
+.filtros{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+}
 
 .evolucao-box{
   background:#f1f1f1;
-  padding:8px;
+  padding:10px;
   border-radius:6px;
-  margin-top:5px;
+  margin-bottom:10px;
 }
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
 <h1>Sistema de Avaliações</h1>
 
-<button onclick="mostrarCadastro()">Nova Avaliação</button>
-<button onclick="carregar()">Ver Avaliações</button>
+<div class="card">
+<h3>Nova Avaliação</h3>
 
-<!-- CADASTRO -->
-<div id="telaCadastro" class="card hidden">
-  <h3>Nova Avaliação</h3>
+<input type="text" id="nome" placeholder="Nome do paciente/aluno">
 
-  <input type="text" id="nome" placeholder="Nome do paciente/aluno">
+<select id="tipo">
+<option value="fisio">Fisioterapia</option>
+<option value="pilates">Pilates</option>
+<option value="pelvica">Pélvica</option>
+<option value="recovery">Recovery</option>
+</select>
 
-  <select id="tipo">
-    <option value="fisio">Fisioterapia</option>
-    <option value="pilates">Pilates</option>
-    <option value="pelvica">Pélvica</option>
-    <option value="recovery">Recovery</option>
-  </select>
-
-  <!-- ESPAÇOS SEPARADOS PARA MODELOS FUTUROS -->
-  <div id="modelo-fisio"></div>
-  <div id="modelo-pilates"></div>
-  <div id="modelo-pelvica"></div>
-  <div id="modelo-recovery"></div>
-
-  <button class="salvar" onclick="salvar()">Salvar</button>
-  <button class="voltar" onclick="voltar()">Cancelar</button>
+<button class="btn-primary" onclick="salvar()">Salvar Avaliação</button>
 </div>
 
-<!-- FILTROS -->
-<div id="telaLista" class="card hidden">
-  <h3>Pesquisar Avaliações</h3>
+<div class="card">
+<h3>Pesquisar Avaliações</h3>
 
-  <input type="text" id="filtroNome" placeholder="Buscar por nome">
-  
-  <select id="filtroTipo">
-    <option value="">Todos os tipos</option>
-    <option value="fisio">Fisioterapia</option>
-    <option value="pilates">Pilates</option>
-    <option value="pelvica">Pélvica</option>
-    <option value="recovery">Recovery</option>
-  </select>
-
-  <button class="filtro" onclick="carregar()">Filtrar</button>
-
-  <div id="listaContainer"></div>
+<div class="filtros">
+<input type="text" id="filtroNome" placeholder="Buscar por nome">
+<select id="filtroTipo">
+<option value="">Todos</option>
+<option value="fisio">Fisio</option>
+<option value="pilates">Pilates</option>
+<option value="pelvica">Pélvica</option>
+<option value="recovery">Recovery</option>
+</select>
+<button class="btn-secondary" onclick="carregar()">Buscar</button>
 </div>
 
+<div id="listaContainer"></div>
+
+</div>
 </div>
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, set, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
@@ -131,26 +125,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-console.log("🔥 Firebase conectado!");
-
-window.mostrarCadastro = function(){
-  document.getElementById("telaCadastro").classList.remove("hidden");
-  document.getElementById("telaLista").classList.add("hidden");
-}
-
-window.voltar = function(){
-  document.getElementById("telaCadastro").classList.add("hidden");
-}
-
 window.salvar = function(){
 
   const nome = document.getElementById("nome").value;
   const tipo = document.getElementById("tipo").value;
 
-  if(!nome){
-    alert("Digite o nome!");
-    return;
-  }
+  if(!nome){ alert("Digite o nome!"); return; }
 
   const novaRef = push(ref(db, `avaliacoes/${tipo}`));
 
@@ -159,105 +139,172 @@ window.salvar = function(){
     criadoEm: new Date().toLocaleString()
   });
 
-  alert("Salvo com sucesso!");
-  voltar();
+  alert("Salvo!");
+  document.getElementById("nome").value="";
 }
 
 window.carregar = function(){
 
-  document.getElementById("telaLista").classList.remove("hidden");
-  document.getElementById("telaCadastro").classList.add("hidden");
-
   const listaDiv = document.getElementById("listaContainer");
-  listaDiv.innerHTML = "Carregando...";
-
   const filtroNome = document.getElementById("filtroNome").value.toLowerCase();
   const filtroTipo = document.getElementById("filtroTipo").value;
 
-  const tipos = ["fisio","pilates","pelvica","recovery"];
+  listaDiv.innerHTML="Carregando...";
 
-  let todas = [];
-  let carregados = 0;
+  onValue(ref(db,"avaliacoes"), snapshot=>{
 
-  tipos.forEach(tipo => {
+    listaDiv.innerHTML="";
+    let todas=[];
 
-    onValue(ref(db, `avaliacoes/${tipo}`), snapshot => {
+    snapshot.forEach(child=>{
 
-      carregados++;
-
-      if(snapshot.exists()){
-        snapshot.forEach(child => {
+      if(child.val().nome){
+        todas.push({
+          id:child.key,
+          tipo:child.val().tipo || "fisio",
+          ...child.val()
+        });
+      }else{
+        child.forEach(sub=>{
           todas.push({
-            id: child.key,
-            tipo: tipo,
-            ...child.val()
+            id:sub.key,
+            tipo:child.key,
+            ...sub.val()
           });
         });
       }
 
-      if(carregados === tipos.length){
-        renderizar(todas, filtroNome, filtroTipo);
-      }
+    });
 
-    }, { onlyOnce:true });
+    const filtradas = todas.filter(item=>{
+      if(filtroTipo && item.tipo!==filtroTipo) return false;
+      if(filtroNome && !item.nome.toLowerCase().includes(filtroNome)) return false;
+      return true;
+    });
 
-  });
+    if(filtradas.length===0){
+      listaDiv.innerHTML="Nenhuma encontrada.";
+      return;
+    }
 
-}
-
-function renderizar(lista, filtroNome, filtroTipo){
-
-  const listaDiv = document.getElementById("listaContainer");
-  listaDiv.innerHTML = "";
-
-  const filtradas = lista.filter(item => {
-    if(filtroTipo && item.tipo !== filtroTipo) return false;
-    if(filtroNome && !item.nome.toLowerCase().includes(filtroNome)) return false;
-    return true;
-  });
-
-  if(filtradas.length === 0){
-    listaDiv.innerHTML = "Nenhuma avaliação encontrada.";
-    return;
-  }
-
-  filtradas.forEach(dados => {
-
-    listaDiv.innerHTML += `
+    filtradas.forEach(dados=>{
+      listaDiv.innerHTML+=`
       <div class="card">
         <strong>${dados.nome}</strong><br>
         Tipo: ${dados.tipo}<br>
-        <small>${dados.criadoEm}</small><br><br>
+        <small>${dados.criadoEm}</small><br>
 
-        <button onclick="adicionarEvolucao('${dados.tipo}','${dados.id}')">Adicionar Evolução</button>
-
-        <div id="evolucoes-${dados.id}"></div>
+        <button class="btn-primary" onclick="abrir('${dados.tipo}','${dados.id}')">Abrir</button>
+        <button class="btn-edit" onclick="editarAvaliacao('${dados.tipo}','${dados.id}','${dados.nome}')">Editar</button>
+        <button class="btn-danger" onclick="excluirAvaliacao('${dados.tipo}','${dados.id}')">Excluir</button>
       </div>
-    `;
+      `;
+    });
 
-  });
+  },{onlyOnce:true});
 
 }
 
-window.adicionarEvolucao = function(tipo,id){
+window.excluirAvaliacao = function(tipo,id){
+  if(confirm("Excluir avaliação?")){
+    remove(ref(db,`avaliacoes/${tipo}/${id}`));
+    carregar();
+  }
+}
 
-  const texto = prompt("Digite a evolução:");
-  if(!texto) return;
+window.editarAvaliacao = function(tipo,id,nomeAtual){
+  const novoNome = prompt("Editar nome:",nomeAtual);
+  if(novoNome){
+    update(ref(db,`avaliacoes/${tipo}/${id}`),{nome:novoNome});
+    carregar();
+  }
+}
 
-  const evolucaoRef = push(ref(db, `avaliacoes/${tipo}/${id}/evolucoes`));
+window.abrir = function(tipo,id){
 
-  set(evolucaoRef,{
+  const listaDiv = document.getElementById("listaContainer");
+
+  onValue(ref(db,`avaliacoes/${tipo}/${id}`), snapshot=>{
+
+    const dados=snapshot.val();
+
+    let html=`
+    <div class="card">
+      <h2>${dados.nome}</h2>
+      <p>Tipo: ${tipo}</p>
+      <p>Criado em: ${dados.criadoEm}</p>
+
+      <h3>Nova Evolução</h3>
+      <textarea id="textoEvolucao"
+      placeholder="DATA:
+PROCEDIMENTOS:
+INTERCORRÊNCIA:
+EVOLUÇÃO DO ESTADO DE SAÚDE:
+PROFISSIONAL/REGISTRO:"></textarea>
+
+      <button class="btn-primary" onclick="salvarEvolucao('${tipo}','${id}')">Salvar Evolução</button>
+      <button class="btn-secondary" onclick="carregar()">Voltar</button>
+
+      <h3>Evoluções</h3>
+    `;
+
+    if(dados.evolucoes){
+      Object.entries(dados.evolucoes).forEach(([evId,ev])=>{
+        html+=`
+        <div class="evolucao-box">
+          <pre>${ev.texto}</pre>
+          <small>${ev.data}</small><br>
+          <button class="btn-edit" onclick="editarEvolucao('${tipo}','${id}','${evId}','${ev.texto.replace(/'/g,"")}')">Editar</button>
+          <button class="btn-danger" onclick="excluirEvolucao('${tipo}','${id}','${evId}')">Excluir</button>
+        </div>
+        `;
+      });
+    }else{
+      html+="Nenhuma evolução.";
+    }
+
+    html+="</div>";
+    listaDiv.innerHTML=html;
+
+  },{onlyOnce:true});
+}
+
+window.salvarEvolucao=function(tipo,id){
+  const texto=document.getElementById("textoEvolucao").value;
+  if(!texto){alert("Digite a evolução!");return;}
+
+  const novaRef=push(ref(db,`avaliacoes/${tipo}/${id}/evolucoes`));
+  set(novaRef,{
     texto,
-    data: new Date().toLocaleString()
+    data:new Date().toLocaleString()
   });
 
-  alert("Evolução adicionada!");
+  abrir(tipo,id);
+}
+
+window.excluirEvolucao=function(tipo,id,evId){
+  if(confirm("Excluir evolução?")){
+    remove(ref(db,`avaliacoes/${tipo}/${id}/evolucoes/${evId}`));
+    abrir(tipo,id);
+  }
+}
+
+window.editarEvolucao=function(tipo,id,evId,textoAtual){
+  const novoTexto=prompt("Editar evolução:",textoAtual);
+  if(novoTexto){
+    update(ref(db,`avaliacoes/${tipo}/${id}/evolucoes/${evId}`),{
+      texto:novoTexto
+    });
+    abrir(tipo,id);
+  }
 }
 
 </script>
 
 </body>
 </html>
+
+
 
 
 
