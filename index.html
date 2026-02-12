@@ -6,135 +6,117 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #f4f6ff, #eef2ff);
-  margin: 0;
-  padding: 20px;
+body{
+  font-family: Arial, sans-serif;
+  background:#f4f6f9;
+  margin:0;
+  padding:20px;
 }
 
-.container {
-  max-width: 750px;
-  margin: auto;
-  background: white;
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+h1{
+  text-align:center;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
+.container{
+  max-width:1000px;
+  margin:auto;
 }
 
-.hidden { display: none; }
-
-button {
-  padding: 8px 14px;
-  margin: 5px 3px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.primary { background:#6c63ff; color:white; }
-.secondary { background:#e4e6ff; }
-.success { background:#00c896; color:white; }
-
-input, select, textarea {
-  width: 100%;
-  padding: 8px;
-  margin: 6px 0;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-}
-
-.card {
-  background:#f8f9ff;
+.card{
+  background:#fff;
   padding:15px;
-  margin:10px 0;
-  border-radius:15px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.05);
+  margin-top:15px;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+button{
+  padding:8px 12px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  margin:4px 2px;
+}
+
+.salvar{ background:#28a745; color:white; }
+.voltar{ background:#6c757d; color:white; }
+.filtro{ background:#007bff; color:white; }
+
+input, select{
+  padding:8px;
+  margin:5px 0;
+  width:100%;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+.hidden{ display:none; }
+
+.evolucao-box{
+  background:#f1f1f1;
+  padding:8px;
+  border-radius:6px;
+  margin-top:5px;
 }
 </style>
 </head>
-
 <body>
+
 <div class="container">
 
-<h2>Sistema de Avaliações</h2>
+<h1>Sistema de Avaliações</h1>
 
-<!-- MENU -->
-<div id="menu">
-<button class="primary" onclick="mostrarFormulario()">Nova Avaliação</button>
-<button class="secondary" onclick="mostrarLista()">Ver Avaliações</button>
+<button onclick="mostrarCadastro()">Nova Avaliação</button>
+<button onclick="carregar()">Ver Avaliações</button>
+
+<!-- CADASTRO -->
+<div id="telaCadastro" class="card hidden">
+  <h3>Nova Avaliação</h3>
+
+  <input type="text" id="nome" placeholder="Nome do paciente/aluno">
+
+  <select id="tipo">
+    <option value="fisio">Fisioterapia</option>
+    <option value="pilates">Pilates</option>
+    <option value="pelvica">Pélvica</option>
+    <option value="recovery">Recovery</option>
+  </select>
+
+  <!-- ESPAÇOS SEPARADOS PARA MODELOS FUTUROS -->
+  <div id="modelo-fisio"></div>
+  <div id="modelo-pilates"></div>
+  <div id="modelo-pelvica"></div>
+  <div id="modelo-recovery"></div>
+
+  <button class="salvar" onclick="salvar()">Salvar</button>
+  <button class="voltar" onclick="voltar()">Cancelar</button>
 </div>
 
-<!-- FORM -->
-<div id="formulario" class="hidden">
-<h3>Nova Avaliação</h3>
+<!-- FILTROS -->
+<div id="telaLista" class="card hidden">
+  <h3>Pesquisar Avaliações</h3>
 
-<form onsubmit="salvar(event)">
-<input name="nome" placeholder="Nome do paciente" required>
+  <input type="text" id="filtroNome" placeholder="Buscar por nome">
+  
+  <select id="filtroTipo">
+    <option value="">Todos os tipos</option>
+    <option value="fisio">Fisioterapia</option>
+    <option value="pilates">Pilates</option>
+    <option value="pelvica">Pélvica</option>
+    <option value="recovery">Recovery</option>
+  </select>
 
-<select name="tipo" required>
-<option value="">Selecione o tipo</option>
-<option value="fisio">Fisioterapia</option>
-<option value="pilates">Pilates</option>
-<option value="pelvica">Pélvica</option>
-<option value="recovery">Recovery</option>
-</select>
+  <button class="filtro" onclick="carregar()">Filtrar</button>
 
-<!-- 🔽 ESPAÇOS RESERVADOS PARA MODELOS FUTUROS -->
-
-<div id="modelo-fisio" class="hidden">
-<!-- Aqui futuramente entra o formulário completo de Fisioterapia -->
-</div>
-
-<div id="modelo-pilates" class="hidden">
-<!-- Aqui futuramente entra o formulário completo de Pilates -->
-</div>
-
-<div id="modelo-pelvica" class="hidden">
-<!-- Aqui futuramente entra o formulário completo de Pélvica -->
-</div>
-
-<div id="modelo-recovery" class="hidden">
-<!-- Aqui futuramente entra o formulário completo de Recovery -->
-</div>
-
-<button class="success" type="submit">Salvar</button>
-</form>
-
-<button class="secondary" onclick="voltarMenu()">Voltar</button>
-</div>
-
-<!-- LISTA -->
-<div id="lista" class="hidden">
-<h3>Avaliações</h3>
-
-<input id="filtroNome" placeholder="Buscar por nome..." oninput="carregar()">
-
-<select id="filtroTipo" onchange="carregar()">
-<option value="">Todos</option>
-<option value="fisio">Fisio</option>
-<option value="pilates">Pilates</option>
-<option value="pelvica">Pélvica</option>
-<option value="recovery">Recovery</option>
-</select>
-
-<div id="listaContainer"></div>
-
-<button class="secondary" onclick="voltarMenu()">Voltar</button>
+  <div id="listaContainer"></div>
 </div>
 
 </div>
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
@@ -149,134 +131,134 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-/* NAVEGAÇÃO */
+console.log("🔥 Firebase conectado!");
 
-window.mostrarFormulario = function(){
-  menu.classList.add("hidden");
-  formulario.classList.remove("hidden");
+window.mostrarCadastro = function(){
+  document.getElementById("telaCadastro").classList.remove("hidden");
+  document.getElementById("telaLista").classList.add("hidden");
 }
 
-window.mostrarLista = function(){
-  menu.classList.add("hidden");
-  lista.classList.remove("hidden");
-  carregar();
+window.voltar = function(){
+  document.getElementById("telaCadastro").classList.add("hidden");
 }
 
-window.voltarMenu = function(){
-  menu.classList.remove("hidden");
-  formulario.classList.add("hidden");
-  lista.classList.add("hidden");
-}
+window.salvar = function(){
 
-/* SALVAR */
+  const nome = document.getElementById("nome").value;
+  const tipo = document.getElementById("tipo").value;
 
-window.salvar = function(e){
-  e.preventDefault();
+  if(!nome){
+    alert("Digite o nome!");
+    return;
+  }
 
-  const dados = Object.fromEntries(new FormData(e.target));
-  dados.criadoEm = new Date().toLocaleString();
+  const novaRef = push(ref(db, `avaliacoes/${tipo}`));
 
-  push(ref(db, `avaliacoes/${dados.tipo}`), dados)
-  .then(()=>{
-    alert("✅ Avaliação salva!");
-    e.target.reset();
-    voltarMenu();
+  set(novaRef,{
+    nome,
+    criadoEm: new Date().toLocaleString()
   });
-}
 
-/* CARREGAR */
+  alert("Salvo com sucesso!");
+  voltar();
+}
 
 window.carregar = function(){
 
+  document.getElementById("telaLista").classList.remove("hidden");
+  document.getElementById("telaCadastro").classList.add("hidden");
+
   const listaDiv = document.getElementById("listaContainer");
+  listaDiv.innerHTML = "Carregando...";
+
   const filtroNome = document.getElementById("filtroNome").value.toLowerCase();
   const filtroTipo = document.getElementById("filtroTipo").value;
 
-  listaDiv.innerHTML = "Carregando...";
-
   const tipos = ["fisio","pilates","pelvica","recovery"];
-  listaDiv.innerHTML = "";
+
+  let todas = [];
+  let carregados = 0;
 
   tipos.forEach(tipo => {
 
-    if(filtroTipo && filtroTipo !== tipo) return;
-
     onValue(ref(db, `avaliacoes/${tipo}`), snapshot => {
 
-      if(!snapshot.exists()) return;
+      carregados++;
 
-      snapshot.forEach(child => {
+      if(snapshot.exists()){
+        snapshot.forEach(child => {
+          todas.push({
+            id: child.key,
+            tipo: tipo,
+            ...child.val()
+          });
+        });
+      }
 
-        const id = child.key;
-        const dados = child.val();
+      if(carregados === tipos.length){
+        renderizar(todas, filtroNome, filtroTipo);
+      }
 
-        if(filtroNome && !dados.nome.toLowerCase().includes(filtroNome)) return;
-
-        listaDiv.innerHTML += `
-          <div class="card">
-            <strong>${dados.nome}</strong><br>
-            Tipo: ${tipo}<br>
-            <small>${dados.criadoEm}</small><br><br>
-            <button onclick="mostrarEvolucoes('${tipo}','${id}')">Ver Evoluções</button>
-            <button onclick="adicionarEvolucao('${tipo}','${id}')">Adicionar Evolução</button>
-            <div id="evolucoes-${id}"></div>
-          </div>
-        `;
-      });
-
-    });
+    }, { onlyOnce:true });
 
   });
 
 }
 
-/* EVOLUÇÃO */
+function renderizar(lista, filtroNome, filtroTipo){
+
+  const listaDiv = document.getElementById("listaContainer");
+  listaDiv.innerHTML = "";
+
+  const filtradas = lista.filter(item => {
+    if(filtroTipo && item.tipo !== filtroTipo) return false;
+    if(filtroNome && !item.nome.toLowerCase().includes(filtroNome)) return false;
+    return true;
+  });
+
+  if(filtradas.length === 0){
+    listaDiv.innerHTML = "Nenhuma avaliação encontrada.";
+    return;
+  }
+
+  filtradas.forEach(dados => {
+
+    listaDiv.innerHTML += `
+      <div class="card">
+        <strong>${dados.nome}</strong><br>
+        Tipo: ${dados.tipo}<br>
+        <small>${dados.criadoEm}</small><br><br>
+
+        <button onclick="adicionarEvolucao('${dados.tipo}','${dados.id}')">Adicionar Evolução</button>
+
+        <div id="evolucoes-${dados.id}"></div>
+      </div>
+    `;
+
+  });
+
+}
 
 window.adicionarEvolucao = function(tipo,id){
 
-  const texto = prompt("Digite a evolução do dia:");
+  const texto = prompt("Digite a evolução:");
   if(!texto) return;
 
-  push(ref(db, `avaliacoes/${tipo}/${id}/evolucoes`), {
-    data: new Date().toLocaleString(),
-    texto
+  const evolucaoRef = push(ref(db, `avaliacoes/${tipo}/${id}/evolucoes`));
+
+  set(evolucaoRef,{
+    texto,
+    data: new Date().toLocaleString()
   });
 
-}
-
-window.mostrarEvolucoes = function(tipo,id){
-
-  const div = document.getElementById(`evolucoes-${id}`);
-  div.innerHTML = "Carregando...";
-
-  onValue(ref(db, `avaliacoes/${tipo}/${id}/evolucoes`), snapshot => {
-
-    div.innerHTML = "";
-
-    if(!snapshot.exists()){
-      div.innerHTML = "<small>Sem evoluções ainda.</small>";
-      return;
-    }
-
-    snapshot.forEach(child => {
-      const evo = child.val();
-
-      div.innerHTML += `
-        <div style="margin-top:6px;padding:8px;background:#eef2ff;border-radius:8px;">
-          <small><strong>${evo.data}</strong></small><br>
-          ${evo.texto}
-        </div>
-      `;
-    });
-
-  });
-
+  alert("Evolução adicionada!");
 }
 
 </script>
 
 </body>
 </html>
+
 
 
 
