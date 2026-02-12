@@ -60,9 +60,7 @@ button{
   margin-right:5px;
 }
 
-button:hover{
-  opacity:0.9;
-}
+button:hover{ opacity:0.9; }
 
 .hidden{ display:none; }
 
@@ -83,6 +81,7 @@ button:hover{
 
 <div class="container">
 
+<!-- TELA INICIAL -->
 <div id="telaInicial">
 
 <div class="card">
@@ -109,6 +108,7 @@ button:hover{
 
 </div>
 
+<!-- TELA DETALHE -->
 <div id="telaDetalhe" class="hidden">
 <div class="card">
 
@@ -148,12 +148,19 @@ const db = getDatabase(app);
 let avaliacaoAtualId = null;
 let tipoAtual = null;
 
+/* SALVAR AVALIAÇÃO */
 window.salvarAvaliacao = function(){
+
   const nome = document.getElementById("nome").value;
   const tipo = document.getElementById("tipo").value;
   const data = document.getElementById("data").value;
 
-  const novaRef = push(ref(db,`avaliacoes/${tipo}`));
+  if(!nome || !data){
+    alert("Preencha nome e data.");
+    return;
+  }
+
+  const novaRef = push(ref(db, `avaliacoes/${tipo}`));
 
   set(novaRef,{
     nome,
@@ -162,34 +169,52 @@ window.salvarAvaliacao = function(){
 
   alert("Avaliação salva!");
   document.getElementById("nome").value="";
-  carregarAvaliacoes();
-}
+  document.getElementById("data").value="";
+};
 
+/* CARREGAR AVALIAÇÕES */
 function carregarAvaliacoes(){
+
   const lista = document.getElementById("listaAvaliacoes");
-  lista.innerHTML="";
+  lista.innerHTML = "Carregando...";
 
-  const tipos = ["fisioterapia","pilates","pelvica","recovery"];
+  const avalRef = ref(db, "avaliacoes");
 
-  tipos.forEach(tipo=>{
-    const tipoRef = ref(db,`avaliacoes/${tipo}`);
+  onValue(avalRef, (snapshot) => {
 
-    onValue(tipoRef, snapshot=>{
-      if(snapshot.exists()){
-        snapshot.forEach(child=>{
-          const dados = child.val();
-          const div = document.createElement("div");
-          div.className="lista-item";
-          div.innerHTML = `<strong>${dados.nome}</strong> - ${tipo}`;
-          div.onclick = ()=> abrirDetalhe(tipo,child.key,dados);
-          lista.appendChild(div);
-        });
-      }
+    lista.innerHTML = "";
+
+    if (!snapshot.exists()) {
+      lista.innerHTML = "Nenhuma avaliação encontrada.";
+      return;
+    }
+
+    snapshot.forEach((tipoSnap) => {
+
+      const tipo = tipoSnap.key;
+
+      tipoSnap.forEach((child) => {
+
+        const dados = child.val();
+
+        const div = document.createElement("div");
+        div.className = "lista-item";
+        div.innerHTML = `<strong>${dados.nome}</strong> - ${tipo}`;
+        div.onclick = () => abrirDetalhe(tipo, child.key, dados);
+
+        lista.appendChild(div);
+
+      });
+
     });
+
   });
+
 }
 
+/* ABRIR DETALHE */
 window.abrirDetalhe = function(tipo,id,dados){
+
   avaliacaoAtualId = id;
   tipoAtual = tipo;
 
@@ -200,52 +225,69 @@ window.abrirDetalhe = function(tipo,id,dados){
   `${dados.nome} - ${tipo}`;
 
   carregarEvolucoes();
-}
+};
 
+/* CARREGAR EVOLUÇÕES */
 function carregarEvolucoes(){
+
   const div = document.getElementById("evolucoes");
-  div.innerHTML="<h4>Evoluções</h4>";
+  div.innerHTML = "<h4>Evoluções</h4>";
 
-  const refEvo = ref(db,`avaliacoes/${tipoAtual}/${avaliacaoAtualId}/evolucoes`);
+  const refEvo = ref(db, `avaliacoes/${tipoAtual}/${avaliacaoAtualId}/evolucoes`);
 
-  onValue(refEvo,snapshot=>{
-    div.innerHTML="<h4>Evoluções</h4>";
+  onValue(refEvo, (snapshot) => {
+
+    div.innerHTML = "<h4>Evoluções</h4>";
 
     if(!snapshot.exists()){
-      div.innerHTML+="Nenhuma evolução.";
+      div.innerHTML += "Nenhuma evolução.";
       return;
     }
 
-    snapshot.forEach(child=>{
+    snapshot.forEach((child)=>{
       const evo = child.val();
+
       const p = document.createElement("p");
-      p.innerHTML=`<strong>${evo.data}</strong><br>${evo.texto}<hr>`;
+      p.innerHTML = `<strong>${evo.data}</strong><br>${evo.texto}<hr>`;
       div.appendChild(p);
     });
+
   });
+
 }
 
+/* SALVAR EVOLUÇÃO */
 window.salvarEvolucao = function(){
+
   const texto = document.getElementById("textoEvolucao").value;
 
-  const novaRef = push(ref(db,`avaliacoes/${tipoAtual}/${avaliacaoAtualId}/evolucoes`));
+  if(!texto){
+    alert("Digite a evolução.");
+    return;
+  }
+
+  const novaRef = push(ref(db, `avaliacoes/${tipoAtual}/${avaliacaoAtualId}/evolucoes`));
 
   set(novaRef,{
     texto,
-    data:new Date().toLocaleDateString()
+    data: new Date().toLocaleDateString()
   });
 
   document.getElementById("textoEvolucao").value="";
-}
+};
 
+/* VOLTAR */
 window.voltar = function(){
   document.getElementById("telaInicial").classList.remove("hidden");
   document.getElementById("telaDetalhe").classList.add("hidden");
-}
+};
 
+/* INICIAR */
 carregarAvaliacoes();
 
 </script>
 
 </body>
 </html>
+
+
