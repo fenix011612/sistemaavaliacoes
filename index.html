@@ -7,38 +7,103 @@
 
 <style>
 body {
-  font-family: Arial;
-  max-width: 600px;
-  margin: auto;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f4f6ff, #eef2ff);
+  margin: 0;
   padding: 20px;
 }
-.hidden { display: none; }
-button {
-  padding: 8px 12px;
-  margin: 5px 0;
-  cursor: pointer;
+
+.container {
+  max-width: 650px;
+  margin: auto;
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
 }
+
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.hidden { display: none; }
+
+button {
+  padding: 10px 15px;
+  margin: 8px 0;
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+button.primary {
+  background: #6c63ff;
+  color: white;
+}
+
+button.secondary {
+  background: #e2e6ff;
+  color: #333;
+}
+
+button.success {
+  background: #00c896;
+  color: white;
+}
+
 input, select {
   width: 100%;
-  padding: 6px;
-  margin: 5px 0;
-}
-.card {
-  border: 1px solid #ccc;
   padding: 10px;
   margin: 8px 0;
-  border-radius: 6px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.card {
+  border: none;
+  padding: 15px;
+  margin: 12px 0;
+  border-radius: 15px;
+  background: #f8f9ff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card strong {
+  font-size: 16px;
+  color: #333;
+}
+
+small {
+  color: #777;
 }
 </style>
 </head>
+
 <body>
+
+<div class="container">
 
 <h2>Sistema de Avaliações</h2>
 
 <!-- MENU -->
 <div id="menu">
-<button onclick="mostrarFormulario()">Nova Avaliação</button>
-<button onclick="mostrarLista()">Ver Avaliações</button>
+<button class="primary" onclick="mostrarFormulario()">Nova Avaliação</button>
+<button class="secondary" onclick="mostrarLista()">Ver Avaliações</button>
 </div>
 
 <!-- FORM -->
@@ -56,17 +121,19 @@ input, select {
 <option value="recovery">Recovery</option>
 </select>
 
-<button type="submit">Salvar</button>
+<button class="success" type="submit">Salvar</button>
 </form>
 
-<button onclick="voltarMenu()">Voltar</button>
+<button class="secondary" onclick="voltarMenu()">Voltar</button>
 </div>
 
 <!-- LISTA -->
 <div id="lista" class="hidden">
 <h3>Avaliações Salvas</h3>
 <div id="listaContainer"></div>
-<button onclick="voltarMenu()">Voltar</button>
+<button class="secondary" onclick="voltarMenu()">Voltar</button>
+</div>
+
 </div>
 
 <script type="module">
@@ -119,7 +186,7 @@ window.salvar = function(e){
 
   push(ref(db, "avaliacoes"), dados)
     .then(()=>{
-      alert("✅ Avaliação salva!");
+      alert("✅ Avaliação salva com sucesso!");
       e.target.reset();
       voltarMenu();
     })
@@ -164,4 +231,5 @@ function carregar(){
 
 </body>
 </html>
+
 
