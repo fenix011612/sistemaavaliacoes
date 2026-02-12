@@ -14,7 +14,7 @@ body {
 }
 
 .container {
-  max-width: 650px;
+  max-width: 750px;
   margin: auto;
   background: white;
   padding: 25px;
@@ -24,78 +24,43 @@ body {
 
 h2 {
   text-align: center;
-  margin-bottom: 25px;
-  color: #333;
+  margin-bottom: 20px;
 }
 
 .hidden { display: none; }
 
 button {
-  padding: 10px 15px;
-  margin: 8px 0;
-  cursor: pointer;
+  padding: 8px 14px;
+  margin: 5px 3px;
   border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: 0.2s;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  opacity: 0.9;
-}
-
-button.primary {
-  background: #6c63ff;
-  color: white;
-}
-
-button.secondary {
-  background: #e2e6ff;
-  color: #333;
-}
-
-button.success {
-  background: #00c896;
-  color: white;
-}
-
-input, select {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
   border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.primary { background:#6c63ff; color:white; }
+.secondary { background:#e4e6ff; }
+.success { background:#00c896; color:white; }
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+  border-radius: 8px;
   border: 1px solid #ddd;
-  font-size: 14px;
 }
 
 .card {
-  border: none;
-  padding: 15px;
-  margin: 12px 0;
-  border-radius: 15px;
-  background: #f8f9ff;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-  transition: 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-}
-
-.card strong {
-  font-size: 16px;
-  color: #333;
-}
-
-small {
-  color: #777;
+  background:#f8f9ff;
+  padding:15px;
+  margin:10px 0;
+  border-radius:15px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.05);
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
 <h2>Sistema de Avaliações</h2>
@@ -121,6 +86,24 @@ small {
 <option value="recovery">Recovery</option>
 </select>
 
+<!-- 🔽 ESPAÇOS RESERVADOS PARA MODELOS FUTUROS -->
+
+<div id="modelo-fisio" class="hidden">
+<!-- Aqui futuramente entra o formulário completo de Fisioterapia -->
+</div>
+
+<div id="modelo-pilates" class="hidden">
+<!-- Aqui futuramente entra o formulário completo de Pilates -->
+</div>
+
+<div id="modelo-pelvica" class="hidden">
+<!-- Aqui futuramente entra o formulário completo de Pélvica -->
+</div>
+
+<div id="modelo-recovery" class="hidden">
+<!-- Aqui futuramente entra o formulário completo de Recovery -->
+</div>
+
 <button class="success" type="submit">Salvar</button>
 </form>
 
@@ -129,8 +112,20 @@ small {
 
 <!-- LISTA -->
 <div id="lista" class="hidden">
-<h3>Avaliações Salvas</h3>
+<h3>Avaliações</h3>
+
+<input id="filtroNome" placeholder="Buscar por nome..." oninput="carregar()">
+
+<select id="filtroTipo" onchange="carregar()">
+<option value="">Todos</option>
+<option value="fisio">Fisio</option>
+<option value="pilates">Pilates</option>
+<option value="pelvica">Pélvica</option>
+<option value="recovery">Recovery</option>
+</select>
+
 <div id="listaContainer"></div>
+
 <button class="secondary" onclick="voltarMenu()">Voltar</button>
 </div>
 
@@ -141,7 +136,6 @@ small {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
-/* 🔥 SEU FIREBASE */
 const firebaseConfig = {
   apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
   authDomain: "sistemaavaliacoes-26513.firebaseapp.com",
@@ -155,28 +149,26 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-console.log("🔥 Firebase conectado com sucesso!");
-
-/* ===== NAVEGAÇÃO ===== */
+/* NAVEGAÇÃO */
 
 window.mostrarFormulario = function(){
-  document.getElementById("menu").classList.add("hidden");
-  document.getElementById("formulario").classList.remove("hidden");
+  menu.classList.add("hidden");
+  formulario.classList.remove("hidden");
 }
 
 window.mostrarLista = function(){
-  document.getElementById("menu").classList.add("hidden");
-  document.getElementById("lista").classList.remove("hidden");
+  menu.classList.add("hidden");
+  lista.classList.remove("hidden");
   carregar();
 }
 
 window.voltarMenu = function(){
-  document.getElementById("menu").classList.remove("hidden");
-  document.getElementById("formulario").classList.add("hidden");
-  document.getElementById("lista").classList.add("hidden");
+  menu.classList.remove("hidden");
+  formulario.classList.add("hidden");
+  lista.classList.add("hidden");
 }
 
-/* ===== SALVAR ===== */
+/* SALVAR */
 
 window.salvar = function(e){
   e.preventDefault();
@@ -184,41 +176,95 @@ window.salvar = function(e){
   const dados = Object.fromEntries(new FormData(e.target));
   dados.criadoEm = new Date().toLocaleString();
 
-  push(ref(db, "avaliacoes"), dados)
-    .then(()=>{
-      alert("✅ Avaliação salva com sucesso!");
-      e.target.reset();
-      voltarMenu();
-    })
-    .catch((erro)=>{
-      alert("Erro ao salvar: " + erro.message);
-    });
+  push(ref(db, `avaliacoes/${dados.tipo}`), dados)
+  .then(()=>{
+    alert("✅ Avaliação salva!");
+    e.target.reset();
+    voltarMenu();
+  });
 }
 
-/* ===== CARREGAR ===== */
+/* CARREGAR */
 
-function carregar(){
+window.carregar = function(){
 
-  const lista = document.getElementById("listaContainer");
-  lista.innerHTML = "Carregando...";
+  const listaDiv = document.getElementById("listaContainer");
+  const filtroNome = document.getElementById("filtroNome").value.toLowerCase();
+  const filtroTipo = document.getElementById("filtroTipo").value;
 
-  onValue(ref(db, "avaliacoes"), snapshot => {
+  listaDiv.innerHTML = "Carregando...";
 
-    lista.innerHTML = "";
+  const tipos = ["fisio","pilates","pelvica","recovery"];
+  listaDiv.innerHTML = "";
+
+  tipos.forEach(tipo => {
+
+    if(filtroTipo && filtroTipo !== tipo) return;
+
+    onValue(ref(db, `avaliacoes/${tipo}`), snapshot => {
+
+      if(!snapshot.exists()) return;
+
+      snapshot.forEach(child => {
+
+        const id = child.key;
+        const dados = child.val();
+
+        if(filtroNome && !dados.nome.toLowerCase().includes(filtroNome)) return;
+
+        listaDiv.innerHTML += `
+          <div class="card">
+            <strong>${dados.nome}</strong><br>
+            Tipo: ${tipo}<br>
+            <small>${dados.criadoEm}</small><br><br>
+            <button onclick="mostrarEvolucoes('${tipo}','${id}')">Ver Evoluções</button>
+            <button onclick="adicionarEvolucao('${tipo}','${id}')">Adicionar Evolução</button>
+            <div id="evolucoes-${id}"></div>
+          </div>
+        `;
+      });
+
+    });
+
+  });
+
+}
+
+/* EVOLUÇÃO */
+
+window.adicionarEvolucao = function(tipo,id){
+
+  const texto = prompt("Digite a evolução do dia:");
+  if(!texto) return;
+
+  push(ref(db, `avaliacoes/${tipo}/${id}/evolucoes`), {
+    data: new Date().toLocaleString(),
+    texto
+  });
+
+}
+
+window.mostrarEvolucoes = function(tipo,id){
+
+  const div = document.getElementById(`evolucoes-${id}`);
+  div.innerHTML = "Carregando...";
+
+  onValue(ref(db, `avaliacoes/${tipo}/${id}/evolucoes`), snapshot => {
+
+    div.innerHTML = "";
 
     if(!snapshot.exists()){
-      lista.innerHTML = "Nenhuma avaliação encontrada.";
+      div.innerHTML = "<small>Sem evoluções ainda.</small>";
       return;
     }
 
     snapshot.forEach(child => {
-      const dados = child.val();
+      const evo = child.val();
 
-      lista.innerHTML += `
-        <div class="card">
-          <strong>${dados.nome}</strong><br>
-          Tipo: ${dados.tipo}<br>
-          <small>${dados.criadoEm}</small>
+      div.innerHTML += `
+        <div style="margin-top:6px;padding:8px;background:#eef2ff;border-radius:8px;">
+          <small><strong>${evo.data}</strong></small><br>
+          ${evo.texto}
         </div>
       `;
     });
@@ -231,5 +277,6 @@ function carregar(){
 
 </body>
 </html>
+
 
 
