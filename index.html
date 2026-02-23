@@ -90,10 +90,10 @@ button:hover{ opacity:0.9; }
 <input type="text" id="nome" placeholder="Nome do paciente">
 
 <select id="tipo">
-<option value="fisioterapia">Fisioterapia</option>
-<option value="pilates">Pilates</option>
-<option value="pelvica">Pélvica</option>
-<option value="recovery">Recovery</option>
+<option value="Fisioterapia">Fisioterapia</option>
+<option value="Pilates">Pilates</option>
+<option value="Pélvica">Pélvica</option>
+<option value="Recovery">Recovery</option>
 </select>
 
 <input type="date" id="data">
@@ -146,7 +146,6 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 let avaliacaoAtualId = null;
-let tipoAtual = null;
 
 /* SALVAR AVALIAÇÃO */
 window.salvarAvaliacao = function(){
@@ -160,11 +159,13 @@ window.salvarAvaliacao = function(){
     return;
   }
 
-  const novaRef = push(ref(db, `avaliacoes/${tipo}`));
+  const novaRef = push(ref(db, "avaliacoes"));
 
   set(novaRef,{
     nome,
-    data
+    tipo,
+    data,
+    criadoEm: new Date().toLocaleString()
   });
 
   alert("Avaliação salva!");
@@ -189,40 +190,32 @@ function carregarAvaliacoes(){
       return;
     }
 
-    snapshot.forEach((tipoSnap) => {
+    snapshot.forEach((child) => {
 
-      const tipo = tipoSnap.key;
+      const dados = child.val();
 
-      tipoSnap.forEach((child) => {
+      const div = document.createElement("div");
+      div.className = "lista-item";
+      div.innerHTML = `<strong>${dados.nome}</strong> - ${dados.tipo}`;
+      div.onclick = () => abrirDetalhe(child.key, dados);
 
-        const dados = child.val();
-
-        const div = document.createElement("div");
-        div.className = "lista-item";
-        div.innerHTML = `<strong>${dados.nome}</strong> - ${tipo}`;
-        div.onclick = () => abrirDetalhe(tipo, child.key, dados);
-
-        lista.appendChild(div);
-
-      });
+      lista.appendChild(div);
 
     });
 
   });
-
 }
 
 /* ABRIR DETALHE */
-window.abrirDetalhe = function(tipo,id,dados){
+window.abrirDetalhe = function(id,dados){
 
   avaliacaoAtualId = id;
-  tipoAtual = tipo;
 
   document.getElementById("telaInicial").classList.add("hidden");
   document.getElementById("telaDetalhe").classList.remove("hidden");
 
   document.getElementById("tituloDetalhe").innerText =
-  `${dados.nome} - ${tipo}`;
+  `${dados.nome} - ${dados.tipo}`;
 
   carregarEvolucoes();
 };
@@ -233,7 +226,7 @@ function carregarEvolucoes(){
   const div = document.getElementById("evolucoes");
   div.innerHTML = "<h4>Evoluções</h4>";
 
-  const refEvo = ref(db, `avaliacoes/${tipoAtual}/${avaliacaoAtualId}/evolucoes`);
+  const refEvo = ref(db, `avaliacoes/${avaliacaoAtualId}/evolucoes`);
 
   onValue(refEvo, (snapshot) => {
 
@@ -253,7 +246,6 @@ function carregarEvolucoes(){
     });
 
   });
-
 }
 
 /* SALVAR EVOLUÇÃO */
@@ -266,7 +258,7 @@ window.salvarEvolucao = function(){
     return;
   }
 
-  const novaRef = push(ref(db, `avaliacoes/${tipoAtual}/${avaliacaoAtualId}/evolucoes`));
+  const novaRef = push(ref(db, `avaliacoes/${avaliacaoAtualId}/evolucoes`));
 
   set(novaRef,{
     texto,
@@ -289,5 +281,6 @@ carregarAvaliacoes();
 
 </body>
 </html>
+
 
 
