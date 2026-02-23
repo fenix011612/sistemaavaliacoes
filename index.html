@@ -68,6 +68,9 @@ button:hover{ opacity:0.9; }
 
 <div class="container">
 
+<!-- TELA INICIAL -->
+<div id="telaInicial">
+
 <div class="card">
 <h3>Nova Avaliação</h3>
 
@@ -122,6 +125,22 @@ button:hover{ opacity:0.9; }
 
 </div>
 
+<!-- TELA DETALHE -->
+<div id="telaDetalhe" class="hidden">
+<div class="card">
+<button onclick="voltar()">⬅ Voltar</button>
+<h3 id="tituloDetalhe"></h3>
+<div id="dadosAvaliacao"></div>
+<div id="evolucoes"></div>
+
+<h4>Nova Evolução</h4>
+<textarea id="textoEvolucao" rows="5"></textarea>
+<button onclick="salvarEvolucao()">Salvar Evolução</button>
+</div>
+</div>
+
+</div>
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -140,21 +159,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-/* MOSTRAR CAMPOS */
-window.mostrarCampos = function(){
+let avaliacaoAtualId = null;
 
+window.mostrarCampos = function(){
 ["fisioCampos","pilatesCampos","pelvicaCampos","recoveryCampos"]
 .forEach(id => document.getElementById(id).classList.add("hidden"));
 
 const tipo = document.getElementById("tipo").value;
-
 if(tipo==="Fisioterapia") document.getElementById("fisioCampos").classList.remove("hidden");
 if(tipo==="Pilates") document.getElementById("pilatesCampos").classList.remove("hidden");
 if(tipo==="Pélvica") document.getElementById("pelvicaCampos").classList.remove("hidden");
 if(tipo==="Recovery") document.getElementById("recoveryCampos").classList.remove("hidden");
 };
 
-/* SALVAR AVALIAÇÃO */
 window.salvarAvaliacao = function(){
 
 const nome = document.getElementById("nome").value;
@@ -170,34 +187,31 @@ let dadosEspecificos = {};
 
 if(tipo==="Fisioterapia"){
 dadosEspecificos = {
-queixa: document.getElementById("fisioQueixa").value,
-diagnostico: document.getElementById("fisioDiagnostico").value,
-plano: document.getElementById("fisioPlano").value
+Queixa: fisioQueixa.value,
+Diagnostico: fisioDiagnostico.value,
+Plano: fisioPlano.value
 };
 }
-
 if(tipo==="Pilates"){
 dadosEspecificos = {
-objetivo: document.getElementById("pilatesObjetivo").value,
-postural: document.getElementById("pilatesPostural").value
+Objetivo: pilatesObjetivo.value,
+Postural: pilatesPostural.value
 };
 }
-
 if(tipo==="Pélvica"){
 dadosEspecificos = {
-historico: document.getElementById("pelvicaHistorico").value,
-sintomas: document.getElementById("pelvicaSintomas").value
+Historico: pelvicaHistorico.value,
+Sintomas: pelvicaSintomas.value
 };
 }
-
 if(tipo==="Recovery"){
 dadosEspecificos = {
-regiao: document.getElementById("recoveryRegiao").value,
-dor: document.getElementById("recoveryDor").value
+Regiao: recoveryRegiao.value,
+Dor: recoveryDor.value
 };
 }
 
-const novaRef = push(ref(db, "avaliacoes"));
+const novaRef = push(ref(db,"avaliacoes"));
 
 set(novaRef,{
 nome,
@@ -208,38 +222,79 @@ criadoEm:new Date().toLocaleString()
 });
 
 alert("Avaliação salva!");
-
-document.querySelectorAll("input, textarea").forEach(el => el.value="");
+document.querySelectorAll("input, textarea").forEach(el=>el.value="");
 document.getElementById("tipo").value="";
 mostrarCampos();
 };
 
-/* CARREGAR */
 function carregarAvaliacoes(){
-
 onValue(ref(db,"avaliacoes"),(snapshot)=>{
-
 const lista=document.getElementById("listaAvaliacoes");
 lista.innerHTML="";
-
 if(!snapshot.exists()){
 lista.innerHTML="Nenhuma avaliação encontrada.";
 return;
 }
-
 snapshot.forEach((child)=>{
 const dados=child.val();
 const div=document.createElement("div");
 div.className="lista-item";
 div.innerHTML=`<strong>${dados.nome}</strong> - ${dados.tipo}`;
+div.onclick=()=>abrirDetalhe(child.key,dados);
 lista.appendChild(div);
 });
-
 });
 }
+
+window.abrirDetalhe=function(id,dados){
+
+avaliacaoAtualId=id;
+
+document.getElementById("telaInicial").classList.add("hidden");
+document.getElementById("telaDetalhe").classList.remove("hidden");
+
+document.getElementById("tituloDetalhe").innerText=`${dados.nome} - ${dados.tipo}`;
+
+let html="<h4>Dados da Avaliação</h4>";
+for(const chave in dados.dadosEspecificos){
+html+=`<p><strong>${chave}:</strong> ${dados.dadosEspecificos[chave]}</p>`;
+}
+document.getElementById("dadosAvaliacao").innerHTML=html;
+
+carregarEvolucoes();
+};
+
+function carregarEvolucoes(){
+const div=document.getElementById("evolucoes");
+div.innerHTML="<h4>Evoluções</h4>";
+onValue(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`),(snapshot)=>{
+if(!snapshot.exists()){
+div.innerHTML+="Nenhuma evolução.";
+return;
+}
+snapshot.forEach((child)=>{
+const evo=child.val();
+div.innerHTML+=`<p><strong>${evo.data}</strong><br>${evo.texto}<hr>`;
+});
+});
+}
+
+window.salvarEvolucao=function(){
+const texto=textoEvolucao.value;
+if(!texto){ alert("Digite a evolução."); return; }
+const novaRef=push(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`));
+set(novaRef,{ texto, data:new Date().toLocaleDateString() });
+textoEvolucao.value="";
+};
+
+window.voltar=function(){
+document.getElementById("telaInicial").classList.remove("hidden");
+document.getElementById("telaDetalhe").classList.add("hidden");
+};
 
 carregarAvaliacoes();
 
 </script>
 </body>
 </html>
+
