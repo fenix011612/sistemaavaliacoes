@@ -91,6 +91,15 @@ button:hover{ opacity:0.9; }
 
 <div class="card">
 <h3>Avaliações Salvas</h3>
+
+<select id="filtroTipo" onchange="carregarAvaliacoes()">
+  <option value="">Todas</option>
+  <option value="Fisioterapia">Fisioterapia</option>
+  <option value="Pilates">Pilates</option>
+  <option value="Pélvica">Pélvica</option>
+  <option value="Recovery">Recovery</option>
+</select>
+
 <div id="listaAvaliacoes">Carregando...</div>
 </div>
 
@@ -102,6 +111,7 @@ button:hover{ opacity:0.9; }
 <button onclick="voltar()">⬅ Voltar</button>
 <h3 id="tituloDetalhe"></h3>
 <div id="dadosAvaliacao"></div>
+
 <div id="evolucoes"></div>
 
 <h4>Nova Evolução</h4>
@@ -160,9 +170,13 @@ document.getElementById("tipo").value="";
 document.getElementById("data").value="";
 };
 
-/* CARREGAR LISTA */
-function carregarAvaliacoes(){
+/* CARREGAR LISTA COM FILTRO */
+window.carregarAvaliacoes = function(){
+
+const filtro = document.getElementById("filtroTipo")?.value || "";
+
 onValue(ref(db,"avaliacoes"),(snapshot)=>{
+
 const lista=document.getElementById("listaAvaliacoes");
 lista.innerHTML="";
 
@@ -172,19 +186,28 @@ return;
 }
 
 snapshot.forEach((child)=>{
+
 const dados=child.val();
+const tipoSalvo = dados.tipo || dados.area || "";
+
+if(filtro && tipoSalvo !== filtro){
+return;
+}
+
 const div=document.createElement("div");
 div.className="lista-item";
-div.innerHTML=`<strong>${dados.nome}</strong> - ${dados.tipo || dados.area || ""}`;
+div.innerHTML=`<strong>${dados.nome}</strong> - ${tipoSalvo}`;
 
 div.addEventListener("click", function(){
 window.abrirDetalhe(child.key, dados);
 });
 
 lista.appendChild(div);
+
 });
+
 });
-}
+};
 
 /* ABRIR DETALHE */
 window.abrirDetalhe=function(id,dados){
@@ -209,10 +232,12 @@ carregarEvolucoes();
 
 /* CARREGAR EVOLUÇÕES */
 function carregarEvolucoes(){
+
 const div=document.getElementById("evolucoes");
 div.innerHTML="<h4>Evoluções</h4>";
 
 onValue(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`),(snapshot)=>{
+
 if(!snapshot.exists()){
 div.innerHTML+="Nenhuma evolução.";
 return;
@@ -232,6 +257,7 @@ ${evo.texto}
 
 /* SALVAR EVOLUÇÃO */
 window.salvarEvolucao=function(){
+
 const texto=document.getElementById("textoEvolucao").value;
 
 if(!texto){
@@ -260,6 +286,7 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
+
 
 
 
