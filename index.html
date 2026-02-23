@@ -89,7 +89,8 @@ button:hover{ opacity:0.9; }
 
 <input type="text" id="nome" placeholder="Nome do paciente">
 
-<select id="tipo">
+<select id="tipo" onchange="mostrarCampos()">
+<option value="">Selecione o tipo</option>
 <option value="Fisioterapia">Fisioterapia</option>
 <option value="Pilates">Pilates</option>
 <option value="Pélvica">Pélvica</option>
@@ -97,6 +98,38 @@ button:hover{ opacity:0.9; }
 </select>
 
 <input type="date" id="data">
+
+<!-- ================= FISIOTERAPIA ================= -->
+<div id="fisioCampos" class="hidden">
+<h4>Fisioterapia</h4>
+<input type="text" id="fisioQueixa" placeholder="Queixa principal">
+<textarea id="fisioDiagnostico" placeholder="Diagnóstico"></textarea>
+<textarea id="fisioPlano" placeholder="Plano de tratamento"></textarea>
+</div>
+
+<!-- ================= PILATES ================= -->
+<div id="pilatesCampos" class="hidden">
+<h4>Pilates</h4>
+<input type="text" id="pilatesObjetivo" placeholder="Objetivo do aluno">
+<textarea id="pilatesPostural" placeholder="Avaliação postural"></textarea>
+<textarea id="pilatesObs" placeholder="Observações"></textarea>
+</div>
+
+<!-- ================= PÉLVICA ================= -->
+<div id="pelvicaCampos" class="hidden">
+<h4>Pélvica</h4>
+<input type="text" id="pelvicaHistorico" placeholder="Histórico obstétrico">
+<textarea id="pelvicaSintomas" placeholder="Sintomas"></textarea>
+<textarea id="pelvicaForca" placeholder="Força do assoalho pélvico"></textarea>
+</div>
+
+<!-- ================= RECOVERY ================= -->
+<div id="recoveryCampos" class="hidden">
+<h4>Recovery</h4>
+<input type="text" id="recoveryRegiao" placeholder="Região tratada">
+<textarea id="recoveryDor" placeholder="Tipo de dor"></textarea>
+<textarea id="recoveryProtocolo" placeholder="Protocolo utilizado"></textarea>
+</div>
 
 <button onclick="salvarAvaliacao()">Salvar Avaliação</button>
 </div>
@@ -113,7 +146,6 @@ button:hover{ opacity:0.9; }
 <div class="card">
 
 <button onclick="voltar()">⬅ Voltar</button>
-
 <h3 id="tituloDetalhe"></h3>
 
 <div id="evolucoes"></div>
@@ -133,13 +165,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
-  authDomain: "sistemaavaliacoes-26513.firebaseapp.com",
-  databaseURL: "https://sistemaavaliacoes-26513-default-rtdb.firebaseio.com",
-  projectId: "sistemaavaliacoes-26513",
-  storageBucket: "sistemaavaliacoes-26513.firebasestorage.app",
-  messagingSenderId: "451297691104",
-  appId: "1:451297691104:web:1f886ad169a54c4f8fd785"
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_AUTH_DOMAIN",
+  databaseURL: "SUA_DATABASE_URL",
+  projectId: "SEU_PROJECT_ID",
+  storageBucket: "SEU_STORAGE",
+  messagingSenderId: "SEU_ID",
+  appId: "SEU_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -147,138 +179,152 @@ const db = getDatabase(app);
 
 let avaliacaoAtualId = null;
 
+/* MOSTRAR CAMPOS CONFORME TIPO */
+window.mostrarCampos = function(){
+
+document.getElementById("fisioCampos").classList.add("hidden");
+document.getElementById("pilatesCampos").classList.add("hidden");
+document.getElementById("pelvicaCampos").classList.add("hidden");
+document.getElementById("recoveryCampos").classList.add("hidden");
+
+const tipo = document.getElementById("tipo").value;
+
+if(tipo==="Fisioterapia") document.getElementById("fisioCampos").classList.remove("hidden");
+if(tipo==="Pilates") document.getElementById("pilatesCampos").classList.remove("hidden");
+if(tipo==="Pélvica") document.getElementById("pelvicaCampos").classList.remove("hidden");
+if(tipo==="Recovery") document.getElementById("recoveryCampos").classList.remove("hidden");
+
+};
+
 /* SALVAR AVALIAÇÃO */
 window.salvarAvaliacao = function(){
 
-  const nome = document.getElementById("nome").value;
-  const tipo = document.getElementById("tipo").value;
-  const data = document.getElementById("data").value;
+const nome = document.getElementById("nome").value;
+const tipo = document.getElementById("tipo").value;
+const data = document.getElementById("data").value;
 
-  if(!nome || !data){
-    alert("Preencha nome e data.");
-    return;
-  }
+if(!nome || !data || !tipo){
+alert("Preencha todos os campos principais.");
+return;
+}
 
-  const novaRef = push(ref(db, "avaliacoes"));
+const novaRef = push(ref(db, "avaliacoes"));
 
-  set(novaRef,{
-    nome,
-    tipo,
-    data,
-    criadoEm: new Date().toLocaleString()
-  });
+set(novaRef,{
+nome,
+tipo,
+data,
+criadoEm: new Date().toLocaleString()
+});
 
-  alert("Avaliação salva!");
-  document.getElementById("nome").value="";
-  document.getElementById("data").value="";
+alert("Avaliação salva!");
+
+document.getElementById("nome").value="";
+document.getElementById("data").value="";
+document.getElementById("tipo").value="";
+mostrarCampos();
 };
 
 /* CARREGAR AVALIAÇÕES */
 function carregarAvaliacoes(){
 
-  const lista = document.getElementById("listaAvaliacoes");
-  lista.innerHTML = "Carregando...";
+const lista = document.getElementById("listaAvaliacoes");
+lista.innerHTML = "Carregando...";
 
-  const avalRef = ref(db, "avaliacoes");
+onValue(ref(db,"avaliacoes"), (snapshot)=>{
 
-  onValue(avalRef, (snapshot) => {
+lista.innerHTML="";
 
-    lista.innerHTML = "";
+if(!snapshot.exists()){
+lista.innerHTML="Nenhuma avaliação encontrada.";
+return;
+}
 
-    if (!snapshot.exists()) {
-      lista.innerHTML = "Nenhuma avaliação encontrada.";
-      return;
-    }
+snapshot.forEach((child)=>{
+const dados = child.val();
 
-    snapshot.forEach((child) => {
+const div = document.createElement("div");
+div.className="lista-item";
+div.innerHTML=`<strong>${dados.nome}</strong> - ${dados.tipo}`;
+div.onclick=()=>abrirDetalhe(child.key,dados);
 
-      const dados = child.val();
+lista.appendChild(div);
 
-      const div = document.createElement("div");
-      div.className = "lista-item";
-      div.innerHTML = `<strong>${dados.nome}</strong> - ${dados.tipo}`;
-      div.onclick = () => abrirDetalhe(child.key, dados);
+});
 
-      lista.appendChild(div);
+});
 
-    });
-
-  });
 }
 
 /* ABRIR DETALHE */
-window.abrirDetalhe = function(id,dados){
+window.abrirDetalhe=function(id,dados){
 
-  avaliacaoAtualId = id;
+avaliacaoAtualId=id;
 
-  document.getElementById("telaInicial").classList.add("hidden");
-  document.getElementById("telaDetalhe").classList.remove("hidden");
+document.getElementById("telaInicial").classList.add("hidden");
+document.getElementById("telaDetalhe").classList.remove("hidden");
 
-  document.getElementById("tituloDetalhe").innerText =
-  `${dados.nome} - ${dados.tipo}`;
+document.getElementById("tituloDetalhe").innerText=
+`${dados.nome} - ${dados.tipo}`;
 
-  carregarEvolucoes();
+carregarEvolucoes();
 };
 
 /* CARREGAR EVOLUÇÕES */
 function carregarEvolucoes(){
 
-  const div = document.getElementById("evolucoes");
-  div.innerHTML = "<h4>Evoluções</h4>";
+const div=document.getElementById("evolucoes");
+div.innerHTML="<h4>Evoluções</h4>";
 
-  const refEvo = ref(db, `avaliacoes/${avaliacaoAtualId}/evolucoes`);
+onValue(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`),(snapshot)=>{
 
-  onValue(refEvo, (snapshot) => {
+div.innerHTML="<h4>Evoluções</h4>";
 
-    div.innerHTML = "<h4>Evoluções</h4>";
+if(!snapshot.exists()){
+div.innerHTML+="Nenhuma evolução.";
+return;
+}
 
-    if(!snapshot.exists()){
-      div.innerHTML += "Nenhuma evolução.";
-      return;
-    }
+snapshot.forEach((child)=>{
+const evo=child.val();
 
-    snapshot.forEach((child)=>{
-      const evo = child.val();
+const p=document.createElement("p");
+p.innerHTML=`<strong>${evo.data}</strong><br>${evo.texto}<hr>`;
+div.appendChild(p);
+});
 
-      const p = document.createElement("p");
-      p.innerHTML = `<strong>${evo.data}</strong><br>${evo.texto}<hr>`;
-      div.appendChild(p);
-    });
-
-  });
+});
 }
 
 /* SALVAR EVOLUÇÃO */
-window.salvarEvolucao = function(){
+window.salvarEvolucao=function(){
 
-  const texto = document.getElementById("textoEvolucao").value;
+const texto=document.getElementById("textoEvolucao").value;
 
-  if(!texto){
-    alert("Digite a evolução.");
-    return;
-  }
+if(!texto){
+alert("Digite a evolução.");
+return;
+}
 
-  const novaRef = push(ref(db, `avaliacoes/${avaliacaoAtualId}/evolucoes`));
+const novaRef=push(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`));
 
-  set(novaRef,{
-    texto,
-    data: new Date().toLocaleDateString()
-  });
+set(novaRef,{
+texto,
+data:new Date().toLocaleDateString()
+});
 
-  document.getElementById("textoEvolucao").value="";
+document.getElementById("textoEvolucao").value="";
 };
 
 /* VOLTAR */
-window.voltar = function(){
-  document.getElementById("telaInicial").classList.remove("hidden");
-  document.getElementById("telaDetalhe").classList.add("hidden");
+window.voltar=function(){
+document.getElementById("telaInicial").classList.remove("hidden");
+document.getElementById("telaDetalhe").classList.add("hidden");
 };
 
-/* INICIAR */
 carregarAvaliacoes();
 
 </script>
-
 </body>
 </html>
 
