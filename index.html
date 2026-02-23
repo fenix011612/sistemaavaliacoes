@@ -11,13 +11,11 @@
   --ciano:#00cfe8;
   --fundo:#f4f6fb;
 }
-
 body{
   margin:0;
   font-family:Arial, sans-serif;
   background:var(--fundo);
 }
-
 header{
   background:linear-gradient(90deg,var(--lilas),var(--ciano));
   color:white;
@@ -26,13 +24,11 @@ header{
   font-size:22px;
   font-weight:bold;
 }
-
 .container{
   padding:20px;
   max-width:900px;
   margin:auto;
 }
-
 .card{
   background:white;
   padding:20px;
@@ -40,7 +36,6 @@ header{
   box-shadow:0 4px 12px rgba(0,0,0,0.1);
   margin-bottom:20px;
 }
-
 input, select, textarea{
   width:100%;
   padding:10px;
@@ -49,7 +44,6 @@ input, select, textarea{
   border-radius:8px;
   border:1px solid #ccc;
 }
-
 button{
   background:var(--lilas);
   color:white;
@@ -57,22 +51,15 @@ button{
   padding:10px 15px;
   border-radius:8px;
   cursor:pointer;
-  margin-right:5px;
 }
-
 button:hover{ opacity:0.9; }
-
 .hidden{ display:none; }
-
 .lista-item{
   padding:12px;
   border-bottom:1px solid #eee;
   cursor:pointer;
 }
-
-.lista-item:hover{
-  background:#f0f0ff;
-}
+.lista-item:hover{ background:#f0f0ff; }
 </style>
 </head>
 <body>
@@ -80,9 +67,6 @@ button:hover{ opacity:0.9; }
 <header>Sistema de Avaliações</header>
 
 <div class="container">
-
-<!-- TELA INICIAL -->
-<div id="telaInicial">
 
 <div class="card">
 <h3>Nova Avaliação</h3>
@@ -99,7 +83,7 @@ button:hover{ opacity:0.9; }
 
 <input type="date" id="data">
 
-<!-- ================= FISIOTERAPIA ================= -->
+<!-- FISIOTERAPIA -->
 <div id="fisioCampos" class="hidden">
 <h4>Fisioterapia</h4>
 <input type="text" id="fisioQueixa" placeholder="Queixa principal">
@@ -107,28 +91,25 @@ button:hover{ opacity:0.9; }
 <textarea id="fisioPlano" placeholder="Plano de tratamento"></textarea>
 </div>
 
-<!-- ================= PILATES ================= -->
+<!-- PILATES -->
 <div id="pilatesCampos" class="hidden">
 <h4>Pilates</h4>
 <input type="text" id="pilatesObjetivo" placeholder="Objetivo do aluno">
 <textarea id="pilatesPostural" placeholder="Avaliação postural"></textarea>
-<textarea id="pilatesObs" placeholder="Observações"></textarea>
 </div>
 
-<!-- ================= PÉLVICA ================= -->
+<!-- PÉLVICA -->
 <div id="pelvicaCampos" class="hidden">
 <h4>Pélvica</h4>
 <input type="text" id="pelvicaHistorico" placeholder="Histórico obstétrico">
 <textarea id="pelvicaSintomas" placeholder="Sintomas"></textarea>
-<textarea id="pelvicaForca" placeholder="Força do assoalho pélvico"></textarea>
 </div>
 
-<!-- ================= RECOVERY ================= -->
+<!-- RECOVERY -->
 <div id="recoveryCampos" class="hidden">
 <h4>Recovery</h4>
 <input type="text" id="recoveryRegiao" placeholder="Região tratada">
 <textarea id="recoveryDor" placeholder="Tipo de dor"></textarea>
-<textarea id="recoveryProtocolo" placeholder="Protocolo utilizado"></textarea>
 </div>
 
 <button onclick="salvarAvaliacao()">Salvar Avaliação</button>
@@ -141,51 +122,29 @@ button:hover{ opacity:0.9; }
 
 </div>
 
-<!-- TELA DETALHE -->
-<div id="telaDetalhe" class="hidden">
-<div class="card">
-
-<button onclick="voltar()">⬅ Voltar</button>
-<h3 id="tituloDetalhe"></h3>
-
-<div id="evolucoes"></div>
-
-<h4>Nova Evolução</h4>
-<textarea id="textoEvolucao" rows="6" placeholder="Digite a evolução..."></textarea>
-<button onclick="salvarEvolucao()">Salvar Evolução</button>
-
-</div>
-</div>
-
-</div>
-
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  databaseURL: "SUA_DATABASE_URL",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE",
-  messagingSenderId: "SEU_ID",
-  appId: "SEU_APP_ID"
+  apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
+  authDomain: "sistemaavaliacoes-26513.firebaseapp.com",
+  databaseURL: "https://sistemaavaliacoes-26513-default-rtdb.firebaseio.com",
+  projectId: "sistemaavaliacoes-26513",
+  storageBucket: "sistemaavaliacoes-26513.firebasestorage.app",
+  messagingSenderId: "451297691104",
+  appId: "1:451297691104:web:1f886ad169a54c4f8fd785"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-let avaliacaoAtualId = null;
-
-/* MOSTRAR CAMPOS CONFORME TIPO */
+/* MOSTRAR CAMPOS */
 window.mostrarCampos = function(){
 
-document.getElementById("fisioCampos").classList.add("hidden");
-document.getElementById("pilatesCampos").classList.add("hidden");
-document.getElementById("pelvicaCampos").classList.add("hidden");
-document.getElementById("recoveryCampos").classList.add("hidden");
+["fisioCampos","pilatesCampos","pelvicaCampos","recoveryCampos"]
+.forEach(id => document.getElementById(id).classList.add("hidden"));
 
 const tipo = document.getElementById("tipo").value;
 
@@ -193,7 +152,6 @@ if(tipo==="Fisioterapia") document.getElementById("fisioCampos").classList.remov
 if(tipo==="Pilates") document.getElementById("pilatesCampos").classList.remove("hidden");
 if(tipo==="Pélvica") document.getElementById("pelvicaCampos").classList.remove("hidden");
 if(tipo==="Recovery") document.getElementById("recoveryCampos").classList.remove("hidden");
-
 };
 
 /* SALVAR AVALIAÇÃO */
@@ -203,9 +161,40 @@ const nome = document.getElementById("nome").value;
 const tipo = document.getElementById("tipo").value;
 const data = document.getElementById("data").value;
 
-if(!nome || !data || !tipo){
-alert("Preencha todos os campos principais.");
+if(!nome || !tipo || !data){
+alert("Preencha nome, tipo e data.");
 return;
+}
+
+let dadosEspecificos = {};
+
+if(tipo==="Fisioterapia"){
+dadosEspecificos = {
+queixa: document.getElementById("fisioQueixa").value,
+diagnostico: document.getElementById("fisioDiagnostico").value,
+plano: document.getElementById("fisioPlano").value
+};
+}
+
+if(tipo==="Pilates"){
+dadosEspecificos = {
+objetivo: document.getElementById("pilatesObjetivo").value,
+postural: document.getElementById("pilatesPostural").value
+};
+}
+
+if(tipo==="Pélvica"){
+dadosEspecificos = {
+historico: document.getElementById("pelvicaHistorico").value,
+sintomas: document.getElementById("pelvicaSintomas").value
+};
+}
+
+if(tipo==="Recovery"){
+dadosEspecificos = {
+regiao: document.getElementById("recoveryRegiao").value,
+dor: document.getElementById("recoveryDor").value
+};
 }
 
 const novaRef = push(ref(db, "avaliacoes"));
@@ -214,25 +203,23 @@ set(novaRef,{
 nome,
 tipo,
 data,
-criadoEm: new Date().toLocaleString()
+dadosEspecificos,
+criadoEm:new Date().toLocaleString()
 });
 
 alert("Avaliação salva!");
 
-document.getElementById("nome").value="";
-document.getElementById("data").value="";
+document.querySelectorAll("input, textarea").forEach(el => el.value="");
 document.getElementById("tipo").value="";
 mostrarCampos();
 };
 
-/* CARREGAR AVALIAÇÕES */
+/* CARREGAR */
 function carregarAvaliacoes(){
 
-const lista = document.getElementById("listaAvaliacoes");
-lista.innerHTML = "Carregando...";
+onValue(ref(db,"avaliacoes"),(snapshot)=>{
 
-onValue(ref(db,"avaliacoes"), (snapshot)=>{
-
+const lista=document.getElementById("listaAvaliacoes");
 lista.innerHTML="";
 
 if(!snapshot.exists()){
@@ -241,92 +228,18 @@ return;
 }
 
 snapshot.forEach((child)=>{
-const dados = child.val();
-
-const div = document.createElement("div");
+const dados=child.val();
+const div=document.createElement("div");
 div.className="lista-item";
 div.innerHTML=`<strong>${dados.nome}</strong> - ${dados.tipo}`;
-div.onclick=()=>abrirDetalhe(child.key,dados);
-
 lista.appendChild(div);
-
-});
-
-});
-
-}
-
-/* ABRIR DETALHE */
-window.abrirDetalhe=function(id,dados){
-
-avaliacaoAtualId=id;
-
-document.getElementById("telaInicial").classList.add("hidden");
-document.getElementById("telaDetalhe").classList.remove("hidden");
-
-document.getElementById("tituloDetalhe").innerText=
-`${dados.nome} - ${dados.tipo}`;
-
-carregarEvolucoes();
-};
-
-/* CARREGAR EVOLUÇÕES */
-function carregarEvolucoes(){
-
-const div=document.getElementById("evolucoes");
-div.innerHTML="<h4>Evoluções</h4>";
-
-onValue(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`),(snapshot)=>{
-
-div.innerHTML="<h4>Evoluções</h4>";
-
-if(!snapshot.exists()){
-div.innerHTML+="Nenhuma evolução.";
-return;
-}
-
-snapshot.forEach((child)=>{
-const evo=child.val();
-
-const p=document.createElement("p");
-p.innerHTML=`<strong>${evo.data}</strong><br>${evo.texto}<hr>`;
-div.appendChild(p);
 });
 
 });
 }
-
-/* SALVAR EVOLUÇÃO */
-window.salvarEvolucao=function(){
-
-const texto=document.getElementById("textoEvolucao").value;
-
-if(!texto){
-alert("Digite a evolução.");
-return;
-}
-
-const novaRef=push(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`));
-
-set(novaRef,{
-texto,
-data:new Date().toLocaleDateString()
-});
-
-document.getElementById("textoEvolucao").value="";
-};
-
-/* VOLTAR */
-window.voltar=function(){
-document.getElementById("telaInicial").classList.remove("hidden");
-document.getElementById("telaDetalhe").classList.add("hidden");
-};
 
 carregarAvaliacoes();
 
 </script>
 </body>
 </html>
-
-
-
