@@ -109,13 +109,178 @@ button:hover{ opacity:0.9; }
 <div id="telaFisioterapia" class="hidden">
 <div class="card">
 <button onclick="voltar()">⬅ Voltar</button>
-<h3>Avaliação Fisioterapia</h3>
+<h3>FICHA DE ANAMNESE E (RE)AVALIAÇÃO – FISIOTERAPIA</h3>
 
-<textarea id="fisio_queixa" placeholder="Queixa Principal"></textarea>
-<textarea id="fisio_diag" placeholder="Diagnóstico"></textarea>
-<textarea id="fisio_plano" placeholder="Plano Terapêutico"></textarea>
+<!-- TIPO DE ATENDIMENTO -->
+<h4>Tipo de Atendimento</h4>
+<label><input type="checkbox" id="fisio_sessao"> Sessão</label>
+<label><input type="checkbox" id="fisio_pacote"> Pacote</label>
+<input type="text" id="fisio_qtdSessoes" placeholder="Quantidade de sessões">
 
-<button onclick="salvarFisioterapia()">Salvar</button>
+<h4>Forma de Pagamento</h4>
+<label><input type="checkbox" id="fisio_pix"> Pix</label>
+<label><input type="checkbox" id="fisio_parcelado"> Parcelado</label>
+<input type="text" id="fisio_parcelas" placeholder="Parcelado em quantas vezes">
+
+<label>Parceria? Se sim qual?</label>
+<input type="text" id="fisio_parceria">
+
+<h4>📌 IDENTIFICAÇÃO</h4>
+
+<label>Nome completo:</label>
+<input type="text" id="fisio_nomeCompleto">
+
+<label>Data de nascimento:</label>
+<input type="date" id="fisio_dataNascimento">
+
+<label>CPF:</label>
+<input type="text" id="fisio_cpf">
+
+<label>Sexo:</label>
+<label><input type="checkbox" id="fisio_masculino"> Masculino</label>
+<label><input type="checkbox" id="fisio_feminino"> Feminino</label>
+
+<label>Responsável (se menor):</label>
+<input type="text" id="fisio_responsavel">
+
+<label>Grau de parentesco:</label>
+<input type="text" id="fisio_parentesco">
+
+<label>CPF Responsável:</label>
+<input type="text" id="fisio_cpfResponsavel">
+
+<label>Profissão/Ocupação:</label>
+<input type="text" id="fisio_profissao">
+
+<label>Endereço Residencial:</label>
+<input type="text" id="fisio_endereco">
+
+<label>Telefone:</label>
+<input type="text" id="fisio_telefone">
+
+<label>E-mail:</label>
+<input type="email" id="fisio_email">
+
+<label>Data da Avaliação:</label>
+<input type="date" id="fisio_dataAvaliacao">
+
+<label>Diagnóstico Clínico:</label>
+<textarea id="fisio_diagClinico"></textarea>
+
+<label>Diagnóstico Fisioterapêutico:</label>
+<textarea id="fisio_diagFisio"></textarea>
+
+<label>CBDF:</label>
+<input type="text" id="fisio_cbdf">
+
+<h4>⚕️ HISTÓRIA CLÍNICA</h4>
+
+<label>Queixa Principal:</label>
+<textarea id="fisio_queixaPrincipal"></textarea>
+
+<label>HPP:</label>
+<textarea id="fisio_hpp"></textarea>
+
+<label>Antecedentes Pessoais:</label>
+<textarea id="fisio_antecedentesPessoais"></textarea>
+
+<label>Antecedentes Familiares:</label>
+<textarea id="fisio_antecedentesFamiliares"></textarea>
+
+<label>Tratamentos Realizados:</label>
+<textarea id="fisio_tratamentos"></textarea>
+
+<label>Hábitos de vida:</label>
+<textarea id="fisio_habitos"></textarea>
+
+<label>Realiza acompanhamento?</label>
+<label><input type="checkbox" id="fisio_acompanhamentoSim"> Sim</label>
+<label><input type="checkbox" id="fisio_acompanhamentoNao"> Não</label>
+
+<label>Qual especialidade?</label>
+<input type="text" id="fisio_especialidade">
+
+<h4>⚕️ APRESENTAÇÃO DO PACIENTE</h4>
+
+<label><input type="checkbox" id="fisio_orientado"> Deambulando e orientado</label>
+<label><input type="checkbox" id="fisio_apoio"> Deambulando com apoio</label>
+<label><input type="checkbox" id="fisio_confuso"> Confuso</label>
+<label><input type="checkbox" id="fisio_desorientado"> Desorientado</label>
+
+<h4>⚕️ EXAMES COMPLEMENTARES</h4>
+<label><input type="checkbox" id="fisio_examesSim"> Sim</label>
+<label><input type="checkbox" id="fisio_examesNao"> Não</label>
+
+<h4>⚕️ USA MEDICAMENTOS</h4>
+<label><input type="checkbox" id="fisio_medicamentoSim"> Sim</label>
+<label><input type="checkbox" id="fisio_medicamentoNao"> Não</label>
+
+<h4>⚕️ REALIZOU CIRURGIA</h4>
+<label><input type="checkbox" id="fisio_cirurgiaSim"> Sim</label>
+<label><input type="checkbox" id="fisio_cirurgiaNao"> Não</label>
+
+<label>Se sim, quais:</label>
+<textarea id="fisio_cirurgias"></textarea>
+
+<h4>⚕️ INSPEÇÃO/PALPAÇÃO</h4>
+
+<label><input type="checkbox" id="fisio_normal"> Normal</label>
+<label><input type="checkbox" id="fisio_edema"> Edema</label>
+<label><input type="checkbox" id="fisio_cicatriz"> Cicatrização incompleta</label>
+<label><input type="checkbox" id="fisio_eritema"> Eritemas</label>
+<label><input type="checkbox" id="fisio_outros"> Outros</label>
+
+<h4>⚕️ AVALIAÇÃO FÍSICA</h4>
+
+<label>Peso:</label>
+<input type="number" id="fisio_peso">
+
+<label>Altura:</label>
+<input type="number" id="fisio_altura">
+
+<h4>📌 TESTES FISIOTERAPÊUTICOS</h4>
+
+<label>Y Balance:</label>
+<label><input type="checkbox" id="fisio_y_risco"> Sim com risco</label>
+<label><input type="checkbox" id="fisio_y_nao"> Não</label>
+
+<label>Romberg:</label>
+<label><input type="checkbox" id="fisio_romberg_pos"> Positivo</label>
+<label><input type="checkbox" id="fisio_romberg_neg"> Negativo</label>
+
+<label>TUG:</label>
+<label><input type="checkbox" id="fisio_tug_normal"> Normal</label>
+<label><input type="checkbox" id="fisio_tug_baixo"> Baixo risco</label>
+<label><input type="checkbox" id="fisio_tug_medio"> Médio risco</label>
+<label><input type="checkbox" id="fisio_tug_alto"> Alto risco</label>
+
+<label>Lasegue:</label>
+<label><input type="checkbox" id="fisio_lasegue_pos"> Positivo</label>
+<label><input type="checkbox" id="fisio_lasegue_neg"> Negativo</label>
+
+<h4>⚕️ ESCALA DE FORÇA MUSCULAR</h4>
+<label><input type="checkbox" id="fisio_g0"> Grau 0</label>
+<label><input type="checkbox" id="fisio_g1"> Grau 1</label>
+<label><input type="checkbox" id="fisio_g2"> Grau 2</label>
+<label><input type="checkbox" id="fisio_g3"> Grau 3</label>
+<label><input type="checkbox" id="fisio_g4"> Grau 4</label>
+<label><input type="checkbox" id="fisio_g5"> Grau 5</label>
+
+<h4>📌 PLANO TERAPÊUTICO</h4>
+
+<label>Objetivos do Tratamento:</label>
+<textarea id="fisio_objetivos"></textarea>
+
+<label>Recursos Terapêuticos:</label>
+<textarea id="fisio_recursos"></textarea>
+
+<label>Plano do Tratamento:</label>
+<textarea id="fisio_planoTratamento"></textarea>
+
+<label>Profissional / Registro Conselho:</label>
+<input type="text" id="fisio_profissional">
+
+<button onclick="salvarFisioterapia()">Salvar Avaliação</button>
 </div>
 </div>
 
@@ -231,10 +396,89 @@ voltar();
 }
 
 window.salvarFisioterapia = function(){
+
 salvarBase({
-queixa:fisio_queixa.value,
-diagnostico:fisio_diag.value,
-plano:fisio_plano.value
+
+sessao: fisio_sessao.checked,
+pacote: fisio_pacote.checked,
+qtdSessoes: fisio_qtdSessoes.value,
+pix: fisio_pix.checked,
+parcelado: fisio_parcelado.checked,
+parcelas: fisio_parcelas.value,
+parceria: fisio_parceria.value,
+
+nomeCompleto: fisio_nomeCompleto.value,
+dataNascimento: fisio_dataNascimento.value,
+cpf: fisio_cpf.value,
+masculino: fisio_masculino.checked,
+feminino: fisio_feminino.checked,
+responsavel: fisio_responsavel.value,
+parentesco: fisio_parentesco.value,
+cpfResponsavel: fisio_cpfResponsavel.value,
+profissao: fisio_profissao.value,
+endereco: fisio_endereco.value,
+telefone: fisio_telefone.value,
+email: fisio_email.value,
+dataAvaliacao: fisio_dataAvaliacao.value,
+diagnosticoClinico: fisio_diagClinico.value,
+diagnosticoFisio: fisio_diagFisio.value,
+cbdf: fisio_cbdf.value,
+
+queixaPrincipal: fisio_queixaPrincipal.value,
+hpp: fisio_hpp.value,
+antecedentesPessoais: fisio_antecedentesPessoais.value,
+antecedentesFamiliares: fisio_antecedentesFamiliares.value,
+tratamentos: fisio_tratamentos.value,
+habitos: fisio_habitos.value,
+acompanhamentoSim: fisio_acompanhamentoSim.checked,
+acompanhamentoNao: fisio_acompanhamentoNao.checked,
+especialidade: fisio_especialidade.value,
+
+orientado: fisio_orientado.checked,
+apoio: fisio_apoio.checked,
+confuso: fisio_confuso.checked,
+desorientado: fisio_desorientado.checked,
+
+examesSim: fisio_examesSim.checked,
+examesNao: fisio_examesNao.checked,
+medicamentoSim: fisio_medicamentoSim.checked,
+medicamentoNao: fisio_medicamentoNao.checked,
+cirurgiaSim: fisio_cirurgiaSim.checked,
+cirurgiaNao: fisio_cirurgiaNao.checked,
+cirurgias: fisio_cirurgias.value,
+
+normal: fisio_normal.checked,
+edema: fisio_edema.checked,
+cicatriz: fisio_cicatriz.checked,
+eritema: fisio_eritema.checked,
+outros: fisio_outros.checked,
+
+peso: fisio_peso.value,
+altura: fisio_altura.value,
+
+yRisco: fisio_y_risco.checked,
+yNao: fisio_y_nao.checked,
+rombergPos: fisio_romberg_pos.checked,
+rombergNeg: fisio_romberg_neg.checked,
+tugNormal: fisio_tug_normal.checked,
+tugBaixo: fisio_tug_baixo.checked,
+tugMedio: fisio_tug_medio.checked,
+tugAlto: fisio_tug_alto.checked,
+laseguePos: fisio_lasegue_pos.checked,
+lasegueNeg: fisio_lasegue_neg.checked,
+
+g0: fisio_g0.checked,
+g1: fisio_g1.checked,
+g2: fisio_g2.checked,
+g3: fisio_g3.checked,
+g4: fisio_g4.checked,
+g5: fisio_g5.checked,
+
+objetivos: fisio_objetivos.value,
+recursos: fisio_recursos.value,
+planoTratamento: fisio_planoTratamento.value,
+profissional: fisio_profissional.value
+
 });
 };
 
@@ -353,6 +597,7 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
+
 
 
 
