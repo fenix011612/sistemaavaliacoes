@@ -182,19 +182,47 @@ button:hover{ opacity:0.9; }
     <input type="text" id="fisio_cbdf" placeholder="CBDF">
 
     <!-- HISTÓRIA CLÍNICA -->
-    <h4>⚕️ HISTÓRIA CLÍNICA</h4>
-    <textarea id="fisio_queixaPrincipal" placeholder="Queixa Principal"></textarea>
-    <textarea id="fisio_hpp" placeholder="HPP"></textarea>
-    <textarea id="fisio_antecedentesPessoais" placeholder="Antecedentes Pessoais"></textarea>
-    <textarea id="fisio_antecedentesFamiliares" placeholder="Antecedentes Familiares"></textarea>
-    <textarea id="fisio_tratamentos" placeholder="Tratamentos Realizados"></textarea>
-    <textarea id="fisio_habitos" placeholder="Hábitos de vida"></textarea>
+ <h4>⚕️ HISTÓRIA CLÍNICA</h4>
 
-    <div class="inline-group">
-      <label><input type="checkbox" id="fisio_acompanhamentoSim"> Sim</label>
-      <label><input type="checkbox" id="fisio_acompanhamentoNao"> Não</label>
-      <input type="text" id="fisio_especialidade" placeholder="Qual especialidade?">
-    </div>
+<label>Queixa Principal:</label>
+<textarea id="fisio_queixaPrincipal"></textarea>
+
+<label>HDA:</label>
+<textarea id="fisio_hpp"></textarea>
+
+<label>HPP:</label>
+<textarea id="fisio_antecedentesPessoais"></textarea>
+
+<label>Antecedentes Familiares:</label>
+<textarea id="fisio_antecedentesFamiliares"></textarea>
+
+<label>Tratamentos Realizados:</label>
+<textarea id="fisio_tratamentos"></textarea>
+
+<label>Hábitos de vida:</label>
+<textarea id="fisio_habitos"></textarea>
+
+<div class="inline-group">
+  <label><input type="checkbox" id="fisio_acompanhamentoSim"> Sim</label>
+  <label><input type="checkbox" id="fisio_acompanhamentoNao"> Não</label>
+  <input type="text" id="fisio_especialidade" placeholder="Qual especialidade?">
+</div>
+
+<h4>⚕️ EXAMES COMPLEMENTARES</h4>
+<div class="inline-group">
+  <label><input type="checkbox" id="fisio_examesSim"> Sim</label>
+  <label><input type="checkbox" id="fisio_examesNao"> Não</label>
+</div>
+
+<textarea id="fisio_examesQuais" placeholder="Se sim, quais?"></textarea>
+
+<h4>⚕️ USA MEDICAMENTOS</h4>
+<div class="inline-group">
+  <label><input type="checkbox" id="fisio_medicamentoSim"> Sim</label>
+  <label><input type="checkbox" id="fisio_medicamentoNao"> Não</label>
+</div>
+
+<textarea id="fisio_medicamentosQuais" placeholder="Se sim, quais?"></textarea>
 
     <!-- APRESENTAÇÃO DO PACIENTE -->
     <h4>⚕️ APRESENTAÇÃO DO PACIENTE</h4>
@@ -450,12 +478,15 @@ desorientado: fisio_desorientado.checked,
 
 examesSim: fisio_examesSim.checked,
 examesNao: fisio_examesNao.checked,
+examesQuais: fisio_examesQuais.value,
+
 medicamentoSim: fisio_medicamentoSim.checked,
 medicamentoNao: fisio_medicamentoNao.checked,
+medicamentosQuais: fisio_medicamentosQuais.value,
+
 cirurgiaSim: fisio_cirurgiaSim.checked,
 cirurgiaNao: fisio_cirurgiaNao.checked,
 cirurgias: fisio_cirurgias.value,
-
 normal: fisio_normal.checked,
 edema: fisio_edema.checked,
 cicatriz: fisio_cicatriz.checked,
@@ -606,6 +637,7 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
+
 
 
 
