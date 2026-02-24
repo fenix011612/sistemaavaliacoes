@@ -86,7 +86,7 @@ button:hover{ opacity:0.9; }
 
 <input type="date" id="data">
 
-<button onclick="salvarAvaliacao()">Salvar Avaliação</button>
+<button onclick="abrirTelaPorTipo()">Continuar</button>
 </div>
 
 <div class="card">
@@ -105,6 +105,59 @@ button:hover{ opacity:0.9; }
 
 </div>
 
+<!-- TELA FISIOTERAPIA -->
+<div id="telaFisioterapia" class="hidden">
+<div class="card">
+<button onclick="voltar()">⬅ Voltar</button>
+<h3>Avaliação Fisioterapia</h3>
+
+<textarea id="fisio_queixa" placeholder="Queixa Principal"></textarea>
+<textarea id="fisio_diag" placeholder="Diagnóstico"></textarea>
+<textarea id="fisio_plano" placeholder="Plano Terapêutico"></textarea>
+
+<button onclick="salvarFisioterapia()">Salvar</button>
+</div>
+</div>
+
+<!-- TELA PILATES -->
+<div id="telaPilates" class="hidden">
+<div class="card">
+<button onclick="voltar()">⬅ Voltar</button>
+<h3>Avaliação Pilates</h3>
+
+<textarea id="pilates_objetivo" placeholder="Objetivo"></textarea>
+<textarea id="pilates_restricoes" placeholder="Restrições"></textarea>
+
+<button onclick="salvarPilates()">Salvar</button>
+</div>
+</div>
+
+<!-- TELA RECOVERY -->
+<div id="telaRecovery" class="hidden">
+<div class="card">
+<button onclick="voltar()">⬅ Voltar</button>
+<h3>Avaliação Recovery</h3>
+
+<input type="text" id="recovery_tipo" placeholder="Tipo de Recovery">
+<textarea id="recovery_obs" placeholder="Observações"></textarea>
+
+<button onclick="salvarRecovery()">Salvar</button>
+</div>
+</div>
+
+<!-- TELA PÉLVICA -->
+<div id="telaPelvica" class="hidden">
+<div class="card">
+<button onclick="voltar()">⬅ Voltar</button>
+<h3>Avaliação Pélvica</h3>
+
+<textarea id="pelvica_queixa" placeholder="Queixa Pélvica"></textarea>
+<textarea id="pelvica_hist" placeholder="Histórico"></textarea>
+
+<button onclick="salvarPelvica()">Salvar</button>
+</div>
+</div>
+
 <!-- TELA DETALHE -->
 <div id="telaDetalhe" class="hidden">
 <div class="card">
@@ -115,7 +168,7 @@ button:hover{ opacity:0.9; }
 <div id="evolucoes"></div>
 
 <h4>Nova Evolução</h4>
-<textarea id="textoEvolucao" rows="4"></textarea>
+<textarea id="textoEvolucao"></textarea>
 <button onclick="salvarEvolucao()">Salvar Evolução</button>
 </div>
 </div>
@@ -140,145 +193,159 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+let tempNome, tempTipo, tempData;
 let avaliacaoAtualId = null;
 
-/* SALVAR AVALIAÇÃO */
-window.salvarAvaliacao = function(){
+/* ABRIR TELA POR TIPO */
+window.abrirTelaPorTipo = function(){
 
-const nome = document.getElementById("nome").value;
-const tipo = document.getElementById("tipo").value;
-const data = document.getElementById("data").value;
+tempNome = nome.value;
+tempTipo = tipo.value;
+tempData = data.value;
 
-if(!nome || !tipo || !data){
+if(!tempNome || !tempTipo || !tempData){
 alert("Preencha todos os campos.");
 return;
 }
 
+telaInicial.classList.add("hidden");
+
+document.getElementById("tela"+tempTipo.replace("ç","c").replace("é","e")).classList.remove("hidden");
+};
+
+/* SALVAMENTOS */
+function salvarBase(dadosExtras){
+
 const novaRef = push(ref(db,"avaliacoes"));
 
 set(novaRef,{
-nome,
-tipo,
-data,
+nome: tempNome,
+tipo: tempTipo,
+data: tempData,
+...dadosExtras,
 criadoEm:new Date().toLocaleString()
 });
 
 alert("Avaliação salva!");
+voltar();
+}
 
-document.getElementById("nome").value="";
-document.getElementById("tipo").value="";
-document.getElementById("data").value="";
+window.salvarFisioterapia = function(){
+salvarBase({
+queixa:fisio_queixa.value,
+diagnostico:fisio_diag.value,
+plano:fisio_plano.value
+});
 };
 
-/* CARREGAR LISTA COM FILTRO */
+window.salvarPilates = function(){
+salvarBase({
+objetivo:pilates_objetivo.value,
+restricoes:pilates_restricoes.value
+});
+};
+
+window.salvarRecovery = function(){
+salvarBase({
+tipoRecovery:recovery_tipo.value,
+obs:recovery_obs.value
+});
+};
+
+window.salvarPelvica = function(){
+salvarBase({
+queixa:pelvica_queixa.value,
+historico:pelvica_hist.value
+});
+};
+
+/* LISTA */
 window.carregarAvaliacoes = function(){
 
-const filtro = document.getElementById("filtroTipo")?.value || "";
+const filtro = filtroTipo.value;
 
 onValue(ref(db,"avaliacoes"),(snapshot)=>{
 
-const lista=document.getElementById("listaAvaliacoes");
-lista.innerHTML="";
+listaAvaliacoes.innerHTML="";
 
 if(!snapshot.exists()){
-lista.innerHTML="Nenhuma avaliação encontrada.";
+listaAvaliacoes.innerHTML="Nenhuma avaliação.";
 return;
 }
 
 snapshot.forEach((child)=>{
-
 const dados=child.val();
-const tipoSalvo = dados.tipo || dados.area || "";
-
-if(filtro && tipoSalvo !== filtro){
-return;
-}
+if(filtro && dados.tipo !== filtro) return;
 
 const div=document.createElement("div");
 div.className="lista-item";
-div.innerHTML=`<strong>${dados.nome}</strong> - ${tipoSalvo}`;
-
-div.addEventListener("click", function(){
-window.abrirDetalhe(child.key, dados);
+div.innerHTML=`<strong>${dados.nome}</strong> - ${dados.tipo}`;
+div.onclick=()=>abrirDetalhe(child.key,dados);
+listaAvaliacoes.appendChild(div);
 });
-
-lista.appendChild(div);
-
-});
-
 });
 };
 
-/* ABRIR DETALHE */
 window.abrirDetalhe=function(id,dados){
 
 avaliacaoAtualId=id;
 
-document.getElementById("telaInicial").classList.add("hidden");
-document.getElementById("telaDetalhe").classList.remove("hidden");
+telaInicial.classList.add("hidden");
+telaDetalhe.classList.remove("hidden");
 
-const tipoMostrado = dados.tipo || dados.area || "Avaliação";
+tituloDetalhe.innerText=`${dados.nome} - ${dados.tipo}`;
 
-document.getElementById("tituloDetalhe").innerText =
-`${dados.nome} - ${tipoMostrado}`;
+let html=`<p><strong>Data:</strong> ${dados.data}</p>`;
 
-let html="<p><strong>Data:</strong> "+(dados.data || "")+"</p>";
-html+="<p><strong>Criado em:</strong> "+(dados.criadoEm || "")+"</p>";
+for (const key in dados){
+if(!["nome","tipo","data","criadoEm"].includes(key)){
+html+=`<p><strong>${key}:</strong> ${dados[key]}</p>`;
+}
+}
 
-document.getElementById("dadosAvaliacao").innerHTML=html;
-
+dadosAvaliacao.innerHTML=html;
 carregarEvolucoes();
 };
 
-/* CARREGAR EVOLUÇÕES */
 function carregarEvolucoes(){
 
-const div=document.getElementById("evolucoes");
-div.innerHTML="<h4>Evoluções</h4>";
+evolucoes.innerHTML="<h4>Evoluções</h4>";
 
 onValue(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`),(snapshot)=>{
-
 if(!snapshot.exists()){
-div.innerHTML+="Nenhuma evolução.";
+evolucoes.innerHTML+="Nenhuma evolução.";
 return;
 }
-
 snapshot.forEach((child)=>{
 const evo=child.val();
-div.innerHTML+=`
-<p>
-<strong>${evo.data}</strong><br>
-${evo.texto}
-<hr>
-</p>`;
+evolucoes.innerHTML+=`
+<p><strong>${evo.data}</strong><br>${evo.texto}<hr></p>`;
 });
 });
 }
 
-/* SALVAR EVOLUÇÃO */
 window.salvarEvolucao=function(){
 
-const texto=document.getElementById("textoEvolucao").value;
-
-if(!texto){
-alert("Digite a evolução.");
-return;
-}
+if(!textoEvolucao.value) return;
 
 const novaRef=push(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`));
 
 set(novaRef,{
-texto,
+texto:textoEvolucao.value,
 data:new Date().toLocaleDateString()
 });
 
-document.getElementById("textoEvolucao").value="";
+textoEvolucao.value="";
 };
 
-/* VOLTAR */
 window.voltar=function(){
-document.getElementById("telaInicial").classList.remove("hidden");
-document.getElementById("telaDetalhe").classList.add("hidden");
+
+telaInicial.classList.remove("hidden");
+telaFisioterapia.classList.add("hidden");
+telaPilates.classList.add("hidden");
+telaRecovery.classList.add("hidden");
+telaPelvica.classList.add("hidden");
+telaDetalhe.classList.add("hidden");
 };
 
 carregarAvaliacoes();
@@ -286,6 +353,7 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
+
 
 
 
