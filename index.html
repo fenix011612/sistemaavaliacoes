@@ -685,10 +685,186 @@ button:hover{ opacity:0.9; }
 <div class="card">
 <button onclick="voltar()">⬅ Voltar</button>
 <h3>Avaliação Recovery</h3>
+<!-- ================= AVALIAÇÃO RECOVERY ================= -->
 
-<input type="text" id="recovery_tipo" placeholder="Tipo de Recovery">
-<textarea id="recovery_obs" placeholder="Observações"></textarea>
+<div class="card" id="modulo_mov_recovery">
 
+<h3>Avaliação Recovery - Anamnese</h3>
+
+<!-- ================= DADOS PESSOAIS ================= -->
+
+<h4>📌 DADOS PESSOAIS</h4>
+
+<label>Nome:</label>
+<input type="text" id="mov_nome">
+
+<div class="grid-2">
+<div>
+<label>Data de Nascimento:</label>
+<input type="date" id="mov_nascimento">
+</div>
+
+<div>
+<label>Telefone:</label>
+<input type="text" id="mov_telefone">
+</div>
+</div>
+
+<div class="campo">
+<label>Sexo:</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_sexo" id="mov_sexo_fem"> Feminino</label>
+<label><input type="radio" name="mov_sexo" id="mov_sexo_masc"> Masculino</label>
+</div>
+</div>
+
+<label>Endereço:</label>
+<input type="text" id="mov_endereco">
+
+<label>Fisioterapeuta:</label>
+<input type="text" id="mov_fisioterapeuta">
+
+<!-- ================= PERFIL ESPORTIVO ================= -->
+
+<h4>🏃 PERFIL ESPORTIVO</h4>
+
+<div class="campo">
+<label>Atleta:</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_atleta" id="mov_atleta_amador"> Amador</label>
+<label><input type="radio" name="mov_atleta" id="mov_atleta_profissional"> Profissional</label>
+</div>
+</div>
+
+<label>Esporte / Há quanto tempo:</label>
+<input type="text" id="mov_esporte">
+
+<div class="campo">
+<label>Pratica atividade física atualmente?</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_pratica" id="mov_pratica_sim"> Sim</label>
+<label><input type="radio" name="mov_pratica" id="mov_pratica_nao"> Não</label>
+</div>
+</div>
+
+<label>Frequência semanal:</label>
+<input type="text" id="mov_frequencia">
+
+<label>Objetivos no programa:</label>
+<textarea id="mov_objetivos"></textarea>
+
+<!-- ================= HISTÓRICO DE SAÚDE ================= -->
+
+<h4>⚕️ HISTÓRICO DE SAÚDE</h4>
+
+<div class="campo">
+<label>Tabagismo?</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_tabagismo" id="mov_tabagismo_sim"> Sim</label>
+<label><input type="radio" name="mov_tabagismo" id="mov_tabagismo_nao"> Não</label>
+</div>
+</div>
+
+<div class="campo">
+<label>Alterações cardíacas?</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_cardiaco" id="mov_cardiaco_sim"> Sim</label>
+<label><input type="radio" name="mov_cardiaco" id="mov_cardiaco_nao"> Não</label>
+</div>
+</div>
+
+<div class="campo">
+<label>Diabetes?</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_diabetes" id="mov_diabetes_sim"> Sim</label>
+<label><input type="radio" name="mov_diabetes" id="mov_diabetes_nao"> Não</label>
+</div>
+</div>
+
+<div class="campo">
+<label>Hipertensão?</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_hipertensao" id="mov_hipertensao_sim"> Sim</label>
+<label><input type="radio" name="mov_hipertensao" id="mov_hipertensao_nao"> Não</label>
+</div>
+</div>
+
+<div class="campo">
+<label>Usa medicamentos?</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_medicamento" id="mov_medicamento_sim"> Sim</label>
+<label><input type="radio" name="mov_medicamento" id="mov_medicamento_nao"> Não</label>
+</div>
+
+<textarea
+  id="mov_medicamento_desc"
+  placeholder="Se sim, quais?"
+  style="width:100%; margin-top:8px;">
+</textarea>
+</div>
+
+<div class="campo">
+<label>Já sofreu acidente ou lesão?</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_lesao" id="mov_lesao_sim"> Sim</label>
+<label><input type="radio" name="mov_lesao" id="mov_lesao_nao"> Não</label>
+</div>
+
+<textarea
+  id="mov_lesao_desc"
+  placeholder="Se sim, qual?"
+  style="width:100%; margin-top:8px;">
+</textarea>
+</div>
+
+<div class="campo">
+<label>Já realizou cirurgia?</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_cirurgia" id="mov_cirurgia_sim"> Sim</label>
+<label><input type="radio" name="mov_cirurgia" id="mov_cirurgia_nao"> Não</label>
+</div>
+
+<textarea
+  id="mov_cirurgia_desc"
+  placeholder="Se sim, qual?"
+  style="width:100%; margin-top:8px;">
+</textarea>
+</div>
+
+<div class="campo">
+<label>Possui alergia?</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_alergia" id="mov_alergia_sim"> Sim</label>
+<label><input type="radio" name="mov_alergia" id="mov_alergia_nao"> Não</label>
+</div>
+
+<textarea
+  id="mov_alergia_desc"
+  placeholder="Se sim, qual?"
+  style="width:100%; margin-top:8px;">
+</textarea>
+</div>
+
+<div class="campo">
+<label>Apresenta tontura ou desmaio?</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_tontura" id="mov_tontura_sim"> Sim</label>
+<label><input type="radio" name="mov_tontura" id="mov_tontura_nao"> Não</label>
+</div>
+</div>
+
+<div class="campo">
+<label>Está em dieta para perder ou ganhar peso?</label>
+<div class="inline-group">
+<label><input type="radio" name="mov_dieta" id="mov_dieta_sim"> Sim</label>
+<label><input type="radio" name="mov_dieta" id="mov_dieta_nao"> Não</label>
+</div>
+</div>
+
+<label>Profissão:</label>
+<input type="text" id="mov_profissao">
+
+</div>
 <button onclick="salvarRecovery()">Salvar</button>
 </div>
 </div>
@@ -1341,3 +1517,4 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
+
