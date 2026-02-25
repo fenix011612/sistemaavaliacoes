@@ -694,10 +694,325 @@ button:hover{ opacity:0.9; }
 <div class="card">
 <button onclick="voltar()">⬅ Voltar</button>
 <h3>Avaliação Pélvica</h3>
+<div class="card">
 
-<textarea id="pelvica_queixa" placeholder="Queixa Pélvica"></textarea>
-<textarea id="pelvica_hist" placeholder="Histórico"></textarea>
+<h3>Avaliação Pélvica Feminina</h3>
 
+<!-- ================= DADOS PESSOAIS ================= -->
+
+<h4>📌 DADOS PESSOAIS</h4>
+
+<div class="grid-2">
+  <div>
+    <label>Nome:</label>
+    <input type="text" id="pelvic_nome">
+  </div>
+  <div>
+    <label>Idade:</label>
+    <input type="number" id="pelvic_idade">
+  </div>
+</div>
+
+<div class="grid-2">
+  <div>
+    <label>Data de Nascimento:</label>
+    <input type="date" id="pelvic_nascimento">
+  </div>
+  <div>
+    <label>Telefone:</label>
+    <input type="text" id="pelvic_telefone">
+  </div>
+</div>
+
+<div class="grid-2">
+  <div>
+    <label>Profissão:</label>
+    <input type="text" id="pelvic_profissao">
+  </div>
+  <div>
+    <label>Estado Civil:</label>
+    <input type="text" id="pelvic_estadoCivil">
+  </div>
+</div>
+
+<label>Data da Avaliação:</label>
+<input type="date" id="pelvic_dataAval">
+
+<label>Diagnóstico Médico:</label>
+<textarea id="pelvic_diagMedico"></textarea>
+
+<!-- ================= HISTÓRIA CLÍNICA ================= -->
+
+<h4>⚕️ HISTÓRIA CLÍNICA</h4>
+
+<label>Queixa Principal:</label>
+
+<div class="opcoes-grid">
+  <label><input type="checkbox"> Assintomática</label>
+  <label><input type="checkbox"> Perda de urina</label>
+  <label><input type="checkbox"> Dor pélvica</label>
+  <label><input type="checkbox"> Dor durante relação sexual</label>
+  <label><input type="checkbox"> Ardência na vulva</label>
+  <label><input type="checkbox"> Dificuldade para evacuar</label>
+  <label><input type="checkbox"> Urgência urinária</label>
+  <label><input type="checkbox"> Dificuldade para urinar</label>
+</div>
+
+<label>Outra:</label>
+<input type="text">
+
+<label>Observações:</label>
+<textarea></textarea>
+
+<!-- ================= INCONTINÊNCIA ================= -->
+
+<h4>⚕️ INCONTINÊNCIA</h4>
+
+<div class="grid-2">
+  <div>
+    <strong>Tipo</strong>
+    <div class="opcoes">
+      <label><input type="checkbox"> Ao esforço</label>
+      <label><input type="checkbox"> Urgência</label>
+      <label><input type="checkbox"> Mista</label>
+    </div>
+  </div>
+
+  <div>
+    <strong>Perda</strong>
+    <div class="opcoes">
+      <label><input type="checkbox"> Em gotas</label>
+      <label><input type="checkbox"> Em jato</label>
+      <label><input type="checkbox"> Contínuo</label>
+    </div>
+  </div>
+</div>
+
+<label>Faz uso de absorvente?</label>
+<div class="opcoes">
+  <label><input type="radio" name="pelvic_abs"> Sim</label>
+  <label><input type="radio" name="pelvic_abs"> Não</label>
+</div>
+
+<label>Observações:</label>
+<textarea></textarea>
+
+<!-- ================= FLUXO URINÁRIO ================= -->
+
+<h4>⚕️ FLUXO URINÁRIO</h4>
+
+<div class="opcoes-grid">
+  <label><input type="checkbox"> Disúria</label>
+  <label><input type="checkbox"> Frequência</label>
+  <label><input type="checkbox"> Enurese</label>
+  <label><input type="checkbox"> Hesitação</label>
+  <label><input type="checkbox"> Esforço</label>
+  <label><input type="checkbox"> Perde após urinar</label>
+  <label><input type="checkbox"> Jato para e recomeça</label>
+  <label><input type="checkbox"> Perde antes de iniciar</label>
+  <label><input type="checkbox"> Gotejamento pós miccional</label>
+  <label><input type="checkbox"> Esvaziamento incompleto</label>
+</div><div class="card">
+
+<h4>🩺 HISTÓRIA GINECOLÓGICA E OBSTÉTRICA</h4>
+
+<div class="grid-2">
+  <div>
+    <label>G:</label>
+    <input type="number" id="pelvic_g">
+  </div>
+  <div>
+    <label>P:</label>
+    <input type="number" id="pelvic_p">
+  </div>
+  <div>
+    <label>A:</label>
+    <input type="number" id="pelvic_a">
+  </div>
+  <div>
+    <label>PC:</label>
+    <input type="number" id="pelvic_pc">
+  </div>
+  <div>
+    <label>PN:</label>
+    <input type="number" id="pelvic_pn">
+  </div>
+</div>
+
+<label>Peso RN maior e menor:</label>
+<input type="text" id="pelvic_pesoRN">
+
+<label>Cirurgia ginecológica?</label>
+<div class="opcoes">
+  <label><input type="radio" name="pelvic_cirurgiaGineco"> Não</label>
+  <label><input type="radio" name="pelvic_cirurgiaGineco"> Sim</label>
+</div>
+
+<label>Qual?</label>
+<input type="text">
+
+<label>Doenças ginecológicas:</label>
+<div class="opcoes-grid">
+  <label><input type="checkbox"> Endometriose</label>
+  <label><input type="checkbox"> Infecções</label>
+  <label><input type="checkbox"> Candidíase de repetição</label>
+  <label><input type="checkbox"> Vaginose de repetição</label>
+</div>
+
+<label>Outra:</label>
+<input type="text">
+
+<div class="grid-2">
+  <div>
+    <label>Menarca:</label>
+    <input type="text">
+  </div>
+  <div>
+    <label>Sexarca:</label>
+    <input type="text">
+  </div>
+  <div>
+    <label>Menopausa:</label>
+    <input type="text">
+  </div>
+</div>
+
+<label>Atividade sexual atual?</label>
+<div class="opcoes">
+  <label><input type="radio" name="pelvic_sexual"> Sim</label>
+  <label><input type="radio" name="pelvic_sexual"> Não</label>
+</div>
+
+<label>Se não, por quê?</label>
+<textarea></textarea>
+
+<label>Contraceptivo:</label>
+<div class="opcoes-grid">
+  <label><input type="checkbox"> Anticoncepcional</label>
+  <label><input type="checkbox"> DIU</label>
+  <label><input type="checkbox"> Implanon</label>
+  <label><input type="checkbox"> Preservativo</label>
+  <label><input type="checkbox"> Injeção</label>
+  <label><input type="checkbox"> Tabelinha / Coito interrompido</label>
+</div>
+
+</div><div class="card">
+
+<h4>📊 ESTUDO URODINÂMICO</h4>
+
+<div class="grid-2">
+  <div><label>Fluxo médio:</label><input type="text"></div>
+  <div><label>Volume de urina:</label><input type="text"></div>
+  <div><label>Fluxo máximo:</label><input type="text"></div>
+  <div><label>Padrão da curva:</label><input type="text"></div>
+  <div><label>T.T. Micção:</label><input type="text"></div>
+  <div><label>Resíduo miccional:</label><input type="text"></div>
+  <div><label>CV 1º desejo:</label><input type="text"></div>
+  <div><label>CV máxima:</label><input type="text"></div>
+  <div><label>Complacência:</label><input type="text"></div>
+</div>
+
+<label>Contração involuntária:</label>
+<div class="opcoes">
+  <label><input type="radio" name="pelvic_contracao"> Sim</label>
+  <label><input type="radio" name="pelvic_contracao"> Não</label>
+</div>
+
+<label>Perda aos esforços:</label>
+<div class="opcoes">
+  <label><input type="radio" name="pelvic_perdaEsforco"> Sim</label>
+  <label><input type="radio" name="pelvic_perdaEsforco"> Não</label>
+</div>
+
+<label>VLPP:</label>
+<input type="text">
+
+<label>Médico / CRM:</label>
+<input type="text">
+
+<label>Diagnóstico:</label>
+<textarea></textarea>
+
+</div><div class="card">
+
+<h4>🧍 EXAME FÍSICO ESPECÍFICO</h4>
+
+<div class="grid-2">
+  <div><label>Peso:</label><input type="text"></div>
+  <div><label>Altura:</label><input type="text"></div>
+</div>
+
+<label>Estado físico:</label>
+<input type="text">
+
+<label>Alterações posturais:</label>
+<textarea></textarea>
+
+<label>Trofismo:</label>
+<input type="text">
+
+<label>Coloração:</label>
+<input type="text">
+
+<label>Cicatrizes:</label>
+<input type="text">
+
+<label>Assimetria:</label>
+<input type="text">
+
+<label>Contração:</label>
+<div class="opcoes">
+  <label><input type="radio" name="pelvic_contracao2"> Sim</label>
+  <label><input type="radio" name="pelvic_contracao2"> Não</label>
+</div>
+
+</div><div class="card">
+
+<h4>💪 FUNÇÃO PERINEAL (PERFECT)</h4>
+
+<div class="grid-2">
+  <div><label>P (Power - Oxford):</label><input type="text"></div>
+  <div><label>E (Endurance):</label><input type="text"></div>
+  <div><label>R (Repetition):</label><input type="text"></div>
+  <div><label>F (Fast):</label><input type="text"></div>
+</div>
+
+<label>Elevação posterior da vagina?</label>
+<div class="opcoes">
+  <label><input type="radio" name="pelvic_elevacao"> Sim</label>
+  <label><input type="radio" name="pelvic_elevacao"> Não</label>
+</div>
+
+<label>Co-contração de abdominais inferiores?</label>
+<div class="opcoes">
+  <label><input type="radio" name="pelvic_cocontracao"> Sim</label>
+  <label><input type="radio" name="pelvic_cocontracao"> Não</label>
+</div>
+
+<label>Contração involuntária em tosse?</label>
+<div class="opcoes">
+  <label><input type="radio" name="pelvic_tosse"> Sim</label>
+  <label><input type="radio" name="pelvic_tosse"> Não</label>
+</div>
+
+<label>Perineômetro (mmHg):</label>
+<input type="text">
+
+</div><div class="card">
+
+<h4>📌 FISIODIAGNÓSTICO</h4>
+<textarea></textarea>
+
+<h4>🎯 OBJETIVOS FISIOTERAPÊUTICOS</h4>
+<textarea></textarea>
+
+<h4>📈 PROGNÓSTICO FISIOTERAPÊUTICO</h4>
+<textarea></textarea>
+
+<h4>📝 TRATAMENTO PROPOSTO</h4>
+<textarea></textarea>
+
+</div>
 <button onclick="salvarPelvica()">Salvar</button>
 </div>
 </div>
@@ -979,6 +1294,7 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
+
 
 
 
