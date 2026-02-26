@@ -233,12 +233,6 @@ button:hover{ opacity:0.9; }
       <label><input type="checkbox" id="fisio_desorientado"> Desorientado</label>
     </div>
 
-    <!-- EXAMES COMPLEMENTARES -->
-    <h4>⚕️ EXAMES COMPLEMENTARES</h4>
-    <div class="inline-group">
-      <label><input type="checkbox" id="fisio_examesSim"> Sim</label>
-      <label><input type="checkbox" id="fisio_examesNao"> Não</label>
-    </div>
 
     <!-- MEDICAMENTOS -->
     <h4>⚕️ USA MEDICAMENTOS</h4>
@@ -1406,44 +1400,79 @@ window.salvarPilates = function(){
 
 salvarBase({
 
-nome: pilates_nome.value,
-dataNascimento: pilates_nascimento.value,
-telefone: pilates_telefone.value,
-sexoFeminino: pilates_sexo_fem.checked,
-sexoMasculino: pilates_sexo_masc.checked,
-endereco: pilates_endereco.value,
+totalpass: pilates_totalpass.checked,
+gympass: pilates_gympass.checked,
+gurupass: pilates_gurupass.checked,
+mensalidade: pilates_mensalidade.checked,
+parceria: pilates_parceria.value,
+
+nomeCompleto: pilates_nomeCompleto.value,
+dataNascimento: pilates_dataNascimento.value,
+cpf: pilates_cpf.value,
+masculino: pilates_masculino.checked,
+feminino: pilates_feminino.checked,
+responsavel: pilates_responsavel.value,
+parentesco: pilates_parentesco.value,
+cpfResponsavel: pilates_cpfResponsavel.value,
 profissao: pilates_profissao.value,
+endereco: pilates_endereco.value,
+telefone: pilates_telefone.value,
+email: pilates_email.value,
+dataAvaliacao: pilates_dataAvaliacao.value,
+diagnosticoClinico: pilates_diagClinico.value,
+diagnosticoFisio: pilates_diagFisio.value,
+cbdf: pilates_cbdf.value,
 
-// Histórico
-hda: pilates_hda.value,
+queixaPrincipal: pilates_queixaPrincipal.value,
 hpp: pilates_hpp.value,
+antecedentesPessoais: pilates_antecedentesPessoais.value,
+antecedentesFamiliares: pilates_antecedentesFamiliares.value,
+tratamentos: pilates_tratamentos.value,
+habitos: pilates_habitos.value,
+acompanhamentoSim: pilates_acompanhamentoSim.checked,
+acompanhamentoNao: pilates_acompanhamentoNao.checked,
+especialidade: pilates_especialidade.value,
 
-// Exames
+orientado: pilates_orientado.checked,
+apoio: pilates_apoio.checked,
+confuso: pilates_confuso.checked,
+desorientado: pilates_desorientado.checked,
+
 examesSim: pilates_examesSim.checked,
 examesNao: pilates_examesNao.checked,
-examesDesc: pilates_examesDesc.value,
 
-// Medicamentos
 medicamentoSim: pilates_medicamentoSim.checked,
 medicamentoNao: pilates_medicamentoNao.checked,
-medicamentoDesc: pilates_medicamentoDesc.value,
 
-// Cirurgia
 cirurgiaSim: pilates_cirurgiaSim.checked,
 cirurgiaNao: pilates_cirurgiaNao.checked,
-cirurgiaDesc: pilates_cirurgiaDesc.value,
+cirurgias: pilates_cirurgias.value,
 
-// Objetivos
+normal: pilates_normal.checked,
+edema: pilates_edema.checked,
+cicatriz: pilates_cicatriz.checked,
+eritema: pilates_eritema.checked,
+outros: pilates_outros.checked,
+
+semiologia: pilates_semiologia.value,
+pressao: pilates_pressao.value,
+peso: pilates_peso.value,
+altura: pilates_altura.value,
+
 objetivos: pilates_objetivos.value,
+recursos: pilates_recursos.value,
+planoTratamento: pilates_planoTratamento.value,
 
-// Postura
-avaliacaoPostural: pilates_postural.value,
-
-observacoes: pilates_observacoes.value
+dataEvolucao: pilates_dataEvolucao.value,
+procedimentos: pilates_procedimentos.value,
+intercorrencia: pilates_intercorrencia.value,
+evolucaoEstado: pilates_evolucaoEstado.value,
+profissional: pilates_profissional.value
 
 });
 
 };
+  
 window.salvarRecovery = function(){
 
 salvarBase({
@@ -1491,22 +1520,14 @@ alergiaDesc: mov_alergia_desc.value,
 
 tonturaSim: mov_tontura_sim.checked,
 tonturaNao: mov_tontura_nao.checked,
-
 dietaSim: mov_dieta_sim.checked,
 dietaNao: mov_dieta_nao.checked,
 
 profissao: mov_profissao.value
 
 });
-};
-  
-window.salvarPelvica = function(){
-salvarBase({
-queixa:pelvica_queixa.value,
-historico:pelvica_hist.value
-});
-};
 
+};
 /* LISTA */
 window.carregarAvaliacoes = function(){
 
@@ -1601,5 +1622,6 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
+
 
 
