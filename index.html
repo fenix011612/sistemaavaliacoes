@@ -62,26 +62,42 @@ button:hover{ opacity:0.9; }
 .lista-item:hover{ background:#f0f0ff; }
   .lista-item:hover{ background:#f0f0ff; }
 
-/* --- Estilo para alinhar checkboxes e inputs --- */
-.inline-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 15px;
+/* ===== CORREÇÃO DEFINITIVA CHECKBOX / RADIO ===== */
+
+/* NÃO deixa checkbox ocupar 100% */
+input[type="checkbox"],
+input[type="radio"]{
+  width:auto;
+  margin:0;
+  transform:translateY(1px);
 }
 
-.card label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 5px;
+/* Grupo de opções */
+.inline-group,
+.opcoes{
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+  align-items:center;
+  margin-bottom:15px;
 }
 
-.inline-group input[type="text"],
-.inline-group input[type="number"],
-.inline-group input[type="date"] {
-  flex: 1;
-  min-width: 120px;
+/* Alinha texto com checkbox */
+.inline-group label,
+.opcoes label{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin:0;
+  cursor:pointer;
+}
+
+/* Grid para opções maiores */
+.opcoes-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:10px;
+  margin-bottom:15px;
 }
 </style>
 </head>
@@ -1626,6 +1642,7 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
+
 
 
 
