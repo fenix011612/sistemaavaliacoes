@@ -1403,19 +1403,103 @@ profissional: fisio_profissional.value
 };
 
 window.salvarPilates = function(){
-salvarBase({
-objetivo:pilates_objetivo.value,
-restricoes:pilates_restricoes.value
-});
-};
 
+salvarBase({
+
+nome: pilates_nome.value,
+dataNascimento: pilates_nascimento.value,
+telefone: pilates_telefone.value,
+sexoFeminino: pilates_sexo_fem.checked,
+sexoMasculino: pilates_sexo_masc.checked,
+endereco: pilates_endereco.value,
+profissao: pilates_profissao.value,
+
+// Histórico
+hda: pilates_hda.value,
+hpp: pilates_hpp.value,
+
+// Exames
+examesSim: pilates_examesSim.checked,
+examesNao: pilates_examesNao.checked,
+examesDesc: pilates_examesDesc.value,
+
+// Medicamentos
+medicamentoSim: pilates_medicamentoSim.checked,
+medicamentoNao: pilates_medicamentoNao.checked,
+medicamentoDesc: pilates_medicamentoDesc.value,
+
+// Cirurgia
+cirurgiaSim: pilates_cirurgiaSim.checked,
+cirurgiaNao: pilates_cirurgiaNao.checked,
+cirurgiaDesc: pilates_cirurgiaDesc.value,
+
+// Objetivos
+objetivos: pilates_objetivos.value,
+
+// Postura
+avaliacaoPostural: pilates_postural.value,
+
+observacoes: pilates_observacoes.value
+
+});
+
+};
 window.salvarRecovery = function(){
+
 salvarBase({
-tipoRecovery:recovery_tipo.value,
-obs:recovery_obs.value
+
+nome: mov_nome.value,
+dataNascimento: mov_nascimento.value,
+telefone: mov_telefone.value,
+sexoFeminino: mov_sexo_fem.checked,
+sexoMasculino: mov_sexo_masc.checked,
+endereco: mov_endereco.value,
+fisioterapeuta: mov_fisioterapeuta.value,
+
+atletaAmador: mov_atleta_amador.checked,
+atletaProfissional: mov_atleta_profissional.checked,
+esporte: mov_esporte.value,
+praticaSim: mov_pratica_sim.checked,
+praticaNao: mov_pratica_nao.checked,
+frequencia: mov_frequencia.value,
+objetivos: mov_objetivos.value,
+
+tabagismoSim: mov_tabagismo_sim.checked,
+tabagismoNao: mov_tabagismo_nao.checked,
+cardiacoSim: mov_cardiaco_sim.checked,
+cardiacoNao: mov_cardiaco_nao.checked,
+diabetesSim: mov_diabetes_sim.checked,
+diabetesNao: mov_diabetes_nao.checked,
+hipertensaoSim: mov_hipertensao_sim.checked,
+hipertensaoNao: mov_hipertensao_nao.checked,
+
+medicamentoSim: mov_medicamento_sim.checked,
+medicamentoNao: mov_medicamento_nao.checked,
+medicamentoDesc: mov_medicamento_desc.value,
+
+lesaoSim: mov_lesao_sim.checked,
+lesaoNao: mov_lesao_nao.checked,
+lesaoDesc: mov_lesao_desc.value,
+
+cirurgiaSim: mov_cirurgia_sim.checked,
+cirurgiaNao: mov_cirurgia_nao.checked,
+cirurgiaDesc: mov_cirurgia_desc.value,
+
+alergiaSim: mov_alergia_sim.checked,
+alergiaNao: mov_alergia_nao.checked,
+alergiaDesc: mov_alergia_desc.value,
+
+tonturaSim: mov_tontura_sim.checked,
+tonturaNao: mov_tontura_nao.checked,
+
+dietaSim: mov_dieta_sim.checked,
+dietaNao: mov_dieta_nao.checked,
+
+profissao: mov_profissao.value
+
 });
 };
-
+  
 window.salvarPelvica = function(){
 salvarBase({
 queixa:pelvica_queixa.value,
@@ -1517,4 +1601,5 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
+
 
