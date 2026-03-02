@@ -333,383 +333,361 @@ input[type="radio"]{
 </div>
 <!-- TELA PILATES -->
 <div id="telaPilates" class="hidden">
-  <div class="card">
-    <button onclick="voltar()">⬅ Voltar</button>
-    <h3>Avaliação Pilates</h3>
-
-    <!-- ================= IDENTIFICAÇÃO ================= -->
-
-    <h4>📌 IDENTIFICAÇÃO</h4>
-
-    <div class="opcoes-grid">
-      <label><input type="checkbox" id="pilates_totalpass"> Totalpass</label>
-      <label><input type="checkbox" id="pilates_gympass"> Gympass</label>
-      <label><input type="checkbox" id="pilates_gurupass"> Gurupass</label>
-      <label><input type="checkbox" id="pilates_mensalidade"> Mensalidade</label>
-    </div>
-
-    <label>Parceria? Se sim qual?</label>
-    <input type="text" id="pilates_parceria">
-
-    <label>Nome completo:</label>
-    <input type="text" id="pilates_nomeCompleto">
-
-    <div class="grid-2">
-      <div>
-        <label>Data de nascimento:</label>
-        <input type="date" id="pilates_dataNascimento">
-      </div>
-      <div>
-        <label>CPF:</label>
-        <input type="text" id="pilates_cpf">
-      </div>
-    </div>
-
-    <div class="opcoes">
-      <label><input type="radio" name="pilates_sexo" id="pilates_masculino"> Masculino</label>
-      <label><input type="radio" name="pilates_sexo" id="pilates_feminino"> Feminino</label>
-    </div>
-
-    <label>Responsável (se menor):</label>
-    <input type="text" id="pilates_responsavel">
-
-    <div class="grid-2">
-      <div>
-        <label>Grau de parentesco:</label>
-        <input type="text" id="pilates_parentesco">
-      </div>
-      <div>
-        <label>CPF:</label>
-        <input type="text" id="pilates_cpfResponsavel">
-      </div>
-    </div>
-
-    <label>Profissão/Ocupação:</label>
-    <input type="text" id="pilates_profissao">
-
-    <label>Endereço Residencial:</label>
-    <input type="text" id="pilates_endereco">
-
-    <div class="grid-2">
-      <div>
-        <label>Telefone:</label>
-        <input type="text" id="pilates_telefone">
-      </div>
-      <div>
-        <label>E-mail:</label>
-        <input type="email" id="pilates_email">
-      </div>
-    </div>
-
-    <label>Data da Avaliação:</label>
-    <input type="date" id="pilates_dataAvaliacao">
-
-    <label>Diagnóstico Clínico:</label>
-    <textarea id="pilates_diagClinico"></textarea>
-
-    <label>Diagnóstico Fisioterapêutico:</label>
-    <textarea id="pilates_diagFisio"></textarea>
-
-    <label>CBDF:</label>
-    <input type="text" id="pilates_cbdf">
-
-    <!-- ================= HISTÓRIA CLÍNICA ================= -->
-
-    <h4>⚕️ HISTÓRIA CLÍNICA</h4>
-
-    <label>Queixa Principal:</label>
-    <textarea id="pilates_queixaPrincipal"></textarea>
-
-    <label>História Patológica Pregressa (HPP):</label>
-    <textarea id="pilates_hpp"></textarea>
-
-    <label>Antecedentes Pessoais:</label>
-    <textarea id="pilates_antecedentesPessoais"></textarea>
-
-    <label>Antecedentes Familiares:</label>
-    <textarea id="pilates_antecedentesFamiliares"></textarea>
-
-    <label>Tratamentos Realizados:</label>
-    <textarea id="pilates_tratamentos"></textarea>
-
-    <label>Hábitos de vida:</label>
-    <textarea id="pilates_habitos"></textarea>
-
-    <div class="campo">
-      <label>Realiza acompanhamento médico/fisioterapêutico?</label>
-      <div class="opcoes">
-        <label><input type="radio" name="pilates_acompanhamento" id="pilates_acompanhamentoSim"> Sim</label>
-        <label><input type="radio" name="pilates_acompanhamento" id="pilates_acompanhamentoNao"> Não</label>
-      </div>
-      <label>Qual especialidade?</label>
-      <input type="text" id="pilates_especialidade">
-    </div>
-
-    <!-- ================= APRESENTAÇÃO ================= -->
-
-    <h4>⚕️ APRESENTAÇÃO DO PACIENTE</h4>
-
-    <div class="opcoes-grid">
-      <label><input type="checkbox" id="pilates_orientado"> Deambulando e orientado</label>
-      <label><input type="checkbox" id="pilates_apoio"> Deambulando com apoio</label>
-      <label><input type="checkbox" id="pilates_confuso"> Confuso</label>
-      <label><input type="checkbox" id="pilates_desorientado"> Desorientado</label>
-    </div>
-
-    <!-- Novo campo para "Se apoio, qual?" -->
-    <label>Se apoio, qual?</label>
-    <input type="text" id="pilates_tipoApoio">
-
-    <!-- ================= EXAMES / MEDICAMENTOS / CIRURGIA ================= -->
-
-    <div class="campo">
-      <label>Exames complementares?</label>
-      <div class="opcoes">
-        <label><input type="radio" name="pilates_exames" id="pilates_examesSim"> Sim</label>
-        <label><input type="radio" name="pilates_exames" id="pilates_examesNao"> Não</label>
-      </div>
-      <label>Se sim, quais?</label>
-      <input type="text" id="pilates_quaisExames">
-    </div>
-
-    <div class="campo">
-      <label>Usa medicamentos?</label>
-      <div class="opcoes">
-        <label><input type="radio" name="pilates_medicamentos" id="pilates_medicamentoSim"> Sim</label>
-        <label><input type="radio" name="pilates_medicamentos" id="pilates_medicamentoNao"> Não</label>
-      </div>
-      <label>Se sim, quais?</label>
-      <input type="text" id="pilates_quaisMedicamentos">
-    </div>
-
-    <div class="campo">
-      <label>Realizou cirurgia?</label>
-      <div class="opcoes">
-        <label><input type="radio" name="pilates_cirurgia" id="pilates_cirurgiaSim"> Sim</label>
-        <label><input type="radio" name="pilates_cirurgia" id="pilates_cirurgiaNao"> Não</label>
-      </div>
-      <label>Se sim, quais:</label>
-      <textarea id="pilates_cirurgias"></textarea>
-    </div>
-
-    <!-- ================= INSPEÇÃO ================= -->
-
-    <h4>⚕️ INSPEÇÃO / PALPAÇÃO</h4>
-
-    <div class="opcoes-grid">
-      <label><input type="checkbox" id="pilates_normal"> Normal</label>
-      <label><input type="checkbox" id="pilates_edema"> Edema</label>
-      <label><input type="checkbox" id="pilates_cicatriz"> Cicatrização incompleta</label>
-      <label><input type="checkbox" id="pilates_eritema"> Eritemas</label>
-      <label><input type="checkbox" id="pilates_outros"> Outros</label>
-    </div>
-
-    <!-- Novo campo para detalhes adicionais de inspeção -->
-    <label>Detalhes adicionais da inspeção/palpação:</label>
-    <textarea id="pilates_inspecaoDetalhes"></textarea>
-
-    <!-- ================= SEMIOLOGIA ================= -->
-
-    <h4>⚕️ SEMIOLOGIA</h4>
-    <textarea id="pilates_semiologia"></textarea>
-
-    <h4>⚕️ PRESSÃO ARTERIAL</h4>
-    <input type="text" id="pilates_pressao">
-
-    <!-- ================= AVALIAÇÃO FÍSICA ================= -->
-
-    <h4>🏃 AVALIAÇÃO FÍSICA</h4>
-
-    <div class="grid-2">
-      <div>
-        <label>Peso:</label>
-        <input type="number" id="pilates_peso">
-      </div>
-      <div>
-        <label>Altura:</label>
-        <input type="number" id="pilates_altura">
-      </div>
-    </div>
-
-    <!-- ================= TESTES FISIOTERAPÊUTICOS ================= -->
-
-    <h4>📌 TESTES FISIOTERAPÊUTICOS</h4>
-
-    <strong>Y BALANCE TESTE (Equilíbrio Funcional)</strong>
-    <div class="opcoes">
-      <label><input type="radio" name="pilates_ybalance" id="pilates_y_risco"> Assimetria - Sim com risco</label>
-      <label><input type="radio" name="pilates_ybalance" id="pilates_y_nao"> Não</label>
-    </div>
-
-    <strong>TESTE DE ROMBERG (Equilíbrio Estático)</strong>
-    <div class="opcoes">
-      <label><input type="radio" name="pilates_romberg" id="pilates_romberg_pos"> Positivo</label>
-      <label><input type="radio" name="pilates_romberg" id="pilates_romberg_neg"> Negativo</label>
-    </div>
-
-    <strong>TESTE DE APOIO UNIPODAL – TAU</strong>
-    <div class="opcoes">
-      <label><input type="radio" name="pilates_tau" id="pilates_tau_menor"> Menor risco de queda</label>
-      <label><input type="radio" name="pilates_tau" id="pilates_tau_maior"> Maior risco de queda</label>
-    </div>
-
-    <strong>TESTE TUG</strong>
-    <div class="opcoes">
-      <label><input type="radio" name="pilates_tug" id="pilates_tug_normal"> Normal</label>
-      <label><input type="radio" name="pilates_tug" id="pilates_tug_baixo"> Baixo risco</label>
-      <label><input type="radio" name="pilates_tug" id="pilates_tug_medio"> Médio risco</label>
-      <label><input type="radio" name="pilates_tug" id="pilates_tug_alto"> Alto risco</label>
-    </div>
-
-    <strong>TESTE DE MARCHA EM TANDEM</strong>
-    <div class="opcoes">
-      <label><input type="radio" name="pilates_tandem" id="pilates_tandem_normal"> Normal</label>
-      <label><input type="radio" name="pilates_tandem_leve"> Leve comprometimento</label>
-      <label><input type="radio" name="pilates_tandem_moderado"> Moderado</label>
-      <label><input type="radio" name="pilates_tandem_grave"> Grave</label>
-    </div>
-
-    <strong>TESTE DE LASEGUE</strong>
-    <div class="opcoes">
-      <label><input type="radio" name="pilates_lasegue" id="pilates_lasegue_pos"> Positivo</label>
-      <label><input type="radio" name="pilates_lasegue" id="pilates_lasegue_neg"> Negativo</label>
-    </div>
-
-    <strong>TESTE DE LASEGUE INVERTIDO</strong>
-    <div class="opcoes">
-      <label><input type="radio" name="pilates_lasegue_inv" id="pilates_lasegue_inv_pos"> Positivo</label>
-      <label><input type="radio" name="pilates_lasegue_inv" id="pilates_lasegue_inv_neg"> Negativo</label>
-    </div>
-
-    <strong>TESTE DE SPURLING</strong>
-    <div class="opcoes">
-      <label><input type="radio" name="pilates_spurling" id="pilates_spurling_pos"> Positivo</label>
-      <label><input type="radio" name="pilates_spurling" id="pilates_spurling_neg"> Negativo</label>
-    </div>
-
-    <!-- ================= ESCALA DE FORÇA MUSCULAR ================= -->
-
-    <h4>⚕️ ESCALA DE FORÇA MUSCULAR</h4>
-
-    <div class="opcoes-grid">
-      <label><input type="radio" name="pilates_forca" id="pilates_g0"> Grau 0</label>
-      <label><input type="radio" name="pilates_forca" id="pilates_g1"> Grau 1</label>
-      <label><input type="radio" name="pilates_forca" id="pilates_g2"> Grau 2</label>
-      <label><input type="radio" name="pilates_forca" id="pilates_g3"> Grau 3</label>
-      <label><input type="radio" name="pilates_forca" id="pilates_g4"> Grau 4</label>
-      <label><input type="radio" name="pilates_forca" id="pilates_g5"> Grau 5</label>
-    </div>
-
-    <!-- ================= DINAMÔMETRO ================= -->
-
-    <h4>Teste de Força Muscular no Dinamômetro</h4>
-
-    <div class="grid-2">
-      <div>
-        <label>Bíceps:</label>
-        <input type="text" id="pilates_biceps">
-      </div>
-      <div>
-        <label>Abdutores de Ombro:</label>
-        <input type="text" id="pilates_abdutores">
-      </div>
-      <div>
-        <label>Flexores de Ombro:</label>
-        <input type="text" id="pilates_flexores_ombro">
-      </div>
-      <div>
-        <label>Extensores de Ombro:</label>
-        <input type="text" id="pilates_extensores_ombro">
-      </div>
-      <div>
-        <label>Rotadores Mediais:</label>
-        <input type="text" id="pilates_rot_mediais">
-      </div>
-      <div>
-        <label>Rotadores Laterais:</label>
-        <input type="text" id="pilates_rot_laterais">
-      </div>
-    </div>
-
-    <!-- ================= FORÇA E RESISTÊNCIA ================= -->
-
-    <h4>Força e Resistência Muscular (Repetições por minuto)</h4>
-
-    <label>Abdominal Supra:</label>
-    <input type="text" id="pilates_abdominal_supra">
-
-    <label>Abdominal Infra:</label>
-    <input type="text" id="pilates_abdominal_infra">
-
-    <label>Prancha Isométrica:</label>
-    <input type="text" id="pilates_prancha">
-
-    <!-- ================= EVA ================= -->
-
-    <h4>⚕️ Avaliação da Intensidade da Dor – EVA</h4>
-
-    <div class="grid-2">
-      <div>
-        <label>EVA 1:</label>
-        <input type="text" id="pilates_eva1">
-        <label>Região:</label>
-        <input type="text" id="pilates_regiao1">
-      </div>
-
-      <div>
-        <label>EVA 2:</label>
-        <input type="text" id="pilates_eva2">
-        <label>Região:</label>
-        <input type="text" id="pilates_regiao2">
-      </div>
-    </div>
-
-    <label>EVA 3:</label>
-    <input type="text" id="pilates_eva3">
-    <label>Região:</label>
-    <input type="text" id="pilates_regiao3">
-
-    <!-- ================= ESCALA DE BORG ================= -->
-
-    <h4>⚕️ ESCALA DE BORG</h4>
-    <label>Observações / Pontuação:</label>
-    <input type="text" id="pilates_escalaBorg">
-
-    <!-- ================= PLANO TERAPÊUTICO ================= -->
-
-    <h4>📌 PLANO TERAPÊUTICO</h4>
-
-    <label>Objetivos do Tratamento:</label>
-    <textarea id="pilates_objetivos"></textarea>
-
-    <label>Recursos Terapêuticos:</label>
-    <textarea id="pilates_recursos"></textarea>
-
-    <label>Plano do Tratamento:</label>
-    <textarea id="pilates_planoTratamento"></textarea>
-
-    <!-- ================= EVOLUÇÃO ================= -->
-
-    <h4>🗓️ EVOLUÇÃO DOS ATENDIMENTOS</h4>
-
-    <label>Data:</label>
-    <input type="date" id="pilates_dataEvolucao">
-
-    <label>Procedimentos:</label>
-    <textarea id="pilates_procedimentos"></textarea>
-
-    <label>Intercorrência:</label>
-    <textarea id="pilates_intercorrencia"></textarea>
-
-    <label>Evolução do Estado de Saúde:</label>
-    <textarea id="pilates_evolucaoEstado"></textarea>
-
-    <label>Profissional / Registro Conselho:</label>
-    <input type="text" id="pilates_profissional">
-
-    <button onclick="salvarAvaliacaoPilates()">💾 Salvar Avaliação</button>
-
-  </div> <!-- FECHA card Pilates -->
+<div class="card">
+<button onclick="voltar()">⬅ Voltar</button>
+<h3>Avaliação Pilates</h3>
+
+<!-- ================= IDENTIFICAÇÃO ================= -->
+
+<h4>📌 IDENTIFICAÇÃO</h4>
+
+<div class="opcoes-grid">
+<label><input type="checkbox" id="pilates_totalpass"> Totalpass</label>
+<label><input type="checkbox" id="pilates_gympass"> Gympass</label>
+<label><input type="checkbox" id="pilates_gurupass"> Gurupass</label>
+<label><input type="checkbox" id="pilates_mensalidade"> Mensalidade</label>
+</div>
+
+<label>Parceria? Se sim qual?</label>
+<input type="text" id="pilates_parceria">
+
+<label>Nome completo:</label>
+<input type="text" id="pilates_nomeCompleto">
+
+<div class="grid-2">
+<div>
+<label>Data de nascimento:</label>
+<input type="date" id="pilates_dataNascimento">
+</div>
+<div>
+<label>CPF:</label>
+<input type="text" id="pilates_cpf">
+</div>
+</div>
+
+<div class="opcoes">
+<label><input type="radio" name="pilates_sexo" id="pilates_masculino"> Masculino</label>
+<label><input type="radio" name="pilates_sexo" id="pilates_feminino"> Feminino</label>
+</div>
+
+<label>Responsável (se menor):</label>
+<input type="text" id="pilates_responsavel">
+
+<div class="grid-2">
+<div>
+<label>Grau de parentesco:</label>
+<input type="text" id="pilates_parentesco">
+</div>
+<div>
+<label>CPF:</label>
+<input type="text" id="pilates_cpfResponsavel">
+</div>
+</div>
+
+<label>Profissão/Ocupação:</label>
+<input type="text" id="pilates_profissao">
+
+<label>Endereço Residencial:</label>
+<input type="text" id="pilates_endereco">
+
+<div class="grid-2">
+<div>
+<label>Telefone:</label>
+<input type="text" id="pilates_telefone">
+</div>
+<div>
+<label>E-mail:</label>
+<input type="email" id="pilates_email">
+</div>
+</div>
+
+<label>Data da Avaliação:</label>
+<input type="date" id="pilates_dataAvaliacao">
+
+<label>Diagnóstico Clínico:</label>
+<textarea id="pilates_diagClinico"></textarea>
+
+<label>Diagnóstico Fisioterapêutico:</label>
+<textarea id="pilates_diagFisio"></textarea>
+
+<label>CBDF:</label>
+<input type="text" id="pilates_cbdf">
+
+<!-- ================= HISTÓRIA CLÍNICA ================= -->
+
+<h4>⚕️ HISTÓRIA CLÍNICA</h4>
+
+<label>Queixa Principal:</label>
+<textarea id="pilates_queixaPrincipal"></textarea>
+
+<label>História Patológica Pregressa (HPP):</label>
+<textarea id="pilates_hpp"></textarea>
+
+<label>Antecedentes Pessoais:</label>
+<textarea id="pilates_antecedentesPessoais"></textarea>
+
+<label>Antecedentes Familiares:</label>
+<textarea id="pilates_antecedentesFamiliares"></textarea>
+
+<label>Tratamentos Realizados:</label>
+<textarea id="pilates_tratamentos"></textarea>
+
+<label>Hábitos de vida:</label>
+<textarea id="pilates_habitos"></textarea>
+
+<div class="campo">
+<label>Realiza acompanhamento médico/fisioterapêutico?</label>
+<div class="opcoes">
+<label><input type="radio" name="pilates_acompanhamento" id="pilates_acompanhamentoSim"> Sim</label>
+<label><input type="radio" name="pilates_acompanhamento" id="pilates_acompanhamentoNao"> Não</label>
+</div>
+<label>Qual especialidade?</label>
+<input type="text" id="pilates_especialidade">
+</div>
+
+<!-- ================= APRESENTAÇÃO ================= -->
+
+<h4>⚕️ APRESENTAÇÃO DO PACIENTE</h4>
+
+<div class="opcoes-grid">
+<label><input type="checkbox" id="pilates_orientado"> Deambulando e orientado</label>
+<label><input type="checkbox" id="pilates_apoio"> Deambulando com apoio</label>
+<label><input type="checkbox" id="pilates_confuso"> Confuso</label>
+<label><input type="checkbox" id="pilates_desorientado"> Desorientado</label>
+</div>
+
+<!-- ================= EXAMES / MEDICAMENTOS / CIRURGIA ================= -->
+
+<div class="campo">
+<label>Exames complementares?</label>
+<div class="opcoes">
+<label><input type="radio" name="pilates_exames" id="pilates_examesSim"> Sim</label>
+<label><input type="radio" name="pilates_exames" id="pilates_examesNao"> Não</label>
+</div>
+</div>
+
+<div class="campo">
+<label>Usa medicamentos?</label>
+<div class="opcoes">
+<label><input type="radio" name="pilates_medicamentos" id="pilates_medicamentoSim"> Sim</label>
+<label><input type="radio" name="pilates_medicamentos" id="pilates_medicamentoNao"> Não</label>
+</div>
+</div>
+
+<div class="campo">
+<label>Realizou cirurgia?</label>
+<div class="opcoes">
+<label><input type="radio" name="pilates_cirurgia" id="pilates_cirurgiaSim"> Sim</label>
+<label><input type="radio" name="pilates_cirurgia" id="pilates_cirurgiaNao"> Não</label>
+</div>
+<label>Se sim, quais:</label>
+<textarea id="pilates_cirurgias"></textarea>
+</div>
+
+<!-- ================= INSPEÇÃO ================= -->
+
+<h4>⚕️ INSPEÇÃO / PALPAÇÃO</h4>
+
+<div class="opcoes-grid">
+<label><input type="checkbox" id="pilates_normal"> Normal</label>
+<label><input type="checkbox" id="pilates_edema"> Edema</label>
+<label><input type="checkbox" id="pilates_cicatriz"> Cicatrização incompleta</label>
+<label><input type="checkbox" id="pilates_eritema"> Eritemas</label>
+<label><input type="checkbox" id="pilates_outros"> Outros</label>
+</div>
+
+<!-- ================= SEMIOLOGIA ================= -->
+
+<h4>⚕️ SEMIOLOGIA</h4>
+<textarea id="pilates_semiologia"></textarea>
+
+<h4>⚕️ PRESSÃO ARTERIAL</h4>
+<input type="text" id="pilates_pressao">
+
+<!-- ================= AVALIAÇÃO FÍSICA ================= -->
+
+<h4>🏃 AVALIAÇÃO FÍSICA</h4>
+
+<div class="grid-2">
+<div>
+<label>Peso:</label>
+<input type="number" id="pilates_peso">
+</div>
+<div>
+<label>Altura:</label>
+<input type="number" id="pilates_altura">
+</div>
+</div><!-- ================= TESTES FISIOTERAPÊUTICOS ================= -->
+
+<h4>📌 TESTES FISIOTERAPÊUTICOS</h4>
+
+<strong>Y BALANCE TESTE (Equilíbrio Funcional)</strong>
+<div class="opcoes">
+<label><input type="radio" name="pilates_ybalance" id="pilates_y_risco"> Assimetria - Sim com risco</label>
+<label><input type="radio" name="pilates_ybalance" id="pilates_y_nao"> Não</label>
+</div>
+
+<strong>TESTE DE ROMBERG (Equilíbrio Estático)</strong>
+<div class="opcoes">
+<label><input type="radio" name="pilates_romberg" id="pilates_romberg_pos"> Positivo</label>
+<label><input type="radio" name="pilates_romberg" id="pilates_romberg_neg"> Negativo</label>
+</div>
+
+<strong>TESTE DE APOIO UNIPODAL – TAU</strong>
+<div class="opcoes">
+<label><input type="radio" name="pilates_tau" id="pilates_tau_menor"> Menor risco de queda</label>
+<label><input type="radio" name="pilates_tau" id="pilates_tau_maior"> Maior risco de queda</label>
+</div>
+
+<strong>TESTE TUG</strong>
+<div class="opcoes">
+<label><input type="radio" name="pilates_tug" id="pilates_tug_normal"> Normal</label>
+<label><input type="radio" name="pilates_tug" id="pilates_tug_baixo"> Baixo risco</label>
+<label><input type="radio" name="pilates_tug" id="pilates_tug_medio"> Médio risco</label>
+<label><input type="radio" name="pilates_tug" id="pilates_tug_alto"> Alto risco</label>
+</div>
+
+<strong>TESTE DE MARCHA EM TANDEM</strong>
+<div class="opcoes">
+<label><input type="radio" name="pilates_tandem" id="pilates_tandem_normal"> Normal</label>
+<label><input type="radio" name="pilates_tandem_leve"> Leve comprometimento</label>
+<label><input type="radio" name="pilates_tandem_moderado"> Moderado</label>
+<label><input type="radio" name="pilates_tandem_grave"> Grave</label>
+</div>
+
+<strong>TESTE DE LASEGUE</strong>
+<div class="opcoes">
+<label><input type="radio" name="pilates_lasegue" id="pilates_lasegue_pos"> Positivo</label>
+<label><input type="radio" name="pilates_lasegue" id="pilates_lasegue_neg"> Negativo</label>
+</div>
+
+<strong>TESTE DE LASEGUE INVERTIDO</strong>
+<div class="opcoes">
+<label><input type="radio" name="pilates_lasegue_inv" id="pilates_lasegue_inv_pos"> Positivo</label>
+<label><input type="radio" name="pilates_lasegue_inv" id="pilates_lasegue_inv_neg"> Negativo</label>
+</div>
+
+<strong>TESTE DE SPURLING</strong>
+<div class="opcoes">
+<label><input type="radio" name="pilates_spurling" id="pilates_spurling_pos"> Positivo</label>
+<label><input type="radio" name="pilates_spurling" id="pilates_spurling_neg"> Negativo</label>
+</div>
+
+<!-- ================= ESCALA DE FORÇA MUSCULAR ================= -->
+
+<h4>⚕️ ESCALA DE FORÇA MUSCULAR</h4>
+
+<div class="opcoes-grid">
+<label><input type="radio" name="pilates_forca" id="pilates_g0"> Grau 0</label>
+<label><input type="radio" name="pilates_forca" id="pilates_g1"> Grau 1</label>
+<label><input type="radio" name="pilates_forca" id="pilates_g2"> Grau 2</label>
+<label><input type="radio" name="pilates_forca" id="pilates_g3"> Grau 3</label>
+<label><input type="radio" name="pilates_forca" id="pilates_g4"> Grau 4</label>
+<label><input type="radio" name="pilates_forca" id="pilates_g5"> Grau 5</label>
+</div>
+
+<!-- ================= DINAMÔMETRO ================= -->
+
+<h4>Teste de Força Muscular no Dinamômetro</h4>
+
+<div class="grid-2">
+<div>
+<label>Bíceps:</label>
+<input type="text" id="pilates_biceps">
+</div>
+<div>
+<label>Abdutores de Ombro:</label>
+<input type="text" id="pilates_abdutores">
+</div>
+<div>
+<label>Flexores de Ombro:</label>
+<input type="text" id="pilates_flexores_ombro">
+</div>
+<div>
+<label>Extensores de Ombro:</label>
+<input type="text" id="pilates_extensores_ombro">
+</div>
+<div>
+<label>Rotadores Mediais:</label>
+<input type="text" id="pilates_rot_mediais">
+</div>
+<div>
+<label>Rotadores Laterais:</label>
+<input type="text" id="pilates_rot_laterais">
+</div>
+</div>
+
+<!-- ================= FORÇA E RESISTÊNCIA ================= -->
+
+<h4>Força e Resistência Muscular (Repetições por minuto)</h4>
+
+<label>Abdominal Supra:</label>
+<input type="text" id="pilates_abdominal_supra">
+
+<label>Abdominal Infra:</label>
+<input type="text" id="pilates_abdominal_infra">
+
+<label>Prancha Isométrica:</label>
+<input type="text" id="pilates_prancha">
+
+<!-- ================= EVA ================= -->
+
+<h4>⚕️ Avaliação da Intensidade da Dor – EVA</h4>
+
+<div class="grid-2">
+<div>
+<label>EVA 1:</label>
+<input type="text" id="pilates_eva1">
+<label>Região:</label>
+<input type="text" id="pilates_regiao1">
+</div>
+
+<div>
+<label>EVA 2:</label>
+<input type="text" id="pilates_eva2">
+<label>Região:</label>
+<input type="text" id="pilates_regiao2">
+</div>
+</div>
+
+<label>EVA 3:</label>
+<input type="text" id="pilates_eva3">
+<label>Região:</label>
+<input type="text" id="pilates_regiao3">
+
+<!-- ================= PLANO TERAPÊUTICO ================= -->
+
+<h4>📌 PLANO TERAPÊUTICO</h4>
+
+<label>Objetivos do Tratamento:</label>
+<textarea id="pilates_objetivos"></textarea>
+
+<label>Recursos Terapêuticos:</label>
+<textarea id="pilates_recursos"></textarea>
+
+<label>Plano do Tratamento:</label>
+<textarea id="pilates_planoTratamento"></textarea>
+
+<!-- ================= EVOLUÇÃO ================= -->
+
+<h4>🗓️ EVOLUÇÃO DOS ATENDIMENTOS</h4>
+
+<label>Data:</label>
+<input type="date" id="pilates_dataEvolucao">
+
+<label>Procedimentos:</label>
+<textarea id="pilates_procedimentos"></textarea>
+
+<label>Intercorrência:</label>
+<textarea id="pilates_intercorrencia"></textarea>
+
+<label>Evolução do Estado de Saúde:</label>
+<textarea id="pilates_evolucaoEstado"></textarea>
+
+<label>Profissional / Registro Conselho:</label>
+<input type="text" id="pilates_profissional">
+  
+</div> <!-- FECHA card Pilates -->
 </div> <!-- FECHA telaPilates -->
   
 <!-- TELA RECOVERY -->
@@ -1664,10 +1642,3 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
