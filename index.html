@@ -62,42 +62,26 @@ button:hover{ opacity:0.9; }
 .lista-item:hover{ background:#f0f0ff; }
   .lista-item:hover{ background:#f0f0ff; }
 
-/* ===== CORREÇÃO DEFINITIVA CHECKBOX / RADIO ===== */
-
-/* NÃO deixa checkbox ocupar 100% */
-input[type="checkbox"],
-input[type="radio"]{
-  width:auto;
-  margin:0;
-  transform:translateY(1px);
+/* --- Estilo para alinhar checkboxes e inputs --- */
+.inline-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
 }
 
-/* Grupo de opções */
-.inline-group,
-.opcoes{
-  display:flex;
-  flex-wrap:wrap;
-  gap:15px;
-  align-items:center;
-  margin-bottom:15px;
+.card label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
 }
 
-/* Alinha texto com checkbox */
-.inline-group label,
-.opcoes label{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin:0;
-  cursor:pointer;
-}
-
-/* Grid para opções maiores */
-.opcoes-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:10px;
-  margin-bottom:15px;
+.inline-group input[type="text"],
+.inline-group input[type="number"],
+.inline-group input[type="date"] {
+  flex: 1;
+  min-width: 120px;
 }
 </style>
 </head>
@@ -249,6 +233,12 @@ input[type="radio"]{
       <label><input type="checkbox" id="fisio_desorientado"> Desorientado</label>
     </div>
 
+    <!-- EXAMES COMPLEMENTARES -->
+    <h4>⚕️ EXAMES COMPLEMENTARES</h4>
+    <div class="inline-group">
+      <label><input type="checkbox" id="fisio_examesSim"> Sim</label>
+      <label><input type="checkbox" id="fisio_examesNao"> Não</label>
+    </div>
 
     <!-- MEDICAMENTOS -->
     <h4>⚕️ USA MEDICAMENTOS</h4>
@@ -332,9 +322,8 @@ input[type="radio"]{
   </div>
 </div>
 <!-- TELA PILATES -->
-<div id="telaPilates" class="hidden">
 <div class="card">
-<button onclick="voltar()">⬅ Voltar</button>
+
 <h3>Avaliação Pilates</h3>
 
 <!-- ================= IDENTIFICAÇÃO ================= -->
@@ -686,569 +675,32 @@ input[type="radio"]{
 
 <label>Profissional / Registro Conselho:</label>
 <input type="text" id="pilates_profissional">
-  
-</div> <!-- FECHA card Pilates -->
-</div> <!-- FECHA telaPilates -->
-  
+
 <!-- TELA RECOVERY -->
 <div id="telaRecovery" class="hidden">
 <div class="card">
 <button onclick="voltar()">⬅ Voltar</button>
 <h3>Avaliação Recovery</h3>
-<!-- ================= AVALIAÇÃO RECOVERY ================= -->
 
-<div class="card" id="modulo_mov_recovery">
+<input type="text" id="recovery_tipo" placeholder="Tipo de Recovery">
+<textarea id="recovery_obs" placeholder="Observações"></textarea>
 
-<h3>Avaliação Recovery - Anamnese</h3>
-
-<!-- ================= DADOS PESSOAIS ================= -->
-
-<h4>📌 DADOS PESSOAIS</h4>
-
-<label>Nome:</label>
-<input type="text" id="mov_nome">
-
-<div class="grid-2">
-<div>
-<label>Data de Nascimento:</label>
-<input type="date" id="mov_nascimento">
-</div>
-
-<div>
-<label>Telefone:</label>
-<input type="text" id="mov_telefone">
-</div>
-</div>
-
-<div class="campo">
-<label>Sexo:</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_sexo" id="mov_sexo_fem"> Feminino</label>
-<label><input type="radio" name="mov_sexo" id="mov_sexo_masc"> Masculino</label>
-</div>
-</div>
-
-<label>Endereço:</label>
-<input type="text" id="mov_endereco">
-
-<label>Fisioterapeuta:</label>
-<input type="text" id="mov_fisioterapeuta">
-
-<!-- ================= PERFIL ESPORTIVO ================= -->
-
-<h4>🏃 PERFIL ESPORTIVO</h4>
-
-<div class="campo">
-<label>Atleta:</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_atleta" id="mov_atleta_amador"> Amador</label>
-<label><input type="radio" name="mov_atleta" id="mov_atleta_profissional"> Profissional</label>
-</div>
-</div>
-
-<label>Esporte / Há quanto tempo:</label>
-<input type="text" id="mov_esporte">
-
-<div class="campo">
-<label>Pratica atividade física atualmente?</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_pratica" id="mov_pratica_sim"> Sim</label>
-<label><input type="radio" name="mov_pratica" id="mov_pratica_nao"> Não</label>
-</div>
-</div>
-
-<label>Frequência semanal:</label>
-<input type="text" id="mov_frequencia">
-
-<label>Objetivos no programa:</label>
-<textarea id="mov_objetivos"></textarea>
-
-<!-- ================= HISTÓRICO DE SAÚDE ================= -->
-
-<h4>⚕️ HISTÓRICO DE SAÚDE</h4>
-
-<div class="campo">
-<label>Tabagismo?</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_tabagismo" id="mov_tabagismo_sim"> Sim</label>
-<label><input type="radio" name="mov_tabagismo" id="mov_tabagismo_nao"> Não</label>
-</div>
-</div>
-
-<div class="campo">
-<label>Alterações cardíacas?</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_cardiaco" id="mov_cardiaco_sim"> Sim</label>
-<label><input type="radio" name="mov_cardiaco" id="mov_cardiaco_nao"> Não</label>
-</div>
-</div>
-
-<div class="campo">
-<label>Diabetes?</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_diabetes" id="mov_diabetes_sim"> Sim</label>
-<label><input type="radio" name="mov_diabetes" id="mov_diabetes_nao"> Não</label>
-</div>
-</div>
-
-<div class="campo">
-<label>Hipertensão?</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_hipertensao" id="mov_hipertensao_sim"> Sim</label>
-<label><input type="radio" name="mov_hipertensao" id="mov_hipertensao_nao"> Não</label>
-</div>
-</div>
-
-<div class="campo">
-<label>Usa medicamentos?</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_medicamento" id="mov_medicamento_sim"> Sim</label>
-<label><input type="radio" name="mov_medicamento" id="mov_medicamento_nao"> Não</label>
-</div>
-
-<textarea
-  id="mov_medicamento_desc"
-  placeholder="Se sim, quais?"
-  style="width:100%; margin-top:8px;">
-</textarea>
-</div>
-
-<div class="campo">
-<label>Já sofreu acidente ou lesão?</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_lesao" id="mov_lesao_sim"> Sim</label>
-<label><input type="radio" name="mov_lesao" id="mov_lesao_nao"> Não</label>
-</div>
-
-<textarea
-  id="mov_lesao_desc"
-  placeholder="Se sim, qual?"
-  style="width:100%; margin-top:8px;">
-</textarea>
-</div>
-
-<div class="campo">
-<label>Já realizou cirurgia?</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_cirurgia" id="mov_cirurgia_sim"> Sim</label>
-<label><input type="radio" name="mov_cirurgia" id="mov_cirurgia_nao"> Não</label>
-</div>
-
-<textarea
-  id="mov_cirurgia_desc"
-  placeholder="Se sim, qual?"
-  style="width:100%; margin-top:8px;">
-</textarea>
-</div>
-
-<div class="campo">
-<label>Possui alergia?</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_alergia" id="mov_alergia_sim"> Sim</label>
-<label><input type="radio" name="mov_alergia" id="mov_alergia_nao"> Não</label>
-</div>
-
-<textarea
-  id="mov_alergia_desc"
-  placeholder="Se sim, qual?"
-  style="width:100%; margin-top:8px;">
-</textarea>
-</div>
-
-<div class="campo">
-<label>Apresenta tontura ou desmaio?</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_tontura" id="mov_tontura_sim"> Sim</label>
-<label><input type="radio" name="mov_tontura" id="mov_tontura_nao"> Não</label>
-</div>
-</div>
-
-<div class="campo">
-<label>Está em dieta para perder ou ganhar peso?</label>
-<div class="inline-group">
-<label><input type="radio" name="mov_dieta" id="mov_dieta_sim"> Sim</label>
-<label><input type="radio" name="mov_dieta" id="mov_dieta_nao"> Não</label>
-</div>
-</div>
-
-<label>Profissão:</label>
-<input type="text" id="mov_profissao">
-
-</div>
 <button onclick="salvarRecovery()">Salvar</button>
 </div>
 </div>
 
 <!-- TELA PÉLVICA -->
 <div id="telaPelvica" class="hidden">
-
+<div class="card">
 <button onclick="voltar()">⬅ Voltar</button>
+<h3>Avaliação Pélvica</h3>
 
-<!-- ================= DADOS PESSOAIS ================= -->
-<div class="card">
-<h3>Avaliação Pélvica Feminina</h3>
+<textarea id="pelvica_queixa" placeholder="Queixa Pélvica"></textarea>
+<textarea id="pelvica_hist" placeholder="Histórico"></textarea>
 
-<h4>📌 DADOS PESSOAIS</h4>
-
-<div class="grid-2">
-  <div><label>Nome:</label><input type="text" id="pelvic_nome"></div>
-  <div><label>Idade:</label><input type="number" id="pelvic_idade"></div>
-</div>
-
-<div class="grid-2">
-  <div><label>Data de Nascimento:</label><input type="date" id="pelvic_nascimento"></div>
-  <div><label>Telefone:</label><input type="text" id="pelvic_telefone"></div>
-</div>
-
-<div class="grid-2">
-  <div><label>Profissão:</label><input type="text"></div>
-  <div><label>Estado Civil:</label><input type="text"></div>
-</div>
-
-<label>Data da Avaliação:</label>
-<input type="date">
-
-<label>Diagnóstico Médico:</label>
-<textarea></textarea>
-</div>
-
-<!-- ================= QUEIXA PRINCIPAL ================= -->
-<div class="card">
-<h4>⚕️ QUEIXA PRINCIPAL</h4>
-
-<div class="opcoes-grid">
-<label><input type="checkbox"> Assintomática</label>
-<label><input type="checkbox"> Perda de urina</label>
-<label><input type="checkbox"> Dor pélvica</label>
-<label><input type="checkbox"> Dor durante relação sexual</label>
-<label><input type="checkbox"> Ardência na vulva</label>
-<label><input type="checkbox"> Dificuldade para evacuar</label>
-<label><input type="checkbox"> Urgência urinária</label>
-<label><input type="checkbox"> Dificuldade para urinar</label>
-</div>
-
-<label>Outra:</label>
-<input type="text">
-
-<label>Observações:</label>
-<textarea></textarea>
-</div>
-
-<!-- ================= INCONTINÊNCIA ================= -->
-<div class="card">
-<h4>⚕️ INCONTINÊNCIA</h4>
-
-<div class="grid-2">
-  <div>
-    <strong>Tipo</strong>
-    <div class="opcoes">
-      <label><input type="checkbox"> Ao esforço</label>
-      <label><input type="checkbox"> Urgência</label>
-      <label><input type="checkbox"> Mista</label>
-    </div>
-  </div>
-
-  <div>
-    <strong>Perda</strong>
-    <div class="opcoes">
-      <label><input type="checkbox"> Em gotas</label>
-      <label><input type="checkbox"> Em jato</label>
-      <label><input type="checkbox"> Contínuo</label>
-    </div>
-  </div>
-</div>
-
-<label>Faz uso de absorvente?</label>
-<div class="opcoes">
-<label><input type="radio" name="abs"> Sim</label>
-<label><input type="radio" name="abs"> Não</label>
+<button onclick="salvarPelvica()">Salvar</button>
 </div>
 </div>
-
-<!-- ================= FLUXO URINÁRIO ================= -->
-<div class="card">
-<h4>⚕️ FLUXO URINÁRIO</h4>
-
-<div class="opcoes-grid">
-<label><input type="checkbox"> Disúria</label>
-<label><input type="checkbox"> Frequência</label>
-<label><input type="checkbox"> Enurese</label>
-<label><input type="checkbox"> Hesitação</label>
-<label><input type="checkbox"> Esforço</label>
-<label><input type="checkbox"> Perde após urinar</label>
-<label><input type="checkbox"> Jato para e recomeça</label>
-<label><input type="checkbox"> Perde antes de iniciar</label>
-<label><input type="checkbox"> Gotejamento pós miccional</label>
-<label><input type="checkbox"> Esvaziamento incompleto</label>
-</div>
-</div>
-
-<!-- ================= SISTEMA INTESTINAL ================= -->
-<div class="card">
-<h4>⚕️ SISTEMA INTESTINAL</h4>
-
-<div class="opcoes-grid">
-<label><input type="checkbox"> Normal</label>
-<label><input type="checkbox"> Hemorroida</label>
-<label><input type="checkbox"> Perda de gases</label>
-<label><input type="checkbox"> Constipação</label>
-<label><input type="checkbox"> Suja a calcinha</label>
-<label><input type="checkbox"> Perde fezes</label>
-</div>
-
-<label>Outro:</label>
-<input type="text">
-</div>
-
-<!-- ================= HPP ================= -->
-<div class="card">
-<h4>⚕️ HPP</h4>
-
-<div class="opcoes-grid">
-<label><input type="checkbox"> Ansiedade</label>
-<label><input type="checkbox"> Hipertensão</label>
-<label><input type="checkbox"> Diabetes</label>
-<label><input type="checkbox"> Epilepsia</label>
-<label><input type="checkbox"> Doenças Gastrointestinais</label>
-<label><input type="checkbox"> Cardiopatia</label>
-<label><input type="checkbox"> Doença Renal</label>
-</div>
-
-<label>Observações:</label>
-<textarea></textarea>
-
-<label>Cirurgias?</label>
-<div class="opcoes">
-<label><input type="radio" name="cir"> Não</label>
-<label><input type="radio" name="cir"> Sim</label>
-</div>
-</div>
-
-<!-- ================= HISTÓRICO SOCIAL ================= -->
-<div class="card">
-<h4>⚕️ HISTÓRICO SOCIAL</h4>
-
-<label>Fuma?</label>
-<input type="text">
-
-<label>Álcool:</label>
-<input type="text">
-
-<label>Atividade física:</label>
-<input type="text">
-
-<label>Ingestão de líquido (litros/dia):</label>
-<input type="number">
-
-<label>Evita consumo de líquido?</label>
-<div class="opcoes">
-<label><input type="radio" name="evitaLiquido"> Sim</label>
-<label><input type="radio" name="evitaLiquido"> Não</label>
-</div>
-</div>
-
-<!-- ================= MEDICAMENTOS ================= -->
-<div class="card">
-<h4>💊 MEDICAMENTOS</h4>
-
-<label>Uso de medicamento controlado?</label>
-<div class="opcoes">
-<label><input type="radio" name="controlado"> Sim</label>
-<label><input type="radio" name="controlado"> Não</label>
-</div>
-
-<label>Qual?</label>
-<input type="text">
-
-<label>Uso contínuo?</label>
-<div class="opcoes">
-<label><input type="radio" name="continuo"> Sim</label>
-<label><input type="radio" name="continuo"> Não</label>
-</div>
-
-<label>Qual?</label>
-<input type="text">
-
-<label>Outros:</label>
-<textarea></textarea>
-</div><!-- ================= HISTÓRIA GINECOLÓGICA ================= -->
-<div class="card">
-<h4>🩺 HISTÓRIA GINECOLÓGICA</h4>
-
-<label>Menarca (idade):</label>
-<input type="number">
-
-<label>Ciclo menstrual:</label>
-<input type="text">
-
-<label>Fluxo:</label>
-<input type="text">
-
-<label>Dor menstrual?</label>
-<div class="opcoes">
-<label><input type="radio" name="dorMenstrual"> Sim</label>
-<label><input type="radio" name="dorMenstrual"> Não</label>
-</div>
-
-<label>Gestações:</label>
-<input type="number">
-
-<label>Partos:</label>
-<input type="number">
-
-<label>Tipo de parto:</label>
-<div class="opcoes">
-<label><input type="checkbox"> Normal</label>
-<label><input type="checkbox"> Cesárea</label>
-<label><input type="checkbox"> Fórceps</label>
-</div>
-
-<label>Episiotomia?</label>
-<div class="opcoes">
-<label><input type="radio" name="episiotomia"> Sim</label>
-<label><input type="radio" name="episiotomia"> Não</label>
-</div>
-
-<label>Vida sexual ativa?</label>
-<div class="opcoes">
-<label><input type="radio" name="vidaSexual"> Sim</label>
-<label><input type="radio" name="vidaSexual"> Não</label>
-</div>
-
-<label>Dor na relação?</label>
-<div class="opcoes">
-<label><input type="radio" name="dorRelacao"> Sim</label>
-<label><input type="radio" name="dorRelacao"> Não</label>
-</div>
-</div>
-
-<!-- ================= AVALIAÇÃO URODINÂMICA ================= -->
-<div class="card">
-<h4>🚻 AVALIAÇÃO URODINÂMICA</h4>
-
-<label>Frequência urinária diurna:</label>
-<input type="text">
-
-<label>Frequência urinária noturna:</label>
-<input type="text">
-
-<label>Urgência miccional?</label>
-<div class="opcoes">
-<label><input type="radio" name="urgencia"> Sim</label>
-<label><input type="radio" name="urgencia"> Não</label>
-</div>
-
-<label>Dor ao urinar?</label>
-<div class="opcoes">
-<label><input type="radio" name="dorUrinar"> Sim</label>
-<label><input type="radio" name="dorUrinar"> Não</label>
-</div>
-</div>
-
-<!-- ================= EXAME FÍSICO ================= -->
-<div class="card">
-<h4>🧍 EXAME FÍSICO</h4>
-
-<label>Postura:</label>
-<textarea></textarea>
-
-<label>Abdômen:</label>
-<textarea></textarea>
-
-<label>Cicatrizes:</label>
-<textarea></textarea>
-
-<label>Prolapso?</label>
-<div class="opcoes">
-<label><input type="radio" name="prolapso"> Sim</label>
-<label><input type="radio" name="prolapso"> Não</label>
-</div>
-</div>
-
-<!-- ================= AVALIAÇÃO PERINEAL (PERFECT) ================= -->
-<div class="card">
-<h4>💪 AVALIAÇÃO PERINEAL (PERFECT)</h4>
-
-<label>P (Power - força):</label>
-<input type="number" min="0" max="5">
-
-<label>E (Endurance - segundos):</label>
-<input type="number">
-
-<label>R (Repetições):</label>
-<input type="number">
-
-<label>F (Fast - rápidas):</label>
-<input type="number">
-
-<label>E (Elevação):</label>
-<input type="text">
-
-<label>C (Coordenação):</label>
-<input type="text">
-
-<label>T (Tempo):</label>
-<input type="text">
-</div>
-
-<!-- ================= PALPAÇÃO ================= -->
-<div class="card">
-<h4>🖐 PALPAÇÃO</h4>
-
-<label>Dor?</label>
-<div class="opcoes">
-<label><input type="radio" name="dorPalpacao"> Sim</label>
-<label><input type="radio" name="dorPalpacao"> Não</label>
-</div>
-
-<label>Localização:</label>
-<textarea></textarea>
-</div>
-
-<!-- ================= DIAGNÓSTICO FISIOTERAPÊUTICO ================= -->
-<div class="card">
-<h4>📋 DIAGNÓSTICO FISIOTERAPÊUTICO</h4>
-<textarea rows="4"></textarea>
-</div>
-
-<!-- ================= OBJETIVOS ================= -->
-<div class="card">
-<h4>🎯 OBJETIVOS DO TRATAMENTO</h4>
-<textarea rows="4"></textarea>
-</div>
-
-<!-- ================= PROGNÓSTICO ================= -->
-<div class="card">
-<h4>📈 PROGNÓSTICO</h4>
-<textarea rows="3"></textarea>
-</div>
-
-<!-- ================= CONDUTA / TRATAMENTO ================= -->
-<div class="card">
-<h4>📝 CONDUTA / TRATAMENTO PROPOSTO</h4>
-<textarea rows="5"></textarea>
-</div>
-
-<!-- ================= FOLLOW-UP ================= -->
-<div class="card">
-<h4>🔄 FOLLOW-UP</h4>
-<textarea rows="4"></textarea>
-</div>
-
-<!-- ================= ASSINATURA ================= -->
-<div class="card">
-<h4>✍ ASSINATURA PROFISSIONAL</h4>
-
-<label>Nome do Fisioterapeuta:</label>
-<input type="text">
-
-<label>CREFITO:</label>
-<input type="text">
-</div>
-
-<button onclick="salvarPelvica()">Salvar Avaliação</button>
-
-</div> <!-- FECHA telaPelvica -->
 
 <!-- TELA DETALHE -->
 <div id="telaDetalhe" class="hidden">
@@ -1413,141 +865,26 @@ profissional: fisio_profissional.value
 };
 
 window.salvarPilates = function(){
-
 salvarBase({
-
-totalpass: pilates_totalpass.checked,
-gympass: pilates_gympass.checked,
-gurupass: pilates_gurupass.checked,
-mensalidade: pilates_mensalidade.checked,
-parceria: pilates_parceria.value,
-
-nomeCompleto: pilates_nomeCompleto.value,
-dataNascimento: pilates_dataNascimento.value,
-cpf: pilates_cpf.value,
-masculino: pilates_masculino.checked,
-feminino: pilates_feminino.checked,
-responsavel: pilates_responsavel.value,
-parentesco: pilates_parentesco.value,
-cpfResponsavel: pilates_cpfResponsavel.value,
-profissao: pilates_profissao.value,
-endereco: pilates_endereco.value,
-telefone: pilates_telefone.value,
-email: pilates_email.value,
-dataAvaliacao: pilates_dataAvaliacao.value,
-diagnosticoClinico: pilates_diagClinico.value,
-diagnosticoFisio: pilates_diagFisio.value,
-cbdf: pilates_cbdf.value,
-
-queixaPrincipal: pilates_queixaPrincipal.value,
-hpp: pilates_hpp.value,
-antecedentesPessoais: pilates_antecedentesPessoais.value,
-antecedentesFamiliares: pilates_antecedentesFamiliares.value,
-tratamentos: pilates_tratamentos.value,
-habitos: pilates_habitos.value,
-acompanhamentoSim: pilates_acompanhamentoSim.checked,
-acompanhamentoNao: pilates_acompanhamentoNao.checked,
-especialidade: pilates_especialidade.value,
-
-orientado: pilates_orientado.checked,
-apoio: pilates_apoio.checked,
-confuso: pilates_confuso.checked,
-desorientado: pilates_desorientado.checked,
-
-examesSim: pilates_examesSim.checked,
-examesNao: pilates_examesNao.checked,
-
-medicamentoSim: pilates_medicamentoSim.checked,
-medicamentoNao: pilates_medicamentoNao.checked,
-
-cirurgiaSim: pilates_cirurgiaSim.checked,
-cirurgiaNao: pilates_cirurgiaNao.checked,
-cirurgias: pilates_cirurgias.value,
-
-normal: pilates_normal.checked,
-edema: pilates_edema.checked,
-cicatriz: pilates_cicatriz.checked,
-eritema: pilates_eritema.checked,
-outros: pilates_outros.checked,
-
-semiologia: pilates_semiologia.value,
-pressao: pilates_pressao.value,
-peso: pilates_peso.value,
-altura: pilates_altura.value,
-
-objetivos: pilates_objetivos.value,
-recursos: pilates_recursos.value,
-planoTratamento: pilates_planoTratamento.value,
-
-dataEvolucao: pilates_dataEvolucao.value,
-procedimentos: pilates_procedimentos.value,
-intercorrencia: pilates_intercorrencia.value,
-evolucaoEstado: pilates_evolucaoEstado.value,
-profissional: pilates_profissional.value
-
+objetivo:pilates_objetivo.value,
+restricoes:pilates_restricoes.value
 });
-
 };
-  
+
 window.salvarRecovery = function(){
-
 salvarBase({
-
-mov_nome: mov_nome.value,
-mov_nascimento: mov_nascimento.value,
-mov_telefone: mov_telefone.value,
-mov_sexo_fem: mov_sexo_fem.checked,
-mov_sexo_masc: mov_sexo_masc.checked,
-mov_endereco: mov_endereco.value,
-mov_fisioterapeuta: mov_fisioterapeuta.value,
-
-mov_atleta_amador: mov_atleta_amador.checked,
-mov_atleta_profissional: mov_atleta_profissional.checked,
-mov_esporte: mov_esporte.value,
-mov_pratica_sim: mov_pratica_sim.checked,
-mov_pratica_nao: mov_pratica_nao.checked,
-mov_frequencia: mov_frequencia.value,
-mov_objetivos: mov_objetivos.value,
-
-mov_tabagismo_sim: mov_tabagismo_sim.checked,
-mov_tabagismo_nao: mov_tabagismo_nao.checked,
-
-mov_cardiaco_sim: mov_cardiaco_sim.checked,
-mov_cardiaco_nao: mov_cardiaco_nao.checked,
-
-mov_diabetes_sim: mov_diabetes_sim.checked,
-mov_diabetes_nao: mov_diabetes_nao.checked,
-
-mov_hipertensao_sim: mov_hipertensao_sim.checked,
-mov_hipertensao_nao: mov_hipertensao_nao.checked,
-
-mov_medicamento_sim: mov_medicamento_sim.checked,
-mov_medicamento_nao: mov_medicamento_nao.checked,
-mov_medicamento_desc: mov_medicamento_desc.value,
-
-mov_lesao_sim: mov_lesao_sim.checked,
-mov_lesao_nao: mov_lesao_nao.checked,
-mov_lesao_desc: mov_lesao_desc.value,
-
-mov_cirurgia_sim: mov_cirurgia_sim.checked,
-mov_cirurgia_nao: mov_cirurgia_nao.checked,
-mov_cirurgia_desc: mov_cirurgia_desc.value,
-
-mov_alergia_sim: mov_alergia_sim.checked,
-mov_alergia_nao: mov_alergia_nao.checked,
-mov_alergia_desc: mov_alergia_desc.value,
-
-mov_tontura_sim: mov_tontura_sim.checked,
-mov_tontura_nao: mov_tontura_nao.checked,
-
-mov_dieta_sim: mov_dieta_sim.checked,
-mov_dieta_nao: mov_dieta_nao.checked,
-
-mov_profissao: mov_profissao.value
-
+tipoRecovery:recovery_tipo.value,
+obs:recovery_obs.value
 });
-
 };
+
+window.salvarPelvica = function(){
+salvarBase({
+queixa:pelvica_queixa.value,
+historico:pelvica_hist.value
+});
+};
+
 /* LISTA */
 window.carregarAvaliacoes = function(){
 
@@ -1642,5 +979,3 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
-
-
