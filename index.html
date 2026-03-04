@@ -62,42 +62,26 @@ button:hover{ opacity:0.9; }
 .lista-item:hover{ background:#f0f0ff; }
   .lista-item:hover{ background:#f0f0ff; }
 
-/* ===== CORREÇÃO DEFINITIVA CHECKBOX / RADIO ===== */
-
-/* NÃO deixa checkbox ocupar 100% */
-input[type="checkbox"],
-input[type="radio"]{
-  width:auto;
-  margin:0;
-  transform:translateY(1px);
+/* --- Estilo para alinhar checkboxes e inputs --- */
+.inline-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
 }
 
-/* Grupo de opções */
-.inline-group,
-.opcoes{
-  display:flex;
-  flex-wrap:wrap;
-  gap:15px;
-  align-items:center;
-  margin-bottom:15px;
+.card label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
 }
 
-/* Alinha texto com checkbox */
-.inline-group label,
-.opcoes label{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin:0;
-  cursor:pointer;
-}
-
-/* Grid para opções maiores */
-.opcoes-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:10px;
-  margin-bottom:15px;
+.inline-group input[type="text"],
+.inline-group input[type="number"],
+.inline-group input[type="date"] {
+  flex: 1;
+  min-width: 120px;
 }
 </style>
 </head>
@@ -1493,6 +1477,8 @@ window.salvarRecovery = function(){
 
 salvarBase({
 
+/* ================= DADOS PESSOAIS ================= */
+
 mov_nome: mov_nome.value,
 mov_nascimento: mov_nascimento.value,
 mov_telefone: mov_telefone.value,
@@ -1501,6 +1487,8 @@ mov_sexo_masc: mov_sexo_masc.checked,
 mov_endereco: mov_endereco.value,
 mov_fisioterapeuta: mov_fisioterapeuta.value,
 
+/* ================= PERFIL ESPORTIVO ================= */
+
 mov_atleta_amador: mov_atleta_amador.checked,
 mov_atleta_profissional: mov_atleta_profissional.checked,
 mov_esporte: mov_esporte.value,
@@ -1508,6 +1496,8 @@ mov_pratica_sim: mov_pratica_sim.checked,
 mov_pratica_nao: mov_pratica_nao.checked,
 mov_frequencia: mov_frequencia.value,
 mov_objetivos: mov_objetivos.value,
+
+/* ================= HISTÓRICO DE SAÚDE ================= */
 
 mov_tabagismo_sim: mov_tabagismo_sim.checked,
 mov_tabagismo_nao: mov_tabagismo_nao.checked,
@@ -1595,30 +1585,22 @@ html+=`<p><strong>${key}:</strong> ${dados[key]}</p>`;
 dadosAvaliacao.innerHTML=html;
 carregarEvolucoes();
 };
+
 function carregarEvolucoes(){
 
-  evolucoes.innerHTML = "<h4>Evoluções</h4>";
+evolucoes.innerHTML="<h4>Evoluções</h4>";
 
-  onValue(ref(db, `avaliacoes/${avaliacaoAtualId}/evolucoes`), (snapshot) => {
-
-    if(!snapshot.exists()){
-      evolucoes.innerHTML += "<p>Nenhuma evolução.</p>";
-      return;
-    }
-
-    snapshot.forEach((child) => {
-      const evo = child.val();
-
-      evolucoes.innerHTML += `
-        <p>
-          <strong>${evo.data || "Sem data"}:</strong><br>
-          ${evo.texto || ""}
-        </p>
-      `;
-    });
-
-  });
-
+onValue(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`),(snapshot)=>{
+if(!snapshot.exists()){
+evolucoes.innerHTML+="Nenhuma evolução.";
+return;
+}
+snapshot.forEach((child)=>{
+const evo=child.val();
+evolucoes.innerHTML+=`
+<p><strong>${evo.data}</strong><br>${evo.texto}<hr></p>`;
+});
+});
 }
 
 window.salvarEvolucao=function(){
@@ -1650,9 +1632,3 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
-
-
-
-
-
-
