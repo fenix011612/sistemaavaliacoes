@@ -1595,22 +1595,30 @@ html+=`<p><strong>${key}:</strong> ${dados[key]}</p>`;
 dadosAvaliacao.innerHTML=html;
 carregarEvolucoes();
 };
-
 function carregarEvolucoes(){
 
-evolucoes.innerHTML="<h4>Evoluções</h4>";
+  evolucoes.innerHTML = "<h4>Evoluções</h4>";
 
-onValue(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`),(snapshot)=>{
-if(!snapshot.exists()){
-evolucoes.innerHTML+="Nenhuma evolução.";
-return;
-}
-snapshot.forEach((child)=>{
-const evo=child.val();
-evolucoes.innerHTML+=`
-<p><strong>${evo.data}</strong><br>${evo.texto}<hr></p>`;
-});
-});
+  onValue(ref(db, `avaliacoes/${avaliacaoAtualId}/evolucoes`), (snapshot) => {
+
+    if(!snapshot.exists()){
+      evolucoes.innerHTML += "<p>Nenhuma evolução.</p>";
+      return;
+    }
+
+    snapshot.forEach((child) => {
+      const evo = child.val();
+
+      evolucoes.innerHTML += `
+        <p>
+          <strong>${evo.data || "Sem data"}:</strong><br>
+          ${evo.texto || ""}
+        </p>
+      `;
+    });
+
+  });
+
 }
 
 window.salvarEvolucao=function(){
@@ -1642,6 +1650,7 @@ carregarAvaliacoes();
 </script>
 </body>
 </html>
+
 
 
 
