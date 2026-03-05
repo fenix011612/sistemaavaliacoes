@@ -1662,5 +1662,54 @@ telaDetalhe.classList.add("hidden");
 carregarAvaliacoes();
 
 </script>
+
+<!-- ===== PATCH ORGANIZAÇÃO / SEGURANÇA CAMPOS ===== -->
+<script>
+function v(id){
+ const el=document.getElementById(id);
+ return el?el.value:"";
+}
+function c(id){
+ const el=document.getElementById(id);
+ return el?el.checked:false;
+}
+
+/* funções seguras que não quebram se campo faltar */
+window.salvarPilatesSeguro=function(){
+ if(typeof salvarBase!=='function'){alert("salvarBase não encontrada");return;}
+ salvarBase({
+  tipo:"Pilates",
+  nomeCompleto:v("pilates_nomeCompleto"),
+  cpf:v("pilates_cpf"),
+  telefone:v("pilates_telefone"),
+  email:v("pilates_email"),
+  peso:v("pilates_peso"),
+  altura:v("pilates_altura"),
+  objetivos:v("pilates_objetivos"),
+  recursos:v("pilates_recursos"),
+  planoTratamento:v("pilates_planoTratamento"),
+  profissional:v("pilates_profissional")
+ });
+}
+
+window.salvarFisioterapiaSeguro=function(){
+ if(typeof salvarBase!=='function'){alert("salvarBase não encontrada");return;}
+ salvarBase({
+  tipo:"Fisioterapia",
+  nomeCompleto:v("fisio_nomeCompleto"),
+  cpf:v("fisio_cpf"),
+  telefone:v("fisio_telefone"),
+  email:v("fisio_email"),
+  peso:v("fisio_peso"),
+  altura:v("fisio_altura"),
+  objetivos:v("fisio_objetivos"),
+  recursos:v("fisio_recursos"),
+  planoTratamento:v("fisio_planoTratamento"),
+  profissional:v("fisio_profissional")
+ });
+}
+</script>
+<!-- ===== FIM PATCH ===== -->
+
 </body>
 </html>
