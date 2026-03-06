@@ -1271,6 +1271,10 @@ input[type="radio"]{
 <button onclick="voltar()">⬅ Voltar</button>
 <h3 id="tituloDetalhe"></h3>
 <div id="dadosAvaliacao"></div>
+<div class="inline-group">
+  <button onclick="editarAvaliacaoAtual()">✏️ Editar Avaliação</button>
+  <button onclick="apagarAvaliacaoAtual()" style="background:#dc3545;">🗑️ Apagar Avaliação</button>
+</div>
 
 <div id="evolucoes"></div>
 
@@ -1285,7 +1289,7 @@ input[type="radio"]{
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFNuEzaEvvpBKBGNG7NUf3zt74Q3r1fdo",
@@ -1302,6 +1306,8 @@ const db = getDatabase(app);
 
 let tempNome, tempTipo, tempData;
 let avaliacaoAtualId = null;
+let avaliacaoEmEdicaoId = null;
+let dadosAvaliacaoAtual = null;
 
 function campoValor(id){
   const el = document.getElementById(id);
@@ -1338,9 +1344,9 @@ alert("Preencha nome, tipo e data na tela inicial antes de salvar.");
 return;
 }
 
-const novaRef = push(ref(db,"avaliacoes"));
+const destinoRef = avaliacaoEmEdicaoId ? ref(db,`avaliacoes/${avaliacaoEmEdicaoId}`) : push(ref(db,"avaliacoes"));
 
-set(novaRef,{
+set(destinoRef,{
 nome: tempNome,
 tipo: tempTipo,
 data: tempData,
@@ -1348,7 +1354,8 @@ data: tempData,
 criadoEm:new Date().toLocaleString()
 });
 
-alert("Avaliação salva!");
+alert(avaliacaoEmEdicaoId ? "Avaliação atualizada!" : "Avaliação salva!");
+avaliacaoEmEdicaoId = null;
 voltar();
 }
 
@@ -1481,14 +1488,17 @@ especialidade: campoValor("pilates_especialidade"),
 
 orientado: campoMarcado("pilates_orientado"),
 apoio: campoMarcado("pilates_apoio"),
+tipoApoio: campoValor("pilates_tipoApoio"),
 confuso: campoMarcado("pilates_confuso"),
 desorientado: campoMarcado("pilates_desorientado"),
 
 examesSim: campoMarcado("pilates_examesSim"),
 examesNao: campoMarcado("pilates_examesNao"),
+quaisExames: campoValor("pilates_quaisExames"),
 
 medicamentoSim: campoMarcado("pilates_medicamentoSim"),
 medicamentoNao: campoMarcado("pilates_medicamentoNao"),
+quaisMedicamentos: campoValor("pilates_quaisMedicamentos"),
 
 cirurgiaSim: campoMarcado("pilates_cirurgiaSim"),
 cirurgiaNao: campoMarcado("pilates_cirurgiaNao"),
@@ -1499,11 +1509,13 @@ edema: campoMarcado("pilates_edema"),
 cicatriz: campoMarcado("pilates_cicatriz"),
 eritema: campoMarcado("pilates_eritema"),
 outros: campoMarcado("pilates_outros"),
+inspecaoDetalhes: campoValor("pilates_inspecaoDetalhes"),
 
 semiologia: campoValor("pilates_semiologia"),
 pressao: campoValor("pilates_pressao"),
 peso: campoValor("pilates_peso"),
 altura: campoValor("pilates_altura"),
+escalaBorg: campoValor("pilates_escalaBorg"),
 
 objetivos: campoValor("pilates_objetivos"),
 recursos: campoValor("pilates_recursos"),
@@ -1632,7 +1644,60 @@ html+=`<p><strong>${key}:</strong> ${dados[key]}</p>`;
 }
 
 dadosAvaliacao.innerHTML=html;
+dadosAvaliacaoAtual=dados;
 carregarEvolucoes();
+};
+
+function preencherCampo(id,valor,tipo="value") {
+const el=document.getElementById(id);
+if(!el) return;
+if(tipo==="checked") el.checked=!!valor;
+else el.value=valor ?? "";
+}
+
+function carregarDadosNaFicha(tipo,dados){
+if(tipo==="Fisioterapia"){
+const mapaValor={qtdSessoes:"fisio_qtdSessoes",parcelas:"fisio_parcelas",parceria:"fisio_parceria",nomeCompleto:"fisio_nomeCompleto",dataNascimento:"fisio_dataNascimento",cpf:"fisio_cpf",responsavel:"fisio_responsavel",parentesco:"fisio_parentesco",cpfResponsavel:"fisio_cpfResponsavel",profissao:"fisio_profissao",endereco:"fisio_endereco",telefone:"fisio_telefone",email:"fisio_email",dataAvaliacao:"fisio_dataAvaliacao",diagnosticoClinico:"fisio_diagClinico",diagnosticoFisio:"fisio_diagFisio",cbdf:"fisio_cbdf",queixaPrincipal:"fisio_queixaPrincipal",hpp:"fisio_hpp",antecedentesPessoais:"fisio_antecedentesPessoais",antecedentesFamiliares:"fisio_antecedentesFamiliares",tratamentos:"fisio_tratamentos",habitos:"fisio_habitos",especialidade:"fisio_especialidade",examesQuais:"fisio_examesQuais",medicamentosQuais:"fisio_medicamentosQuais",cirurgias:"fisio_cirurgias",peso:"fisio_peso",altura:"fisio_altura",objetivos:"fisio_objetivos",recursos:"fisio_recursos",planoTratamento:"fisio_planoTratamento",profissional:"fisio_profissional"};
+const mapaCheck={sessao:"fisio_sessao",pacote:"fisio_pacote",pix:"fisio_pix",parcelado:"fisio_parcelado",masculino:"fisio_masculino",feminino:"fisio_feminino",acompanhamentoSim:"fisio_acompanhamentoSim",acompanhamentoNao:"fisio_acompanhamentoNao",orientado:"fisio_orientado",apoio:"fisio_apoio",confuso:"fisio_confuso",desorientado:"fisio_desorientado",examesSim:"fisio_examesSim",examesNao:"fisio_examesNao",medicamentoSim:"fisio_medicamentoSim",medicamentoNao:"fisio_medicamentoNao",cirurgiaSim:"fisio_cirurgiaSim",cirurgiaNao:"fisio_cirurgiaNao",normal:"fisio_normal",edema:"fisio_edema",cicatriz:"fisio_cicatriz",eritema:"fisio_eritema",outros:"fisio_outros",yRisco:"fisio_y_risco",yNao:"fisio_y_nao",rombergPos:"fisio_romberg_pos",rombergNeg:"fisio_romberg_neg",tugNormal:"fisio_tug_normal",tugBaixo:"fisio_tug_baixo",tugMedio:"fisio_tug_medio",tugAlto:"fisio_tug_alto",laseguePos:"fisio_lasegue_pos",lasegueNeg:"fisio_lasegue_neg",g0:"fisio_g0",g1:"fisio_g1",g2:"fisio_g2",g3:"fisio_g3",g4:"fisio_g4",g5:"fisio_g5"};
+for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
+for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
+}
+if(tipo==="Pilates"){
+const mapaValor={parceria:"pilates_parceria",nomeCompleto:"pilates_nomeCompleto",dataNascimento:"pilates_dataNascimento",cpf:"pilates_cpf",responsavel:"pilates_responsavel",parentesco:"pilates_parentesco",cpfResponsavel:"pilates_cpfResponsavel",profissao:"pilates_profissao",endereco:"pilates_endereco",telefone:"pilates_telefone",email:"pilates_email",dataAvaliacao:"pilates_dataAvaliacao",diagnosticoClinico:"pilates_diagClinico",diagnosticoFisio:"pilates_diagFisio",cbdf:"pilates_cbdf",queixaPrincipal:"pilates_queixaPrincipal",hpp:"pilates_hpp",antecedentesPessoais:"pilates_antecedentesPessoais",antecedentesFamiliares:"pilates_antecedentesFamiliares",tratamentos:"pilates_tratamentos",habitos:"pilates_habitos",especialidade:"pilates_especialidade",tipoApoio:"pilates_tipoApoio",quaisExames:"pilates_quaisExames",quaisMedicamentos:"pilates_quaisMedicamentos",cirurgias:"pilates_cirurgias",inspecaoDetalhes:"pilates_inspecaoDetalhes",semiologia:"pilates_semiologia",pressao:"pilates_pressao",peso:"pilates_peso",altura:"pilates_altura",escalaBorg:"pilates_escalaBorg",objetivos:"pilates_objetivos",recursos:"pilates_recursos",planoTratamento:"pilates_planoTratamento",dataEvolucao:"pilates_dataEvolucao",procedimentos:"pilates_procedimentos",intercorrencia:"pilates_intercorrencia",evolucaoEstado:"pilates_evolucaoEstado",profissional:"pilates_profissional"};
+const mapaCheck={totalpass:"pilates_totalpass",gympass:"pilates_gympass",gurupass:"pilates_gurupass",mensalidade:"pilates_mensalidade",masculino:"pilates_masculino",feminino:"pilates_feminino",acompanhamentoSim:"pilates_acompanhamentoSim",acompanhamentoNao:"pilates_acompanhamentoNao",orientado:"pilates_orientado",apoio:"pilates_apoio",confuso:"pilates_confuso",desorientado:"pilates_desorientado",examesSim:"pilates_examesSim",examesNao:"pilates_examesNao",medicamentoSim:"pilates_medicamentoSim",medicamentoNao:"pilates_medicamentoNao",cirurgiaSim:"pilates_cirurgiaSim",cirurgiaNao:"pilates_cirurgiaNao",normal:"pilates_normal",edema:"pilates_edema",cicatriz:"pilates_cicatriz",eritema:"pilates_eritema",outros:"pilates_outros"};
+for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
+for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
+}
+if(tipo==="Pélvica"){
+preencherCampo("pelvic_nome",dados.pelvic_nome,"value");
+preencherCampo("pelvic_idade",dados.pelvic_idade,"value");
+preencherCampo("pelvic_nascimento",dados.pelvic_nascimento,"value");
+preencherCampo("pelvic_telefone",dados.pelvic_telefone,"value");
+}
+}
+
+window.editarAvaliacaoAtual = function(){
+if(!avaliacaoAtualId || !dadosAvaliacaoAtual) return;
+avaliacaoEmEdicaoId=avaliacaoAtualId;
+tempNome=dadosAvaliacaoAtual.nome || "";
+tempTipo=dadosAvaliacaoAtual.tipo || "";
+tempData=dadosAvaliacaoAtual.data || "";
+preencherCampo("nome",tempNome,"value");
+preencherCampo("tipo",tempTipo,"value");
+preencherCampo("data",tempData,"value");
+telaDetalhe.classList.add("hidden");
+const telaId="tela"+tempTipo.replace("ç","c").replace("é","e");
+const tela=document.getElementById(telaId);
+if(tela) tela.classList.remove("hidden");
+carregarDadosNaFicha(tempTipo,dadosAvaliacaoAtual);
+};
+
+window.apagarAvaliacaoAtual = async function(){
+if(!avaliacaoAtualId) return;
+if(!confirm("Deseja realmente apagar esta avaliação?")) return;
+await remove(ref(db,`avaliacoes/${avaliacaoAtualId}`));
+alert("Avaliação apagada com sucesso.");
+voltar();
 };
 
 function carregarEvolucoes(){
@@ -1674,6 +1739,8 @@ telaPilates.classList.add("hidden");
 telaRecovery.classList.add("hidden");
 telaPelvica.classList.add("hidden");
 telaDetalhe.classList.add("hidden");
+dadosAvaliacaoAtual = null;
+avaliacaoEmEdicaoId = null;
 };
 
 carregarAvaliacoes();
