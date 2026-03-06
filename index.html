@@ -250,13 +250,6 @@ input[type="radio"]{
     </div>
 
 
-    <!-- MEDICAMENTOS -->
-    <h4>⚕️ USA MEDICAMENTOS</h4>
-    <div class="inline-group">
-      <label><input type="checkbox" id="fisio_medicamentoSim"> Sim</label>
-      <label><input type="checkbox" id="fisio_medicamentoNao"> Não</label>
-    </div>
-
     <!-- CIRURGIA -->
     <h4>⚕️ REALIZOU CIRURGIA</h4>
     <div class="inline-group">
@@ -707,7 +700,7 @@ input[type="radio"]{
     <label>Profissional / Registro Conselho:</label>
     <input type="text" id="pilates_profissional">
 
-    <button onclick="salvarAvaliacaoPilates()">💾 Salvar Avaliação</button>
+    <button onclick="salvarPilates()">💾 Salvar Avaliação</button>
 
   </div> <!-- FECHA card Pilates -->
 </div> <!-- FECHA telaPilates -->
@@ -1310,12 +1303,22 @@ const db = getDatabase(app);
 let tempNome, tempTipo, tempData;
 let avaliacaoAtualId = null;
 
+function campoValor(id){
+  const el = document.getElementById(id);
+  return el ? el.value : "";
+}
+
+function campoMarcado(id){
+  const el = document.getElementById(id);
+  return el ? el.checked : false;
+}
+
 /* ABRIR TELA POR TIPO */
 window.abrirTelaPorTipo = function(){
 
-tempNome = nome.value;
-tempTipo = tipo.value;
-tempData = data.value;
+tempNome = campoValor("nome");
+tempTipo = campoValor("tipo");
+tempData = campoValor("data");
 
 if(!tempNome || !tempTipo || !tempData){
 alert("Preencha todos os campos.");
@@ -1329,6 +1332,11 @@ document.getElementById("tela"+tempTipo.replace("ç","c").replace("é","e")).cla
 
 /* SALVAMENTOS */
 function salvarBase(dadosExtras){
+
+if(!tempNome || !tempTipo || !tempData){
+alert("Preencha nome, tipo e data na tela inicial antes de salvar.");
+return;
+}
 
 const novaRef = push(ref(db,"avaliacoes"));
 
@@ -1348,88 +1356,88 @@ window.salvarFisioterapia = function(){
 
 salvarBase({
 
-sessao: fisio_sessao.checked,
-pacote: fisio_pacote.checked,
-qtdSessoes: fisio_qtdSessoes.value,
-pix: fisio_pix.checked,
-parcelado: fisio_parcelado.checked,
-parcelas: fisio_parcelas.value,
-parceria: fisio_parceria.value,
+sessao: campoMarcado("fisio_sessao"),
+pacote: campoMarcado("fisio_pacote"),
+qtdSessoes: campoValor("fisio_qtdSessoes"),
+pix: campoMarcado("fisio_pix"),
+parcelado: campoMarcado("fisio_parcelado"),
+parcelas: campoValor("fisio_parcelas"),
+parceria: campoValor("fisio_parceria"),
 
-nomeCompleto: fisio_nomeCompleto.value,
-dataNascimento: fisio_dataNascimento.value,
-cpf: fisio_cpf.value,
-masculino: fisio_masculino.checked,
-feminino: fisio_feminino.checked,
-responsavel: fisio_responsavel.value,
-parentesco: fisio_parentesco.value,
-cpfResponsavel: fisio_cpfResponsavel.value,
-profissao: fisio_profissao.value,
-endereco: fisio_endereco.value,
-telefone: fisio_telefone.value,
-email: fisio_email.value,
-dataAvaliacao: fisio_dataAvaliacao.value,
-diagnosticoClinico: fisio_diagClinico.value,
-diagnosticoFisio: fisio_diagFisio.value,
-cbdf: fisio_cbdf.value,
+nomeCompleto: campoValor("fisio_nomeCompleto"),
+dataNascimento: campoValor("fisio_dataNascimento"),
+cpf: campoValor("fisio_cpf"),
+masculino: campoMarcado("fisio_masculino"),
+feminino: campoMarcado("fisio_feminino"),
+responsavel: campoValor("fisio_responsavel"),
+parentesco: campoValor("fisio_parentesco"),
+cpfResponsavel: campoValor("fisio_cpfResponsavel"),
+profissao: campoValor("fisio_profissao"),
+endereco: campoValor("fisio_endereco"),
+telefone: campoValor("fisio_telefone"),
+email: campoValor("fisio_email"),
+dataAvaliacao: campoValor("fisio_dataAvaliacao"),
+diagnosticoClinico: campoValor("fisio_diagClinico"),
+diagnosticoFisio: campoValor("fisio_diagFisio"),
+cbdf: campoValor("fisio_cbdf"),
 
-queixaPrincipal: fisio_queixaPrincipal.value,
-hpp: fisio_hpp.value,
-antecedentesPessoais: fisio_antecedentesPessoais.value,
-antecedentesFamiliares: fisio_antecedentesFamiliares.value,
-tratamentos: fisio_tratamentos.value,
-habitos: fisio_habitos.value,
-acompanhamentoSim: fisio_acompanhamentoSim.checked,
-acompanhamentoNao: fisio_acompanhamentoNao.checked,
-especialidade: fisio_especialidade.value,
+queixaPrincipal: campoValor("fisio_queixaPrincipal"),
+hpp: campoValor("fisio_hpp"),
+antecedentesPessoais: campoValor("fisio_antecedentesPessoais"),
+antecedentesFamiliares: campoValor("fisio_antecedentesFamiliares"),
+tratamentos: campoValor("fisio_tratamentos"),
+habitos: campoValor("fisio_habitos"),
+acompanhamentoSim: campoMarcado("fisio_acompanhamentoSim"),
+acompanhamentoNao: campoMarcado("fisio_acompanhamentoNao"),
+especialidade: campoValor("fisio_especialidade"),
 
-orientado: fisio_orientado.checked,
-apoio: fisio_apoio.checked,
-confuso: fisio_confuso.checked,
-desorientado: fisio_desorientado.checked,
+orientado: campoMarcado("fisio_orientado"),
+apoio: campoMarcado("fisio_apoio"),
+confuso: campoMarcado("fisio_confuso"),
+desorientado: campoMarcado("fisio_desorientado"),
 
-examesSim: fisio_examesSim.checked,
-examesNao: fisio_examesNao.checked,
-examesQuais: fisio_examesQuais.value,
+examesSim: campoMarcado("fisio_examesSim"),
+examesNao: campoMarcado("fisio_examesNao"),
+examesQuais: campoValor("fisio_examesQuais"),
 
-medicamentoSim: fisio_medicamentoSim.checked,
-medicamentoNao: fisio_medicamentoNao.checked,
-medicamentosQuais: fisio_medicamentosQuais.value,
+medicamentoSim: campoMarcado("fisio_medicamentoSim"),
+medicamentoNao: campoMarcado("fisio_medicamentoNao"),
+medicamentosQuais: campoValor("fisio_medicamentosQuais"),
 
-cirurgiaSim: fisio_cirurgiaSim.checked,
-cirurgiaNao: fisio_cirurgiaNao.checked,
-cirurgias: fisio_cirurgias.value,
-normal: fisio_normal.checked,
-edema: fisio_edema.checked,
-cicatriz: fisio_cicatriz.checked,
-eritema: fisio_eritema.checked,
-outros: fisio_outros.checked,
+cirurgiaSim: campoMarcado("fisio_cirurgiaSim"),
+cirurgiaNao: campoMarcado("fisio_cirurgiaNao"),
+cirurgias: campoValor("fisio_cirurgias"),
+normal: campoMarcado("fisio_normal"),
+edema: campoMarcado("fisio_edema"),
+cicatriz: campoMarcado("fisio_cicatriz"),
+eritema: campoMarcado("fisio_eritema"),
+outros: campoMarcado("fisio_outros"),
 
-peso: fisio_peso.value,
-altura: fisio_altura.value,
+peso: campoValor("fisio_peso"),
+altura: campoValor("fisio_altura"),
 
-yRisco: fisio_y_risco.checked,
-yNao: fisio_y_nao.checked,
-rombergPos: fisio_romberg_pos.checked,
-rombergNeg: fisio_romberg_neg.checked,
-tugNormal: fisio_tug_normal.checked,
-tugBaixo: fisio_tug_baixo.checked,
-tugMedio: fisio_tug_medio.checked,
-tugAlto: fisio_tug_alto.checked,
-laseguePos: fisio_lasegue_pos.checked,
-lasegueNeg: fisio_lasegue_neg.checked,
+yRisco: campoMarcado("fisio_y_risco"),
+yNao: campoMarcado("fisio_y_nao"),
+rombergPos: campoMarcado("fisio_romberg_pos"),
+rombergNeg: campoMarcado("fisio_romberg_neg"),
+tugNormal: campoMarcado("fisio_tug_normal"),
+tugBaixo: campoMarcado("fisio_tug_baixo"),
+tugMedio: campoMarcado("fisio_tug_medio"),
+tugAlto: campoMarcado("fisio_tug_alto"),
+laseguePos: campoMarcado("fisio_lasegue_pos"),
+lasegueNeg: campoMarcado("fisio_lasegue_neg"),
 
-g0: fisio_g0.checked,
-g1: fisio_g1.checked,
-g2: fisio_g2.checked,
-g3: fisio_g3.checked,
-g4: fisio_g4.checked,
-g5: fisio_g5.checked,
+g0: campoMarcado("fisio_g0"),
+g1: campoMarcado("fisio_g1"),
+g2: campoMarcado("fisio_g2"),
+g3: campoMarcado("fisio_g3"),
+g4: campoMarcado("fisio_g4"),
+g5: campoMarcado("fisio_g5"),
 
-objetivos: fisio_objetivos.value,
-recursos: fisio_recursos.value,
-planoTratamento: fisio_planoTratamento.value,
-profissional: fisio_profissional.value
+objetivos: campoValor("fisio_objetivos"),
+recursos: campoValor("fisio_recursos"),
+planoTratamento: campoValor("fisio_planoTratamento"),
+profissional: campoValor("fisio_profissional")
 
 });
 };
@@ -1438,77 +1446,86 @@ window.salvarPilates = function(){
 
 salvarBase({
 
-totalpass: pilates_totalpass.checked,
-gympass: pilates_gympass.checked,
-gurupass: pilates_gurupass.checked,
-mensalidade: pilates_mensalidade.checked,
-parceria: pilates_parceria.value,
+totalpass: campoMarcado("pilates_totalpass"),
+gympass: campoMarcado("pilates_gympass"),
+gurupass: campoMarcado("pilates_gurupass"),
+mensalidade: campoMarcado("pilates_mensalidade"),
+parceria: campoValor("pilates_parceria"),
 
-nomeCompleto: pilates_nomeCompleto.value,
-dataNascimento: pilates_dataNascimento.value,
-cpf: pilates_cpf.value,
-masculino: pilates_masculino.checked,
-feminino: pilates_feminino.checked,
-responsavel: pilates_responsavel.value,
-parentesco: pilates_parentesco.value,
-cpfResponsavel: pilates_cpfResponsavel.value,
-profissao: pilates_profissao.value,
-endereco: pilates_endereco.value,
-telefone: pilates_telefone.value,
-email: pilates_email.value,
-dataAvaliacao: pilates_dataAvaliacao.value,
-diagnosticoClinico: pilates_diagClinico.value,
-diagnosticoFisio: pilates_diagFisio.value,
-cbdf: pilates_cbdf.value,
+nomeCompleto: campoValor("pilates_nomeCompleto"),
+dataNascimento: campoValor("pilates_dataNascimento"),
+cpf: campoValor("pilates_cpf"),
+masculino: campoMarcado("pilates_masculino"),
+feminino: campoMarcado("pilates_feminino"),
+responsavel: campoValor("pilates_responsavel"),
+parentesco: campoValor("pilates_parentesco"),
+cpfResponsavel: campoValor("pilates_cpfResponsavel"),
+profissao: campoValor("pilates_profissao"),
+endereco: campoValor("pilates_endereco"),
+telefone: campoValor("pilates_telefone"),
+email: campoValor("pilates_email"),
+dataAvaliacao: campoValor("pilates_dataAvaliacao"),
+diagnosticoClinico: campoValor("pilates_diagClinico"),
+diagnosticoFisio: campoValor("pilates_diagFisio"),
+cbdf: campoValor("pilates_cbdf"),
 
-queixaPrincipal: pilates_queixaPrincipal.value,
-hpp: pilates_hpp.value,
-antecedentesPessoais: pilates_antecedentesPessoais.value,
-antecedentesFamiliares: pilates_antecedentesFamiliares.value,
-tratamentos: pilates_tratamentos.value,
-habitos: pilates_habitos.value,
-acompanhamentoSim: pilates_acompanhamentoSim.checked,
-acompanhamentoNao: pilates_acompanhamentoNao.checked,
-especialidade: pilates_especialidade.value,
+queixaPrincipal: campoValor("pilates_queixaPrincipal"),
+hpp: campoValor("pilates_hpp"),
+antecedentesPessoais: campoValor("pilates_antecedentesPessoais"),
+antecedentesFamiliares: campoValor("pilates_antecedentesFamiliares"),
+tratamentos: campoValor("pilates_tratamentos"),
+habitos: campoValor("pilates_habitos"),
+acompanhamentoSim: campoMarcado("pilates_acompanhamentoSim"),
+acompanhamentoNao: campoMarcado("pilates_acompanhamentoNao"),
+especialidade: campoValor("pilates_especialidade"),
 
-orientado: pilates_orientado.checked,
-apoio: pilates_apoio.checked,
-confuso: pilates_confuso.checked,
-desorientado: pilates_desorientado.checked,
+orientado: campoMarcado("pilates_orientado"),
+apoio: campoMarcado("pilates_apoio"),
+confuso: campoMarcado("pilates_confuso"),
+desorientado: campoMarcado("pilates_desorientado"),
 
-examesSim: pilates_examesSim.checked,
-examesNao: pilates_examesNao.checked,
+examesSim: campoMarcado("pilates_examesSim"),
+examesNao: campoMarcado("pilates_examesNao"),
 
-medicamentoSim: pilates_medicamentoSim.checked,
-medicamentoNao: pilates_medicamentoNao.checked,
+medicamentoSim: campoMarcado("pilates_medicamentoSim"),
+medicamentoNao: campoMarcado("pilates_medicamentoNao"),
 
-cirurgiaSim: pilates_cirurgiaSim.checked,
-cirurgiaNao: pilates_cirurgiaNao.checked,
-cirurgias: pilates_cirurgias.value,
+cirurgiaSim: campoMarcado("pilates_cirurgiaSim"),
+cirurgiaNao: campoMarcado("pilates_cirurgiaNao"),
+cirurgias: campoValor("pilates_cirurgias"),
 
-normal: pilates_normal.checked,
-edema: pilates_edema.checked,
-cicatriz: pilates_cicatriz.checked,
-eritema: pilates_eritema.checked,
-outros: pilates_outros.checked,
+normal: campoMarcado("pilates_normal"),
+edema: campoMarcado("pilates_edema"),
+cicatriz: campoMarcado("pilates_cicatriz"),
+eritema: campoMarcado("pilates_eritema"),
+outros: campoMarcado("pilates_outros"),
 
-semiologia: pilates_semiologia.value,
-pressao: pilates_pressao.value,
-peso: pilates_peso.value,
-altura: pilates_altura.value,
+semiologia: campoValor("pilates_semiologia"),
+pressao: campoValor("pilates_pressao"),
+peso: campoValor("pilates_peso"),
+altura: campoValor("pilates_altura"),
 
-objetivos: pilates_objetivos.value,
-recursos: pilates_recursos.value,
-planoTratamento: pilates_planoTratamento.value,
+objetivos: campoValor("pilates_objetivos"),
+recursos: campoValor("pilates_recursos"),
+planoTratamento: campoValor("pilates_planoTratamento"),
 
-dataEvolucao: pilates_dataEvolucao.value,
-procedimentos: pilates_procedimentos.value,
-intercorrencia: pilates_intercorrencia.value,
-evolucaoEstado: pilates_evolucaoEstado.value,
-profissional: pilates_profissional.value
+dataEvolucao: campoValor("pilates_dataEvolucao"),
+procedimentos: campoValor("pilates_procedimentos"),
+intercorrencia: campoValor("pilates_intercorrencia"),
+evolucaoEstado: campoValor("pilates_evolucaoEstado"),
+profissional: campoValor("pilates_profissional")
 
 });
 
+};
+
+window.salvarPelvica = function(){
+salvarBase({
+pelvic_nome: campoValor("pelvic_nome"),
+pelvic_idade: campoValor("pelvic_idade"),
+pelvic_nascimento: campoValor("pelvic_nascimento"),
+pelvic_telefone: campoValor("pelvic_telefone")
+});
 };
   
 window.salvarRecovery = function(){
