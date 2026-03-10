@@ -524,6 +524,42 @@ input[type="radio"]{
       </div>
     </div>
 
+    <h4>Composição Corporal por Adipômetro</h4>
+    <div class="grid-2">
+      <div>
+        <label>Peitoral/Torácica:</label>
+        <input type="text" id="pilates_adipometro_peitoral_toracica">
+      </div>
+      <div>
+        <label>Subescapular:</label>
+        <input type="text" id="pilates_adipometro_subescapular">
+      </div>
+      <div>
+        <label>Suprailiaca:</label>
+        <input type="text" id="pilates_adipometro_suprailiaca">
+      </div>
+      <div>
+        <label>Axilar média:</label>
+        <input type="text" id="pilates_adipometro_axilar_media">
+      </div>
+      <div>
+        <label>Tríceps:</label>
+        <input type="text" id="pilates_adipometro_triceps">
+      </div>
+      <div>
+        <label>Bíceps:</label>
+        <input type="text" id="pilates_adipometro_biceps">
+      </div>
+      <div>
+        <label>Abdominal:</label>
+        <input type="text" id="pilates_adipometro_abdominal">
+      </div>
+      <div>
+        <label>Coxa:</label>
+        <input type="text" id="pilates_adipometro_coxa">
+      </div>
+    </div>
+
     <!-- ================= TESTES FISIOTERAPÊUTICOS ================= -->
 
     <h4>📌 TESTES FISIOTERAPÊUTICOS</h4>
@@ -649,18 +685,7 @@ input[type="radio"]{
         <input type="text" id="pilates_regiao1">
       </div>
 
-      <div>
-        <label>EVA 2:</label>
-        <input type="text" id="pilates_eva2">
-        <label>Região:</label>
-        <input type="text" id="pilates_regiao2">
-      </div>
     </div>
-
-    <label>EVA 3:</label>
-    <input type="text" id="pilates_eva3">
-    <label>Região:</label>
-    <input type="text" id="pilates_regiao3">
 
     <!-- ================= ESCALA DE BORG ================= -->
 
@@ -1515,6 +1540,14 @@ semiologia: campoValor("pilates_semiologia"),
 pressao: campoValor("pilates_pressao"),
 peso: campoValor("pilates_peso"),
 altura: campoValor("pilates_altura"),
+adipometroPeitoralToracica: campoValor("pilates_adipometro_peitoral_toracica"),
+adipometroSubescapular: campoValor("pilates_adipometro_subescapular"),
+adipometroSuprailiaca: campoValor("pilates_adipometro_suprailiaca"),
+adipometroAxilarMedia: campoValor("pilates_adipometro_axilar_media"),
+adipometroTriceps: campoValor("pilates_adipometro_triceps"),
+adipometroBiceps: campoValor("pilates_adipometro_biceps"),
+adipometroAbdominal: campoValor("pilates_adipometro_abdominal"),
+adipometroCoxa: campoValor("pilates_adipometro_coxa"),
 escalaBorg: campoValor("pilates_escalaBorg"),
 
 objetivos: campoValor("pilates_objetivos"),
@@ -1663,7 +1696,7 @@ for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
 }
 if(tipo==="Pilates"){
-const mapaValor={parceria:"pilates_parceria",nomeCompleto:"pilates_nomeCompleto",dataNascimento:"pilates_dataNascimento",cpf:"pilates_cpf",responsavel:"pilates_responsavel",parentesco:"pilates_parentesco",cpfResponsavel:"pilates_cpfResponsavel",profissao:"pilates_profissao",endereco:"pilates_endereco",telefone:"pilates_telefone",email:"pilates_email",dataAvaliacao:"pilates_dataAvaliacao",diagnosticoClinico:"pilates_diagClinico",diagnosticoFisio:"pilates_diagFisio",cbdf:"pilates_cbdf",queixaPrincipal:"pilates_queixaPrincipal",hpp:"pilates_hpp",antecedentesPessoais:"pilates_antecedentesPessoais",antecedentesFamiliares:"pilates_antecedentesFamiliares",tratamentos:"pilates_tratamentos",habitos:"pilates_habitos",especialidade:"pilates_especialidade",tipoApoio:"pilates_tipoApoio",quaisExames:"pilates_quaisExames",quaisMedicamentos:"pilates_quaisMedicamentos",cirurgias:"pilates_cirurgias",inspecaoDetalhes:"pilates_inspecaoDetalhes",semiologia:"pilates_semiologia",pressao:"pilates_pressao",peso:"pilates_peso",altura:"pilates_altura",escalaBorg:"pilates_escalaBorg",objetivos:"pilates_objetivos",recursos:"pilates_recursos",planoTratamento:"pilates_planoTratamento",dataEvolucao:"pilates_dataEvolucao",procedimentos:"pilates_procedimentos",intercorrencia:"pilates_intercorrencia",evolucaoEstado:"pilates_evolucaoEstado",profissional:"pilates_profissional"};
+const mapaValor={parceria:"pilates_parceria",nomeCompleto:"pilates_nomeCompleto",dataNascimento:"pilates_dataNascimento",cpf:"pilates_cpf",responsavel:"pilates_responsavel",parentesco:"pilates_parentesco",cpfResponsavel:"pilates_cpfResponsavel",profissao:"pilates_profissao",endereco:"pilates_endereco",telefone:"pilates_telefone",email:"pilates_email",dataAvaliacao:"pilates_dataAvaliacao",diagnosticoClinico:"pilates_diagClinico",diagnosticoFisio:"pilates_diagFisio",cbdf:"pilates_cbdf",queixaPrincipal:"pilates_queixaPrincipal",hpp:"pilates_hpp",antecedentesPessoais:"pilates_antecedentesPessoais",antecedentesFamiliares:"pilates_antecedentesFamiliares",tratamentos:"pilates_tratamentos",habitos:"pilates_habitos",especialidade:"pilates_especialidade",tipoApoio:"pilates_tipoApoio",quaisExames:"pilates_quaisExames",quaisMedicamentos:"pilates_quaisMedicamentos",cirurgias:"pilates_cirurgias",inspecaoDetalhes:"pilates_inspecaoDetalhes",semiologia:"pilates_semiologia",pressao:"pilates_pressao",peso:"pilates_peso",altura:"pilates_altura",adipometroPeitoralToracica:"pilates_adipometro_peitoral_toracica",adipometroSubescapular:"pilates_adipometro_subescapular",adipometroSuprailiaca:"pilates_adipometro_suprailiaca",adipometroAxilarMedia:"pilates_adipometro_axilar_media",adipometroTriceps:"pilates_adipometro_triceps",adipometroBiceps:"pilates_adipometro_biceps",adipometroAbdominal:"pilates_adipometro_abdominal",adipometroCoxa:"pilates_adipometro_coxa",escalaBorg:"pilates_escalaBorg",objetivos:"pilates_objetivos",recursos:"pilates_recursos",planoTratamento:"pilates_planoTratamento",dataEvolucao:"pilates_dataEvolucao",procedimentos:"pilates_procedimentos",intercorrencia:"pilates_intercorrencia",evolucaoEstado:"pilates_evolucaoEstado",profissional:"pilates_profissional"};
 const mapaCheck={totalpass:"pilates_totalpass",gympass:"pilates_gympass",gurupass:"pilates_gurupass",mensalidade:"pilates_mensalidade",masculino:"pilates_masculino",feminino:"pilates_feminino",acompanhamentoSim:"pilates_acompanhamentoSim",acompanhamentoNao:"pilates_acompanhamentoNao",orientado:"pilates_orientado",apoio:"pilates_apoio",confuso:"pilates_confuso",desorientado:"pilates_desorientado",examesSim:"pilates_examesSim",examesNao:"pilates_examesNao",medicamentoSim:"pilates_medicamentoSim",medicamentoNao:"pilates_medicamentoNao",cirurgiaSim:"pilates_cirurgiaSim",cirurgiaNao:"pilates_cirurgiaNao",normal:"pilates_normal",edema:"pilates_edema",cicatriz:"pilates_cicatriz",eritema:"pilates_eritema",outros:"pilates_outros"};
 for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
