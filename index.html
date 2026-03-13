@@ -121,6 +121,7 @@ input[type="radio"]{
 <option value="Pilates">Pilates</option>
 <option value="Pélvica">Pélvica</option>
 <option value="Recovery">Recovery</option>
+<option value="Condicionamento">Condicionamento</option>
 </select>
 
 <input type="date" id="data">
@@ -137,6 +138,7 @@ input[type="radio"]{
   <option value="Pilates">Pilates</option>
   <option value="Pélvica">Pélvica</option>
   <option value="Recovery">Recovery</option>
+  <option value="Condicionamento">Condicionamento</option>
 </select>
 
 <div id="listaAvaliacoes">Carregando...</div>
@@ -919,6 +921,151 @@ input[type="radio"]{
 </div>
 </div>
 
+<!-- TELA CONDICIONAMENTO -->
+<div id="telaCondicionamento" class="hidden">
+  <div class="card">
+    <button onclick="voltar()">⬅ Voltar</button>
+    <h3>Avaliação Condicionamento Funcional - Aula em Grupo</h3>
+
+    <h4>📌 IDENTIFICAÇÃO</h4>
+    <label>Profissão</label>
+    <input type="text" id="cond_profissao">
+
+    <label>Endereço</label>
+    <input type="text" id="cond_endereco">
+
+    <label>Telefone</label>
+    <input type="text" id="cond_telefone">
+
+    <label>Data de Avaliação</label>
+    <input type="date" id="cond_dataAvaliacao">
+
+    <label>Diagnóstico Clínico</label>
+    <input type="text" id="cond_diagnosticoClinico">
+
+    <label>Diagnóstico Fisioterapêutico</label>
+    <input type="text" id="cond_diagnosticoFisio">
+
+    <label>CBDF</label>
+    <input type="text" id="cond_cbdf">
+
+    <h4>⚕️ HISTÓRIA CLÍNICA</h4>
+    <label>Queixa Principal</label>
+    <textarea id="cond_queixaPrincipal"></textarea>
+
+    <label>História da Doença Atual (HDA)</label>
+    <textarea id="cond_hda"></textarea>
+
+    <label>Histórico de Lesões</label>
+    <textarea id="cond_historicoLesoes"></textarea>
+
+    <label>Acompanhamento Médico/Fisioterapêutico/Nutricional</label>
+    <div class="inline-group">
+      <label><input type="radio" name="cond_acompanhamento" id="cond_acompanhamento_sim"> Sim</label>
+      <label><input type="radio" name="cond_acompanhamento" id="cond_acompanhamento_nao"> Não</label>
+    </div>
+
+    <label>Quais</label>
+    <input type="text" id="cond_acompanhamento_quais">
+
+    <label>Usa Medicamentos</label>
+    <div class="inline-group">
+      <label><input type="radio" name="cond_medicamentos" id="cond_medicamentos_sim"> Sim</label>
+      <label><input type="radio" name="cond_medicamentos" id="cond_medicamentos_nao"> Não</label>
+    </div>
+
+    <label>Quais</label>
+    <input type="text" id="cond_medicamentos_quais">
+
+    <label>Peso (kg)</label>
+    <input type="number" id="cond_peso">
+
+    <label>Altura (cm)</label>
+    <input type="number" id="cond_altura">
+
+    <label>Hábitos de Vida</label>
+    <textarea id="cond_habitosVida"></textarea>
+
+    <label>Metas Pessoais</label>
+    <textarea id="cond_metasPessoais"></textarea>
+
+    <h4>⚕️ AVALIAÇÃO DA DOR - EVA</h4>
+    <label>EVA / Região</label>
+    <input type="text" id="cond_evaRegiao">
+
+    <h4>🏃 NÍVEL DE CONDICIONAMENTO FÍSICO</h4>
+    <div class="inline-group">
+      <label><input type="checkbox" id="cond_ativo"> Ativo</label>
+      <label><input type="checkbox" id="cond_moderadamente_ativo"> Moderadamente Ativo</label>
+      <label><input type="checkbox" id="cond_sedentario"> Sedentário</label>
+    </div>
+
+    <label>Atividade Física Regular</label>
+    <div class="inline-group">
+      <label><input type="radio" name="cond_atividade" id="cond_atividade_sim"> Sim</label>
+      <label><input type="radio" name="cond_atividade" id="cond_atividade_nao"> Não</label>
+    </div>
+
+    <label>Quais</label>
+    <input type="text" id="cond_atividade_quais">
+
+    <label>Classificação de Esforço - Escala de BORG</label>
+    <input type="number" min="0" max="10" id="cond_borg">
+
+    <h4>⚕️ AVALIAÇÃO FÍSICA</h4>
+    <label>Desvios Posturais</label>
+    <div class="inline-group">
+      <label><input type="radio" name="cond_desvios" id="cond_desvios_sim"> Sim</label>
+      <label><input type="radio" name="cond_desvios" id="cond_desvios_nao"> Não</label>
+    </div>
+
+    <label>Quais</label>
+    <input type="text" id="cond_desvios_quais">
+
+    <label>Movimentos Articulares</label>
+    <div class="inline-group">
+      <label><input type="radio" name="cond_movimentos" id="cond_movimentos_com_dor"> Com Dor</label>
+      <label><input type="radio" name="cond_movimentos" id="cond_movimentos_sem_dor"> Sem Dor</label>
+    </div>
+
+    <label>Quais</label>
+    <input type="text" id="cond_movimentos_quais">
+
+    <label>Movimentos Funcionais</label>
+    <textarea id="cond_movimentos_funcionais" placeholder="Agachamentos, pranchas, rotações..."></textarea>
+
+    <label>Mobilidade</label>
+    <textarea id="cond_mobilidade"></textarea>
+
+    <label>Déficit</label>
+    <textarea id="cond_deficit"></textarea>
+
+    <label>Flexibilidade</label>
+    <select id="cond_flexibilidade">
+      <option value="">Selecione</option>
+      <option>Baixa</option>
+      <option>Média</option>
+      <option>Alta</option>
+    </select>
+
+    <label>Resistência Muscular/Cardiovascular</label>
+    <select id="cond_resistencia">
+      <option value="">Selecione</option>
+      <option>Baixa</option>
+      <option>Média</option>
+      <option>Alta</option>
+    </select>
+
+    <h4>📌 PLANO TERAPÊUTICO</h4>
+    <textarea id="cond_planoTerapeutico"></textarea>
+
+    <label>Profissional / Registro Conselho</label>
+    <input type="text" id="cond_profissional">
+
+    <button onclick="salvarCondicionamento()">Salvar Avaliação</button>
+  </div>
+</div>
+
 <!-- TELA PÉLVICA -->
 <div id="telaPelvica" class="hidden">
 
@@ -1573,6 +1720,55 @@ pelvic_telefone: campoValor("pelvic_telefone")
 });
 };
   
+window.salvarCondicionamento = function(){
+
+salvarBase({
+profissao: campoValor("cond_profissao"),
+endereco: campoValor("cond_endereco"),
+telefone: campoValor("cond_telefone"),
+dataAvaliacao: campoValor("cond_dataAvaliacao"),
+diagnosticoClinico: campoValor("cond_diagnosticoClinico"),
+diagnosticoFisio: campoValor("cond_diagnosticoFisio"),
+cbdf: campoValor("cond_cbdf"),
+queixaPrincipal: campoValor("cond_queixaPrincipal"),
+hda: campoValor("cond_hda"),
+historicoLesoes: campoValor("cond_historicoLesoes"),
+acompanhamentoSim: campoMarcado("cond_acompanhamento_sim"),
+acompanhamentoNao: campoMarcado("cond_acompanhamento_nao"),
+acompanhamentoQuais: campoValor("cond_acompanhamento_quais"),
+medicamentosSim: campoMarcado("cond_medicamentos_sim"),
+medicamentosNao: campoMarcado("cond_medicamentos_nao"),
+medicamentosQuais: campoValor("cond_medicamentos_quais"),
+peso: campoValor("cond_peso"),
+altura: campoValor("cond_altura"),
+habitosVida: campoValor("cond_habitosVida"),
+metasPessoais: campoValor("cond_metasPessoais"),
+evaRegiao: campoValor("cond_evaRegiao"),
+ativo: campoMarcado("cond_ativo"),
+moderadamenteAtivo: campoMarcado("cond_moderadamente_ativo"),
+sedentario: campoMarcado("cond_sedentario"),
+atividadeSim: campoMarcado("cond_atividade_sim"),
+atividadeNao: campoMarcado("cond_atividade_nao"),
+atividadeQuais: campoValor("cond_atividade_quais"),
+borg: campoValor("cond_borg"),
+desviosSim: campoMarcado("cond_desvios_sim"),
+desviosNao: campoMarcado("cond_desvios_nao"),
+desviosQuais: campoValor("cond_desvios_quais"),
+movimentosComDor: campoMarcado("cond_movimentos_com_dor"),
+movimentosSemDor: campoMarcado("cond_movimentos_sem_dor"),
+movimentosQuais: campoValor("cond_movimentos_quais"),
+movimentosFuncionais: campoValor("cond_movimentos_funcionais"),
+mobilidade: campoValor("cond_mobilidade"),
+deficit: campoValor("cond_deficit"),
+flexibilidade: campoValor("cond_flexibilidade"),
+resistenciaMuscularCardio: campoValor("cond_resistencia"),
+planoTerapeutico: campoValor("cond_planoTerapeutico"),
+profissional: campoValor("cond_profissional")
+
+});
+
+};
+
 window.salvarRecovery = function(){
 
 salvarBase({
@@ -1701,6 +1897,12 @@ const mapaCheck={totalpass:"pilates_totalpass",gympass:"pilates_gympass",gurupas
 for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
 }
+if(tipo==="Condicionamento"){
+const mapaValor={profissao:"cond_profissao",endereco:"cond_endereco",telefone:"cond_telefone",dataAvaliacao:"cond_dataAvaliacao",diagnosticoClinico:"cond_diagnosticoClinico",diagnosticoFisio:"cond_diagnosticoFisio",cbdf:"cond_cbdf",queixaPrincipal:"cond_queixaPrincipal",hda:"cond_hda",historicoLesoes:"cond_historicoLesoes",acompanhamentoQuais:"cond_acompanhamento_quais",medicamentosQuais:"cond_medicamentos_quais",peso:"cond_peso",altura:"cond_altura",habitosVida:"cond_habitosVida",metasPessoais:"cond_metasPessoais",evaRegiao:"cond_evaRegiao",atividadeQuais:"cond_atividade_quais",borg:"cond_borg",desviosQuais:"cond_desvios_quais",movimentosQuais:"cond_movimentos_quais",movimentosFuncionais:"cond_movimentos_funcionais",mobilidade:"cond_mobilidade",deficit:"cond_deficit",flexibilidade:"cond_flexibilidade",resistenciaMuscularCardio:"cond_resistencia",planoTerapeutico:"cond_planoTerapeutico",profissional:"cond_profissional"};
+const mapaCheck={acompanhamentoSim:"cond_acompanhamento_sim",acompanhamentoNao:"cond_acompanhamento_nao",medicamentosSim:"cond_medicamentos_sim",medicamentosNao:"cond_medicamentos_nao",ativo:"cond_ativo",moderadamenteAtivo:"cond_moderadamente_ativo",sedentario:"cond_sedentario",atividadeSim:"cond_atividade_sim",atividadeNao:"cond_atividade_nao",desviosSim:"cond_desvios_sim",desviosNao:"cond_desvios_nao",movimentosComDor:"cond_movimentos_com_dor",movimentosSemDor:"cond_movimentos_sem_dor"};
+for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
+for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
+}
 if(tipo==="Pélvica"){
 preencherCampo("pelvic_nome",dados.pelvic_nome,"value");
 preencherCampo("pelvic_idade",dados.pelvic_idade,"value");
@@ -1770,6 +1972,7 @@ telaInicial.classList.remove("hidden");
 telaFisioterapia.classList.add("hidden");
 telaPilates.classList.add("hidden");
 telaRecovery.classList.add("hidden");
+telaCondicionamento.classList.add("hidden");
 telaPelvica.classList.add("hidden");
 telaDetalhe.classList.add("hidden");
 dadosAvaliacaoAtual = null;
