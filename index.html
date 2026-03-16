@@ -928,25 +928,58 @@ input[type="radio"]{
     <h3>Avaliação Condicionamento Funcional - Aula em Grupo</h3>
 
     <h4>📌 IDENTIFICAÇÃO</h4>
-    <label>Profissão</label>
-    <input type="text" id="cond_profissao">
+    <label>Nome completo:</label>
+    <input type="text" id="cond_nomeCompleto">
 
-    <label>Endereço</label>
-    <input type="text" id="cond_endereco">
+    <label>Data de nascimento:</label>
+    <input type="date" id="cond_dataNascimento">
 
-    <label>Telefone</label>
+    <label>CPF:</label>
+    <input type="text" id="cond_cpf">
+
+    <label>Sexo:</label>
+    <div class="inline-group">
+      <label><input type="radio" name="cond_sexo" id="cond_sexo_masculino"> Masculino</label>
+      <label><input type="radio" name="cond_sexo" id="cond_sexo_feminino"> Feminino</label>
+    </div>
+
+    <label>Se menor, identificação completa do responsável</label>
+    <label>Nome:</label>
+    <input type="text" id="cond_responsavel_nome">
+
+    <div class="grid-2">
+      <div>
+        <label>Grau de parentesco:</label>
+        <input type="text" id="cond_responsavel_parentesco">
+      </div>
+      <div>
+        <label>CPF:</label>
+        <input type="text" id="cond_responsavel_cpf">
+      </div>
+    </div>
+
+    <label>Profissão/Ocupação:</label>
+    <input type="text" id="cond_profissao_ocupacao">
+
+    <label>Endereço Residencial:</label>
+    <input type="text" id="cond_endereco_residencial">
+
+    <label>Telefone:</label>
     <input type="text" id="cond_telefone">
 
-    <label>Data de Avaliação</label>
+    <label>E-mail:</label>
+    <input type="email" id="cond_email">
+
+    <label>Data da Avaliação:</label>
     <input type="date" id="cond_dataAvaliacao">
 
-    <label>Diagnóstico Clínico</label>
+    <label>Diagnóstico Clínico:</label>
     <input type="text" id="cond_diagnosticoClinico">
 
-    <label>Diagnóstico Fisioterapêutico</label>
+    <label>Diagnóstico Fisioterapêutico:</label>
     <input type="text" id="cond_diagnosticoFisio">
 
-    <label>CBDF</label>
+    <label>CBDF:</label>
     <input type="text" id="cond_cbdf">
 
     <h4>⚕️ HISTÓRIA CLÍNICA</h4>
@@ -1032,21 +1065,14 @@ input[type="radio"]{
     <input type="text" id="cond_movimentos_quais">
 
     <label>Movimentos Funcionais</label>
-    <textarea id="cond_movimentos_funcionais" placeholder="Agachamentos, pranchas, rotações..."></textarea>
+    <textarea id="cond_movimentos_funcionais"></textarea>
 
     <label>Mobilidade</label>
     <textarea id="cond_mobilidade"></textarea>
 
-    <label>Déficit</label>
-    <textarea id="cond_deficit"></textarea>
 
     <label>Flexibilidade</label>
-    <select id="cond_flexibilidade">
-      <option value="">Selecione</option>
-      <option>Baixa</option>
-      <option>Média</option>
-      <option>Alta</option>
-    </select>
+    <input type="text" id="cond_flexibilidade">
 
     <label>Resistência Muscular/Cardiovascular</label>
     <select id="cond_resistencia">
@@ -1723,9 +1749,18 @@ pelvic_telefone: campoValor("pelvic_telefone")
 window.salvarCondicionamento = function(){
 
 salvarBase({
-profissao: campoValor("cond_profissao"),
-endereco: campoValor("cond_endereco"),
+nomeCompleto: campoValor("cond_nomeCompleto"),
+dataNascimento: campoValor("cond_dataNascimento"),
+cpf: campoValor("cond_cpf"),
+sexoMasculino: campoMarcado("cond_sexo_masculino"),
+sexoFeminino: campoMarcado("cond_sexo_feminino"),
+responsavelNome: campoValor("cond_responsavel_nome"),
+responsavelParentesco: campoValor("cond_responsavel_parentesco"),
+responsavelCpf: campoValor("cond_responsavel_cpf"),
+profissaoOcupacao: campoValor("cond_profissao_ocupacao"),
+enderecoResidencial: campoValor("cond_endereco_residencial"),
 telefone: campoValor("cond_telefone"),
+email: campoValor("cond_email"),
 dataAvaliacao: campoValor("cond_dataAvaliacao"),
 diagnosticoClinico: campoValor("cond_diagnosticoClinico"),
 diagnosticoFisio: campoValor("cond_diagnosticoFisio"),
@@ -1759,7 +1794,6 @@ movimentosSemDor: campoMarcado("cond_movimentos_sem_dor"),
 movimentosQuais: campoValor("cond_movimentos_quais"),
 movimentosFuncionais: campoValor("cond_movimentos_funcionais"),
 mobilidade: campoValor("cond_mobilidade"),
-deficit: campoValor("cond_deficit"),
 flexibilidade: campoValor("cond_flexibilidade"),
 resistenciaMuscularCardio: campoValor("cond_resistencia"),
 planoTerapeutico: campoValor("cond_planoTerapeutico"),
@@ -1898,8 +1932,8 @@ for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
 }
 if(tipo==="Condicionamento"){
-const mapaValor={profissao:"cond_profissao",endereco:"cond_endereco",telefone:"cond_telefone",dataAvaliacao:"cond_dataAvaliacao",diagnosticoClinico:"cond_diagnosticoClinico",diagnosticoFisio:"cond_diagnosticoFisio",cbdf:"cond_cbdf",queixaPrincipal:"cond_queixaPrincipal",hda:"cond_hda",historicoLesoes:"cond_historicoLesoes",acompanhamentoQuais:"cond_acompanhamento_quais",medicamentosQuais:"cond_medicamentos_quais",peso:"cond_peso",altura:"cond_altura",habitosVida:"cond_habitosVida",metasPessoais:"cond_metasPessoais",evaRegiao:"cond_evaRegiao",atividadeQuais:"cond_atividade_quais",borg:"cond_borg",desviosQuais:"cond_desvios_quais",movimentosQuais:"cond_movimentos_quais",movimentosFuncionais:"cond_movimentos_funcionais",mobilidade:"cond_mobilidade",deficit:"cond_deficit",flexibilidade:"cond_flexibilidade",resistenciaMuscularCardio:"cond_resistencia",planoTerapeutico:"cond_planoTerapeutico",profissional:"cond_profissional"};
-const mapaCheck={acompanhamentoSim:"cond_acompanhamento_sim",acompanhamentoNao:"cond_acompanhamento_nao",medicamentosSim:"cond_medicamentos_sim",medicamentosNao:"cond_medicamentos_nao",ativo:"cond_ativo",moderadamenteAtivo:"cond_moderadamente_ativo",sedentario:"cond_sedentario",atividadeSim:"cond_atividade_sim",atividadeNao:"cond_atividade_nao",desviosSim:"cond_desvios_sim",desviosNao:"cond_desvios_nao",movimentosComDor:"cond_movimentos_com_dor",movimentosSemDor:"cond_movimentos_sem_dor"};
+const mapaValor={nomeCompleto:"cond_nomeCompleto",dataNascimento:"cond_dataNascimento",cpf:"cond_cpf",responsavelNome:"cond_responsavel_nome",responsavelParentesco:"cond_responsavel_parentesco",responsavelCpf:"cond_responsavel_cpf",profissaoOcupacao:"cond_profissao_ocupacao",enderecoResidencial:"cond_endereco_residencial",telefone:"cond_telefone",email:"cond_email",dataAvaliacao:"cond_dataAvaliacao",diagnosticoClinico:"cond_diagnosticoClinico",diagnosticoFisio:"cond_diagnosticoFisio",cbdf:"cond_cbdf",queixaPrincipal:"cond_queixaPrincipal",hda:"cond_hda",historicoLesoes:"cond_historicoLesoes",acompanhamentoQuais:"cond_acompanhamento_quais",medicamentosQuais:"cond_medicamentos_quais",peso:"cond_peso",altura:"cond_altura",habitosVida:"cond_habitosVida",metasPessoais:"cond_metasPessoais",evaRegiao:"cond_evaRegiao",atividadeQuais:"cond_atividade_quais",borg:"cond_borg",desviosQuais:"cond_desvios_quais",movimentosQuais:"cond_movimentos_quais",movimentosFuncionais:"cond_movimentos_funcionais",mobilidade:"cond_mobilidade",flexibilidade:"cond_flexibilidade",resistenciaMuscularCardio:"cond_resistencia",planoTerapeutico:"cond_planoTerapeutico",profissional:"cond_profissional"};
+const mapaCheck={sexoMasculino:"cond_sexo_masculino",sexoFeminino:"cond_sexo_feminino",acompanhamentoSim:"cond_acompanhamento_sim",acompanhamentoNao:"cond_acompanhamento_nao",medicamentosSim:"cond_medicamentos_sim",medicamentosNao:"cond_medicamentos_nao",ativo:"cond_ativo",moderadamenteAtivo:"cond_moderadamente_ativo",sedentario:"cond_sedentario",atividadeSim:"cond_atividade_sim",atividadeNao:"cond_atividade_nao",desviosSim:"cond_desvios_sim",desviosNao:"cond_desvios_nao",movimentosComDor:"cond_movimentos_com_dor",movimentosSemDor:"cond_movimentos_sem_dor"};
 for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
 }
