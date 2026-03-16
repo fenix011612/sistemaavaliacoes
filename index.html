@@ -269,6 +269,8 @@ input[type="radio"]{
       <label><input type="checkbox" id="fisio_eritema"> Eritemas</label>
       <label><input type="checkbox" id="fisio_outros"> Outros</label>
     </div>
+    <label>Detalhes adicionais da inspeção/palpação:</label>
+    <textarea id="fisio_inspecaoDetalhes"></textarea>
 
     <!-- AVALIAÇÃO FÍSICA -->
     <h4>⚕️ AVALIAÇÃO FÍSICA</h4>
@@ -280,9 +282,9 @@ input[type="radio"]{
     <!-- TESTES FISIOTERAPÊUTICOS -->
     <h4>📌 TESTES FISIOTERAPÊUTICOS</h4>
     <div class="inline-group">
-      <label>Y Balance:</label>
-      <label><input type="checkbox" id="fisio_y_risco"> Sim com risco</label>
-      <label><input type="checkbox" id="fisio_y_nao"> Não</label>
+      <label>Teste de Joelhos (Y Teste):</label>
+      <label><input type="checkbox" id="fisio_joelhoY_sim"> Sim</label>
+      <label><input type="checkbox" id="fisio_joelhoY_nao"> Não</label>
     </div>
 
     <div class="inline-group">
@@ -916,6 +918,33 @@ input[type="radio"]{
 <label>Profissão:</label>
 <input type="text" id="mov_profissao">
 
+<h4>📌 PROGRAMA MOV RECOVERY - AVALIAÇÃO FISIOTERAPÊUTICA</h4>
+<div class="grid-2">
+  <div>
+    <label>Esporte:</label>
+    <input type="text" id="mov_prog_esporte">
+  </div>
+  <div>
+    <label>Início:</label>
+    <input type="text" id="mov_prog_inicio">
+  </div>
+</div>
+
+<label>Queixa principal:</label>
+<textarea id="mov_prog_queixaPrincipal" rows="4"></textarea>
+
+<label>Diagnóstico Cinético Funcional:</label>
+<textarea id="mov_prog_diagnosticoCinetico" rows="4"></textarea>
+
+<label>Objetivos:</label>
+<textarea id="mov_prog_objetivos" rows="4"></textarea>
+
+<label>Conduta Fisioterapêutica:</label>
+<textarea id="mov_prog_conduta" rows="4"></textarea>
+
+<label>FISIOTERAPEUTA:</label>
+<input type="text" id="mov_prog_fisioterapeuta">
+
 </div>
 <button onclick="salvarRecovery()">Salvar</button>
 </div>
@@ -1232,9 +1261,11 @@ input[type="radio"]{
 
 <label>Cirurgias?</label>
 <div class="opcoes">
-<label><input type="radio" name="cir"> Não</label>
-<label><input type="radio" name="cir"> Sim</label>
+<label><input type="radio" name="pelvic_cirurgia" id="pelvic_cirurgia_nao"> Não</label>
+<label><input type="radio" name="pelvic_cirurgia" id="pelvic_cirurgia_sim"> Sim</label>
 </div>
+<label>Se sim, quais?</label>
+<input type="text" id="pelvic_cirurgias_quais">
 </div>
 
 <!-- ================= HISTÓRICO SOCIAL ================= -->
@@ -1517,6 +1548,35 @@ function campoMarcado(id){
   return el ? el.checked : false;
 }
 
+function formatarDataBR(valor){
+  if(!valor) return "-";
+  if(/^\d{4}-\d{2}-\d{2}$/.test(valor)){
+    const [ano,mes,dia]=valor.split("-");
+    return `${dia}/${mes}/${ano}`;
+  }
+  return valor;
+}
+
+function formatarValorExibicao(chave, valor){
+  if(valor === true) return "Sim";
+  if(valor === false) return "Não";
+  if(typeof valor === "string" && chave.toLowerCase().includes("data")) return formatarDataBR(valor);
+  return valor ?? "-";
+}
+
+function rotuloCampo(chave){
+  const mapa = {
+    nomeCompleto:"Nome completo", dataNascimento:"Data de nascimento", cpf:"CPF", cpfResponsavel:"CPF responsável", dataAvaliacao:"Data da avaliação",
+    diagnosticoClinico:"Diagnóstico clínico", diagnosticoFisio:"Diagnóstico fisioterapêutico", queixaPrincipal:"Queixa principal",
+    antecedentesPessoais:"Antecedentes pessoais", antecedentesFamiliares:"Antecedentes familiares", planoTratamento:"Plano de tratamento",
+    profissional:"Profissional", criadoEm:"Criado em", evolucoes:"Evoluções", evaRegiao:"EVA / Região"
+  };
+  return mapa[chave] || chave
+    .replace(/([A-Z])/g,' $1')
+    .replace(/_/g,' ')
+    .replace(/^./, c => c.toUpperCase());
+}
+
 /* ABRIR TELA POR TIPO */
 window.abrirTelaPorTipo = function(){
 
@@ -1549,7 +1609,7 @@ nome: tempNome,
 tipo: tempTipo,
 data: tempData,
 ...dadosExtras,
-criadoEm:new Date().toLocaleString()
+criadoEm:new Date().toLocaleString("pt-BR")
 });
 
 alert(avaliacaoEmEdicaoId ? "Avaliação atualizada!" : "Avaliação salva!");
@@ -1617,12 +1677,13 @@ edema: campoMarcado("fisio_edema"),
 cicatriz: campoMarcado("fisio_cicatriz"),
 eritema: campoMarcado("fisio_eritema"),
 outros: campoMarcado("fisio_outros"),
+inspecaoDetalhes: campoValor("fisio_inspecaoDetalhes"),
 
 peso: campoValor("fisio_peso"),
 altura: campoValor("fisio_altura"),
 
-yRisco: campoMarcado("fisio_y_risco"),
-yNao: campoMarcado("fisio_y_nao"),
+joelhoYSim: campoMarcado("fisio_joelhoY_sim"),
+joelhoYNao: campoMarcado("fisio_joelhoY_nao"),
 rombergPos: campoMarcado("fisio_romberg_pos"),
 rombergNeg: campoMarcado("fisio_romberg_neg"),
 tugNormal: campoMarcado("fisio_tug_normal"),
@@ -1742,7 +1803,10 @@ salvarBase({
 pelvic_nome: campoValor("pelvic_nome"),
 pelvic_idade: campoValor("pelvic_idade"),
 pelvic_nascimento: campoValor("pelvic_nascimento"),
-pelvic_telefone: campoValor("pelvic_telefone")
+pelvic_telefone: campoValor("pelvic_telefone"),
+pelvic_cirurgia_sim: campoMarcado("pelvic_cirurgia_sim"),
+pelvic_cirurgia_nao: campoMarcado("pelvic_cirurgia_nao"),
+pelvic_cirurgias_quais: campoValor("pelvic_cirurgias_quais")
 });
 };
   
@@ -1857,7 +1921,15 @@ mov_tontura_nao: mov_tontura_nao.checked,
 mov_dieta_sim: mov_dieta_sim.checked,
 mov_dieta_nao: mov_dieta_nao.checked,
 
-mov_profissao: mov_profissao.value
+mov_profissao: mov_profissao.value,
+
+mov_prog_esporte: campoValor("mov_prog_esporte"),
+mov_prog_inicio: campoValor("mov_prog_inicio"),
+mov_prog_queixaPrincipal: campoValor("mov_prog_queixaPrincipal"),
+mov_prog_diagnosticoCinetico: campoValor("mov_prog_diagnosticoCinetico"),
+mov_prog_objetivos: campoValor("mov_prog_objetivos"),
+mov_prog_conduta: campoValor("mov_prog_conduta"),
+mov_prog_fisioterapeuta: campoValor("mov_prog_fisioterapeuta")
 
 });
 
@@ -1882,7 +1954,7 @@ if(filtro && dados.tipo !== filtro) return;
 
 const div=document.createElement("div");
 div.className="lista-item";
-div.innerHTML=`<strong>${dados.nome}</strong> - ${dados.tipo}`;
+div.innerHTML=`<strong>${dados.nome}</strong> - ${dados.tipo} <small>(${formatarDataBR(dados.data)})</small>`;
 div.onclick=()=>abrirDetalhe(child.key,dados);
 listaAvaliacoes.appendChild(div);
 });
@@ -1898,11 +1970,11 @@ telaDetalhe.classList.remove("hidden");
 
 tituloDetalhe.innerText=`${dados.nome} - ${dados.tipo}`;
 
-let html=`<p><strong>Data:</strong> ${dados.data}</p>`;
+let html=`<p><strong>Data:</strong> ${formatarDataBR(dados.data)}</p>`;
 
 for (const key in dados){
 if(!["nome","tipo","data","criadoEm"].includes(key)){
-html+=`<p><strong>${key}:</strong> ${dados[key]}</p>`;
+html+=`<p><strong>${rotuloCampo(key)}:</strong> ${formatarValorExibicao(key,dados[key])}</p>`;
 }
 }
 
@@ -1920,14 +1992,20 @@ else el.value=valor ?? "";
 
 function carregarDadosNaFicha(tipo,dados){
 if(tipo==="Fisioterapia"){
-const mapaValor={qtdSessoes:"fisio_qtdSessoes",parcelas:"fisio_parcelas",parceria:"fisio_parceria",nomeCompleto:"fisio_nomeCompleto",dataNascimento:"fisio_dataNascimento",cpf:"fisio_cpf",responsavel:"fisio_responsavel",parentesco:"fisio_parentesco",cpfResponsavel:"fisio_cpfResponsavel",profissao:"fisio_profissao",endereco:"fisio_endereco",telefone:"fisio_telefone",email:"fisio_email",dataAvaliacao:"fisio_dataAvaliacao",diagnosticoClinico:"fisio_diagClinico",diagnosticoFisio:"fisio_diagFisio",cbdf:"fisio_cbdf",queixaPrincipal:"fisio_queixaPrincipal",hpp:"fisio_hpp",antecedentesPessoais:"fisio_antecedentesPessoais",antecedentesFamiliares:"fisio_antecedentesFamiliares",tratamentos:"fisio_tratamentos",habitos:"fisio_habitos",especialidade:"fisio_especialidade",examesQuais:"fisio_examesQuais",medicamentosQuais:"fisio_medicamentosQuais",cirurgias:"fisio_cirurgias",peso:"fisio_peso",altura:"fisio_altura",objetivos:"fisio_objetivos",recursos:"fisio_recursos",planoTratamento:"fisio_planoTratamento",profissional:"fisio_profissional"};
-const mapaCheck={sessao:"fisio_sessao",pacote:"fisio_pacote",pix:"fisio_pix",parcelado:"fisio_parcelado",masculino:"fisio_masculino",feminino:"fisio_feminino",acompanhamentoSim:"fisio_acompanhamentoSim",acompanhamentoNao:"fisio_acompanhamentoNao",orientado:"fisio_orientado",apoio:"fisio_apoio",confuso:"fisio_confuso",desorientado:"fisio_desorientado",examesSim:"fisio_examesSim",examesNao:"fisio_examesNao",medicamentoSim:"fisio_medicamentoSim",medicamentoNao:"fisio_medicamentoNao",cirurgiaSim:"fisio_cirurgiaSim",cirurgiaNao:"fisio_cirurgiaNao",normal:"fisio_normal",edema:"fisio_edema",cicatriz:"fisio_cicatriz",eritema:"fisio_eritema",outros:"fisio_outros",yRisco:"fisio_y_risco",yNao:"fisio_y_nao",rombergPos:"fisio_romberg_pos",rombergNeg:"fisio_romberg_neg",tugNormal:"fisio_tug_normal",tugBaixo:"fisio_tug_baixo",tugMedio:"fisio_tug_medio",tugAlto:"fisio_tug_alto",laseguePos:"fisio_lasegue_pos",lasegueNeg:"fisio_lasegue_neg",g0:"fisio_g0",g1:"fisio_g1",g2:"fisio_g2",g3:"fisio_g3",g4:"fisio_g4",g5:"fisio_g5"};
+const mapaValor={qtdSessoes:"fisio_qtdSessoes",parcelas:"fisio_parcelas",parceria:"fisio_parceria",nomeCompleto:"fisio_nomeCompleto",dataNascimento:"fisio_dataNascimento",cpf:"fisio_cpf",responsavel:"fisio_responsavel",parentesco:"fisio_parentesco",cpfResponsavel:"fisio_cpfResponsavel",profissao:"fisio_profissao",endereco:"fisio_endereco",telefone:"fisio_telefone",email:"fisio_email",dataAvaliacao:"fisio_dataAvaliacao",diagnosticoClinico:"fisio_diagClinico",diagnosticoFisio:"fisio_diagFisio",cbdf:"fisio_cbdf",queixaPrincipal:"fisio_queixaPrincipal",hpp:"fisio_hpp",antecedentesPessoais:"fisio_antecedentesPessoais",antecedentesFamiliares:"fisio_antecedentesFamiliares",tratamentos:"fisio_tratamentos",habitos:"fisio_habitos",especialidade:"fisio_especialidade",examesQuais:"fisio_examesQuais",medicamentosQuais:"fisio_medicamentosQuais",cirurgias:"fisio_cirurgias",inspecaoDetalhes:"fisio_inspecaoDetalhes",peso:"fisio_peso",altura:"fisio_altura",objetivos:"fisio_objetivos",recursos:"fisio_recursos",planoTratamento:"fisio_planoTratamento",profissional:"fisio_profissional"};
+const mapaCheck={sessao:"fisio_sessao",pacote:"fisio_pacote",pix:"fisio_pix",parcelado:"fisio_parcelado",masculino:"fisio_masculino",feminino:"fisio_feminino",acompanhamentoSim:"fisio_acompanhamentoSim",acompanhamentoNao:"fisio_acompanhamentoNao",orientado:"fisio_orientado",apoio:"fisio_apoio",confuso:"fisio_confuso",desorientado:"fisio_desorientado",examesSim:"fisio_examesSim",examesNao:"fisio_examesNao",medicamentoSim:"fisio_medicamentoSim",medicamentoNao:"fisio_medicamentoNao",cirurgiaSim:"fisio_cirurgiaSim",cirurgiaNao:"fisio_cirurgiaNao",normal:"fisio_normal",edema:"fisio_edema",cicatriz:"fisio_cicatriz",eritema:"fisio_eritema",outros:"fisio_outros",joelhoYSim:"fisio_joelhoY_sim",joelhoYNao:"fisio_joelhoY_nao",rombergPos:"fisio_romberg_pos",rombergNeg:"fisio_romberg_neg",tugNormal:"fisio_tug_normal",tugBaixo:"fisio_tug_baixo",tugMedio:"fisio_tug_medio",tugAlto:"fisio_tug_alto",laseguePos:"fisio_lasegue_pos",lasegueNeg:"fisio_lasegue_neg",g0:"fisio_g0",g1:"fisio_g1",g2:"fisio_g2",g3:"fisio_g3",g4:"fisio_g4",g5:"fisio_g5"};
 for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
 }
 if(tipo==="Pilates"){
 const mapaValor={parceria:"pilates_parceria",nomeCompleto:"pilates_nomeCompleto",dataNascimento:"pilates_dataNascimento",cpf:"pilates_cpf",responsavel:"pilates_responsavel",parentesco:"pilates_parentesco",cpfResponsavel:"pilates_cpfResponsavel",profissao:"pilates_profissao",endereco:"pilates_endereco",telefone:"pilates_telefone",email:"pilates_email",dataAvaliacao:"pilates_dataAvaliacao",diagnosticoClinico:"pilates_diagClinico",diagnosticoFisio:"pilates_diagFisio",cbdf:"pilates_cbdf",queixaPrincipal:"pilates_queixaPrincipal",hpp:"pilates_hpp",antecedentesPessoais:"pilates_antecedentesPessoais",antecedentesFamiliares:"pilates_antecedentesFamiliares",tratamentos:"pilates_tratamentos",habitos:"pilates_habitos",especialidade:"pilates_especialidade",tipoApoio:"pilates_tipoApoio",quaisExames:"pilates_quaisExames",quaisMedicamentos:"pilates_quaisMedicamentos",cirurgias:"pilates_cirurgias",inspecaoDetalhes:"pilates_inspecaoDetalhes",semiologia:"pilates_semiologia",pressao:"pilates_pressao",peso:"pilates_peso",altura:"pilates_altura",adipometroPeitoralToracica:"pilates_adipometro_peitoral_toracica",adipometroSubescapular:"pilates_adipometro_subescapular",adipometroSuprailiaca:"pilates_adipometro_suprailiaca",adipometroAxilarMedia:"pilates_adipometro_axilar_media",adipometroTriceps:"pilates_adipometro_triceps",adipometroBiceps:"pilates_adipometro_biceps",adipometroAbdominal:"pilates_adipometro_abdominal",adipometroCoxa:"pilates_adipometro_coxa",escalaBorg:"pilates_escalaBorg",objetivos:"pilates_objetivos",recursos:"pilates_recursos",planoTratamento:"pilates_planoTratamento",dataEvolucao:"pilates_dataEvolucao",procedimentos:"pilates_procedimentos",intercorrencia:"pilates_intercorrencia",evolucaoEstado:"pilates_evolucaoEstado",profissional:"pilates_profissional"};
 const mapaCheck={totalpass:"pilates_totalpass",gympass:"pilates_gympass",gurupass:"pilates_gurupass",mensalidade:"pilates_mensalidade",masculino:"pilates_masculino",feminino:"pilates_feminino",acompanhamentoSim:"pilates_acompanhamentoSim",acompanhamentoNao:"pilates_acompanhamentoNao",orientado:"pilates_orientado",apoio:"pilates_apoio",confuso:"pilates_confuso",desorientado:"pilates_desorientado",examesSim:"pilates_examesSim",examesNao:"pilates_examesNao",medicamentoSim:"pilates_medicamentoSim",medicamentoNao:"pilates_medicamentoNao",cirurgiaSim:"pilates_cirurgiaSim",cirurgiaNao:"pilates_cirurgiaNao",normal:"pilates_normal",edema:"pilates_edema",cicatriz:"pilates_cicatriz",eritema:"pilates_eritema",outros:"pilates_outros"};
+for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
+for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
+}
+if(tipo==="Recovery"){
+const mapaValor={mov_nome:"mov_nome",mov_nascimento:"mov_nascimento",mov_telefone:"mov_telefone",mov_endereco:"mov_endereco",mov_fisioterapeuta:"mov_fisioterapeuta",mov_esporte:"mov_esporte",mov_frequencia:"mov_frequencia",mov_objetivos:"mov_objetivos",mov_medicamento_desc:"mov_medicamento_desc",mov_lesao_desc:"mov_lesao_desc",mov_cirurgia_desc:"mov_cirurgia_desc",mov_alergia_desc:"mov_alergia_desc",mov_profissao:"mov_profissao",mov_prog_esporte:"mov_prog_esporte",mov_prog_inicio:"mov_prog_inicio",mov_prog_queixaPrincipal:"mov_prog_queixaPrincipal",mov_prog_diagnosticoCinetico:"mov_prog_diagnosticoCinetico",mov_prog_objetivos:"mov_prog_objetivos",mov_prog_conduta:"mov_prog_conduta",mov_prog_fisioterapeuta:"mov_prog_fisioterapeuta"};
+const mapaCheck={mov_sexo_fem:"mov_sexo_fem",mov_sexo_masc:"mov_sexo_masc",mov_atleta_amador:"mov_atleta_amador",mov_atleta_profissional:"mov_atleta_profissional",mov_pratica_sim:"mov_pratica_sim",mov_pratica_nao:"mov_pratica_nao",mov_tabagismo_sim:"mov_tabagismo_sim",mov_tabagismo_nao:"mov_tabagismo_nao",mov_cardiaco_sim:"mov_cardiaco_sim",mov_cardiaco_nao:"mov_cardiaco_nao",mov_diabetes_sim:"mov_diabetes_sim",mov_diabetes_nao:"mov_diabetes_nao",mov_hipertensao_sim:"mov_hipertensao_sim",mov_hipertensao_nao:"mov_hipertensao_nao",mov_medicamento_sim:"mov_medicamento_sim",mov_medicamento_nao:"mov_medicamento_nao",mov_lesao_sim:"mov_lesao_sim",mov_lesao_nao:"mov_lesao_nao",mov_cirurgia_sim:"mov_cirurgia_sim",mov_cirurgia_nao:"mov_cirurgia_nao",mov_alergia_sim:"mov_alergia_sim",mov_alergia_nao:"mov_alergia_nao",mov_tontura_sim:"mov_tontura_sim",mov_tontura_nao:"mov_tontura_nao",mov_dieta_sim:"mov_dieta_sim",mov_dieta_nao:"mov_dieta_nao"};
 for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
 }
@@ -1942,6 +2020,9 @@ preencherCampo("pelvic_nome",dados.pelvic_nome,"value");
 preencherCampo("pelvic_idade",dados.pelvic_idade,"value");
 preencherCampo("pelvic_nascimento",dados.pelvic_nascimento,"value");
 preencherCampo("pelvic_telefone",dados.pelvic_telefone,"value");
+preencherCampo("pelvic_cirurgia_sim",dados.pelvic_cirurgia_sim,"checked");
+preencherCampo("pelvic_cirurgia_nao",dados.pelvic_cirurgia_nao,"checked");
+preencherCampo("pelvic_cirurgias_quais",dados.pelvic_cirurgias_quais,"value");
 }
 }
 
@@ -1994,7 +2075,7 @@ const novaRef=push(ref(db,`avaliacoes/${avaliacaoAtualId}/evolucoes`));
 
 set(novaRef,{
 texto:textoEvolucao.value,
-data:new Date().toLocaleDateString()
+data:new Date().toLocaleDateString("pt-BR")
 });
 
 textoEvolucao.value="";
