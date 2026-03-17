@@ -956,6 +956,12 @@ input[type="radio"]{
     <button onclick="voltar()">⬅ Voltar</button>
     <h3>Avaliação Condicionamento Funcional - Aula em Grupo</h3>
 
+    <div class="opcoes-grid">
+      <label><input type="checkbox" id="cond_totalpass"> Totalpass</label>
+      <label><input type="checkbox" id="cond_gympass"> Gympass</label>
+      <label><input type="checkbox" id="cond_mensalidade"> Mensalidade</label>
+    </div>
+
     <h4>📌 IDENTIFICAÇÃO</h4>
     <label>Nome completo:</label>
     <input type="text" id="cond_nomeCompleto">
@@ -1813,6 +1819,9 @@ pelvic_cirurgias_quais: campoValor("pelvic_cirurgias_quais")
 window.salvarCondicionamento = function(){
 
 salvarBase({
+totalpass: campoMarcado("cond_totalpass"),
+gympass: campoMarcado("cond_gympass"),
+mensalidade: campoMarcado("cond_mensalidade"),
 nomeCompleto: campoValor("cond_nomeCompleto"),
 dataNascimento: campoValor("cond_dataNascimento"),
 cpf: campoValor("cond_cpf"),
@@ -2011,7 +2020,7 @@ for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
 }
 if(tipo==="Condicionamento"){
 const mapaValor={nomeCompleto:"cond_nomeCompleto",dataNascimento:"cond_dataNascimento",cpf:"cond_cpf",responsavelNome:"cond_responsavel_nome",responsavelParentesco:"cond_responsavel_parentesco",responsavelCpf:"cond_responsavel_cpf",profissaoOcupacao:"cond_profissao_ocupacao",enderecoResidencial:"cond_endereco_residencial",telefone:"cond_telefone",email:"cond_email",dataAvaliacao:"cond_dataAvaliacao",diagnosticoClinico:"cond_diagnosticoClinico",diagnosticoFisio:"cond_diagnosticoFisio",cbdf:"cond_cbdf",queixaPrincipal:"cond_queixaPrincipal",hda:"cond_hda",historicoLesoes:"cond_historicoLesoes",acompanhamentoQuais:"cond_acompanhamento_quais",medicamentosQuais:"cond_medicamentos_quais",peso:"cond_peso",altura:"cond_altura",habitosVida:"cond_habitosVida",metasPessoais:"cond_metasPessoais",evaRegiao:"cond_evaRegiao",atividadeQuais:"cond_atividade_quais",borg:"cond_borg",desviosQuais:"cond_desvios_quais",movimentosQuais:"cond_movimentos_quais",movimentosFuncionais:"cond_movimentos_funcionais",mobilidade:"cond_mobilidade",flexibilidade:"cond_flexibilidade",resistenciaMuscularCardio:"cond_resistencia",planoTerapeutico:"cond_planoTerapeutico",profissional:"cond_profissional"};
-const mapaCheck={sexoMasculino:"cond_sexo_masculino",sexoFeminino:"cond_sexo_feminino",acompanhamentoSim:"cond_acompanhamento_sim",acompanhamentoNao:"cond_acompanhamento_nao",medicamentosSim:"cond_medicamentos_sim",medicamentosNao:"cond_medicamentos_nao",ativo:"cond_ativo",moderadamenteAtivo:"cond_moderadamente_ativo",sedentario:"cond_sedentario",atividadeSim:"cond_atividade_sim",atividadeNao:"cond_atividade_nao",desviosSim:"cond_desvios_sim",desviosNao:"cond_desvios_nao",movimentosComDor:"cond_movimentos_com_dor",movimentosSemDor:"cond_movimentos_sem_dor"};
+const mapaCheck={totalpass:"cond_totalpass",gympass:"cond_gympass",mensalidade:"cond_mensalidade",sexoMasculino:"cond_sexo_masculino",sexoFeminino:"cond_sexo_feminino",acompanhamentoSim:"cond_acompanhamento_sim",acompanhamentoNao:"cond_acompanhamento_nao",medicamentosSim:"cond_medicamentos_sim",medicamentosNao:"cond_medicamentos_nao",ativo:"cond_ativo",moderadamenteAtivo:"cond_moderadamente_ativo",sedentario:"cond_sedentario",atividadeSim:"cond_atividade_sim",atividadeNao:"cond_atividade_nao",desviosSim:"cond_desvios_sim",desviosNao:"cond_desvios_nao",movimentosComDor:"cond_movimentos_com_dor",movimentosSemDor:"cond_movimentos_sem_dor"};
 for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
 }
