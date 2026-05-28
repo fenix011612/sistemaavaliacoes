@@ -99,11 +99,100 @@ input[type="radio"]{
   gap:10px;
   margin-bottom:15px;
 }
+
+
+.grid-2{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+.table-responsive{
+  width:100%;
+  overflow-x:auto;
+  margin-bottom:15px;
+}
+.avaliacao-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:760px;
+}
+.avaliacao-table th,
+.avaliacao-table td{
+  border:1px solid #ddd;
+  padding:8px;
+  text-align:center;
+}
+.avaliacao-table th:first-child,
+.avaliacao-table td:first-child{
+  text-align:left;
+  font-weight:bold;
+  background:#f8f8ff;
+}
+.fotos-preview{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+  margin:10px 0 15px;
+}
+.foto-card{
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:8px;
+  background:#fafafa;
+}
+.foto-card img{
+  width:100%;
+  height:120px;
+  object-fit:cover;
+  border-radius:8px;
+  cursor:pointer;
+}
+.foto-card button{
+  width:100%;
+  margin-top:8px;
+  background:#dc3545;
+}
+.foto-detalhe{
+  display:inline-block;
+  margin:6px;
+}
+.foto-detalhe img{
+  width:120px;
+  height:120px;
+  object-fit:cover;
+  border-radius:8px;
+  cursor:pointer;
+  border:1px solid #ddd;
+}
+.modal-foto{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.82);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:9999;
+}
+.modal-foto.hidden{ display:none; }
+.modal-foto img{
+  max-width:95vw;
+  max-height:90vh;
+  border-radius:10px;
+}
+.modal-foto button{
+  position:absolute;
+  top:20px;
+  right:20px;
+  background:#dc3545;
+}
+
 </style>
 </head>
 <body>
 
 <header>Sistema de Avaliações</header>
+<div id="modalFoto" class="modal-foto hidden"><button onclick="fecharFotoAmpliada()">Fechar</button><img id="modalFotoImagem" alt="Foto ampliada"></div>
 
 <div class="container">
 
@@ -132,14 +221,31 @@ input[type="radio"]{
 <div class="card">
 <h3>Avaliações Salvas</h3>
 
-<select id="filtroTipo" onchange="carregarAvaliacoes()">
-  <option value="">Todas</option>
-  <option value="Fisioterapia">Fisioterapia</option>
-  <option value="Pilates">Pilates</option>
-  <option value="Pélvica">Pélvica</option>
-  <option value="Recovery">Recovery</option>
-  <option value="Condicionamento">Condicionamento</option>
-</select>
+<div class="grid-2">
+  <div>
+    <label>Filtrar por tipo:</label>
+    <select id="filtroTipo" onchange="carregarAvaliacoes()">
+      <option value="">Todas</option>
+      <option value="Fisioterapia">Fisioterapia</option>
+      <option value="Pilates">Pilates</option>
+      <option value="Pélvica">Pélvica</option>
+      <option value="Recovery">Recovery</option>
+      <option value="Condicionamento">Condicionamento</option>
+    </select>
+  </div>
+  <div>
+    <label>Ordenação:</label>
+    <select id="ordenacaoAvaliacoes" onchange="carregarAvaliacoes()">
+      <option value="az">Nome A → Z</option>
+      <option value="za">Nome Z → A</option>
+      <option value="dataRecente">Data mais recente</option>
+      <option value="dataAntiga">Data mais antiga</option>
+    </select>
+  </div>
+</div>
+
+<label>Buscar paciente ou avaliação:</label>
+<input type="search" id="buscaAvaliacoes" placeholder="Digite nome, tipo ou data" oninput="carregarAvaliacoes()">
 
 <div id="listaAvaliacoes">Carregando...</div>
 </div>
@@ -173,6 +279,12 @@ input[type="radio"]{
 
     <!-- IDENTIFICAÇÃO -->
     <h4>📌 IDENTIFICAÇÃO</h4>
+    <div class="opcoes-grid">
+      <label><input type="checkbox" id="fisio_totalpass"> Totalpass</label>
+      <label><input type="checkbox" id="fisio_mensalidade"> Mensalidade</label>
+      <label><input type="checkbox" id="fisio_outros_identificacao"> Outros</label>
+    </div>
+    <input type="text" id="fisio_outros_identificacao_texto" placeholder="Descreva Outros">
     <input type="text" id="fisio_nomeCompleto" placeholder="Nome completo">
     <input type="date" id="fisio_dataNascimento" placeholder="Data de nascimento">
     <input type="text" id="fisio_cpf" placeholder="CPF">
@@ -282,19 +394,25 @@ input[type="radio"]{
     <!-- TESTES FISIOTERAPÊUTICOS -->
     <h4>📌 TESTES FISIOTERAPÊUTICOS</h4>
     <div class="inline-group">
-      <label>Teste de Joelhos (Y Teste):</label>
+      <label>Y Balance Teste (equilíbrio dinâmico):</label>
       <label><input type="checkbox" id="fisio_joelhoY_sim"> Sim</label>
       <label><input type="checkbox" id="fisio_joelhoY_nao"> Não</label>
     </div>
 
     <div class="inline-group">
-      <label>Romberg:</label>
+      <label>Teste de Romberg (Positivo: oscila com olhos fechados | Negativo: mantém estável):</label>
       <label><input type="checkbox" id="fisio_romberg_pos"> Positivo</label>
       <label><input type="checkbox" id="fisio_romberg_neg"> Negativo</label>
     </div>
 
     <div class="inline-group">
-      <label>TUG:</label>
+      <label>Teste de Apoio Unipodal (menor risco de queda acima de 5s e maior risco de queda abaixo de 5s):</label>
+      <label><input type="checkbox" id="fisio_tau_menor"> Menor risco</label>
+      <label><input type="checkbox" id="fisio_tau_maior"> Maior risco</label>
+    </div>
+
+    <div class="inline-group">
+      <label>Teste TUG (Baixo risco: inferior a 10s | Médio risco: entre 10s e 20s | Alto risco: superior a 20s):</label>
       <label><input type="checkbox" id="fisio_tug_normal"> Normal</label>
       <label><input type="checkbox" id="fisio_tug_baixo"> Baixo risco</label>
       <label><input type="checkbox" id="fisio_tug_medio"> Médio risco</label>
@@ -302,10 +420,43 @@ input[type="radio"]{
     </div>
 
     <div class="inline-group">
-      <label>Lasegue:</label>
+      <label>Teste de Lasègue (Positivo: compressão do nervo | Negativo: encurtamento de isquiotibiais):</label>
       <label><input type="checkbox" id="fisio_lasegue_pos"> Positivo</label>
       <label><input type="checkbox" id="fisio_lasegue_neg"> Negativo</label>
     </div>
+
+    <div class="inline-group">
+      <label>Teste de Lasègue Invertido (estiramento do nervo femoral/lombalgia alta) (Positivo: compressão do nervo femoral | Negativo: encurtamento muscular):</label>
+      <label><input type="checkbox" id="fisio_lasegue_inv_pos"> Positivo</label>
+      <label><input type="checkbox" id="fisio_lasegue_inv_neg"> Negativo</label>
+    </div>
+
+    <div class="inline-group">
+      <label>Teste de Spurling (compressão cervical) (Positivo: dor | Negativo: desconforto):</label>
+      <label><input type="checkbox" id="fisio_spurling_pos"> Positivo</label>
+      <label><input type="checkbox" id="fisio_spurling_neg"> Negativo</label>
+    </div>
+
+
+    <!-- ================= AVALIAÇÃO MIT ================= -->
+    <h4>📌 Avaliação MIT</h4>
+    <div id="fisio_mit_tabela" class="table-responsive"></div>
+    <label>Observações:</label>
+    <textarea id="fisio_mit_observacoes"></textarea>
+
+    <!-- ================= TESTES DE CONDICIONAMENTO FÍSICO ================= -->
+    <h4>🏃 TESTES DE CONDICIONAMENTO FÍSICO</h4>
+    <label>Teste do Degrau/Step (TD2): número de subidas:</label>
+    <input type="number" id="fisio_td2_subidas">
+    <label>Teste de Marcha Estacionária (TME2): número de elevações do joelho:</label>
+    <input type="number" id="fisio_tme2_elevacoes">
+    <label>Escala de Borg (Dispneia):</label>
+    <input type="text" id="fisio_borg_dispneia">
+
+    <!-- ================= FOTOS DA AVALIAÇÃO ================= -->
+    <h4>📷 Fotos na Avaliação</h4>
+    <input type="file" id="fisio_fotos_input" accept="image/*" multiple>
+    <div id="fisio_fotos_preview" class="fotos-preview"></div>
 
     <!-- ESCALA DE FORÇA MUSCULAR -->
     <h4>⚕️ ESCALA DE FORÇA MUSCULAR</h4>
@@ -340,10 +491,10 @@ input[type="radio"]{
 
     <div class="opcoes-grid">
       <label><input type="checkbox" id="pilates_totalpass"> Totalpass</label>
-      <label><input type="checkbox" id="pilates_gympass"> Gympass</label>
-      <label><input type="checkbox" id="pilates_gurupass"> Gurupass</label>
       <label><input type="checkbox" id="pilates_mensalidade"> Mensalidade</label>
+      <label><input type="checkbox" id="pilates_outros_identificacao"> Outros</label>
     </div>
+    <input type="text" id="pilates_outros_identificacao_texto" placeholder="Descreva Outros">
 
     <label>Parceria? Se sim qual?</label>
     <input type="text" id="pilates_parceria">
@@ -568,25 +719,25 @@ input[type="radio"]{
 
     <h4>📌 TESTES FISIOTERAPÊUTICOS</h4>
 
-    <strong>Y BALANCE TESTE (Equilíbrio Funcional)</strong>
+    <strong>Y BALANCE TESTE (equilíbrio dinâmico)</strong>
     <div class="opcoes">
       <label><input type="radio" name="pilates_ybalance" id="pilates_y_risco"> Assimetria - Sim com risco</label>
       <label><input type="radio" name="pilates_ybalance" id="pilates_y_nao"> Não</label>
     </div>
 
-    <strong>TESTE DE ROMBERG (Equilíbrio Estático)</strong>
+    <strong>TESTE DE ROMBERG (Positivo: oscila com olhos fechados | Negativo: mantém estável)</strong>
     <div class="opcoes">
       <label><input type="radio" name="pilates_romberg" id="pilates_romberg_pos"> Positivo</label>
       <label><input type="radio" name="pilates_romberg" id="pilates_romberg_neg"> Negativo</label>
     </div>
 
-    <strong>TESTE DE APOIO UNIPODAL – TAU</strong>
+    <strong>TESTE DE APOIO UNIPODAL – TAU (menor risco de queda acima de 5s e maior risco de queda abaixo de 5s)</strong>
     <div class="opcoes">
       <label><input type="radio" name="pilates_tau" id="pilates_tau_menor"> Menor risco de queda</label>
       <label><input type="radio" name="pilates_tau" id="pilates_tau_maior"> Maior risco de queda</label>
     </div>
 
-    <strong>TESTE TUG</strong>
+    <strong>TESTE TUG (Baixo risco: inferior a 10s | Médio risco: entre 10s e 20s | Alto risco: superior a 20s)</strong>
     <div class="opcoes">
       <label><input type="radio" name="pilates_tug" id="pilates_tug_normal"> Normal</label>
       <label><input type="radio" name="pilates_tug" id="pilates_tug_baixo"> Baixo risco</label>
@@ -602,23 +753,44 @@ input[type="radio"]{
       <label><input type="radio" name="pilates_tandem_grave"> Grave</label>
     </div>
 
-    <strong>TESTE DE LASEGUE</strong>
+    <strong>TESTE DE LASÈGUE (Positivo: compressão do nervo | Negativo: encurtamento de isquiotibiais)</strong>
     <div class="opcoes">
       <label><input type="radio" name="pilates_lasegue" id="pilates_lasegue_pos"> Positivo</label>
       <label><input type="radio" name="pilates_lasegue" id="pilates_lasegue_neg"> Negativo</label>
     </div>
 
-    <strong>TESTE DE LASEGUE INVERTIDO</strong>
+    <strong>TESTE DE LASÈGUE INVERTIDO (estiramento do nervo femoral/lombalgia alta) (Positivo: compressão do nervo femoral | Negativo: encurtamento muscular)</strong>
     <div class="opcoes">
       <label><input type="radio" name="pilates_lasegue_inv" id="pilates_lasegue_inv_pos"> Positivo</label>
       <label><input type="radio" name="pilates_lasegue_inv" id="pilates_lasegue_inv_neg"> Negativo</label>
     </div>
 
-    <strong>TESTE DE SPURLING</strong>
+    <strong>TESTE DE SPURLING (compressão cervical) (Positivo: dor | Negativo: desconforto)</strong>
     <div class="opcoes">
       <label><input type="radio" name="pilates_spurling" id="pilates_spurling_pos"> Positivo</label>
       <label><input type="radio" name="pilates_spurling" id="pilates_spurling_neg"> Negativo</label>
     </div>
+
+
+    <!-- ================= AVALIAÇÃO MIT ================= -->
+    <h4>📌 Avaliação MIT</h4>
+    <div id="pilates_mit_tabela" class="table-responsive"></div>
+    <label>Observações:</label>
+    <textarea id="pilates_mit_observacoes"></textarea>
+
+    <!-- ================= TESTES DE CONDICIONAMENTO FÍSICO ================= -->
+    <h4>🏃 TESTES DE CONDICIONAMENTO FÍSICO</h4>
+    <label>Teste do Degrau/Step (TD2): número de subidas:</label>
+    <input type="number" id="pilates_td2_subidas">
+    <label>Teste de Marcha Estacionária (TME2): número de elevações do joelho:</label>
+    <input type="number" id="pilates_tme2_elevacoes">
+    <label>Escala de Borg (Dispneia):</label>
+    <input type="text" id="pilates_borg_dispneia">
+
+    <!-- ================= FOTOS DA AVALIAÇÃO ================= -->
+    <h4>📷 Fotos na Avaliação</h4>
+    <input type="file" id="pilates_fotos_input" accept="image/*" multiple>
+    <div id="pilates_fotos_preview" class="fotos-preview"></div>
 
     <!-- ================= ESCALA DE FORÇA MUSCULAR ================= -->
 
@@ -683,7 +855,7 @@ input[type="radio"]{
 
     <div class="grid-2">
       <div>
-        <label>EVA 1:</label>
+        <label>EVA:</label>
         <input type="text" id="pilates_eva1">
         <label>Região:</label>
         <input type="text" id="pilates_regiao1">
@@ -733,7 +905,7 @@ input[type="radio"]{
 
   </div> <!-- FECHA card Pilates -->
 </div> <!-- FECHA telaPilates -->
-  
+
 <!-- TELA RECOVERY -->
 <div id="telaRecovery" class="hidden">
 <div class="card">
@@ -1543,6 +1715,7 @@ let tempNome, tempTipo, tempData;
 let avaliacaoAtualId = null;
 let avaliacaoEmEdicaoId = null;
 let dadosAvaliacaoAtual = null;
+const fotosAvaliacoes = { fisio: [], pilates: [] };
 
 function campoValor(id){
   const el = document.getElementById(id);
@@ -1552,6 +1725,133 @@ function campoValor(id){
 function campoMarcado(id){
   const el = document.getElementById(id);
   return el ? el.checked : false;
+}
+
+const mitLinhas = ["Pés","Tornozelo","Joelho","Quadril","Lombar","Escápulas","Ombros","Dorsal","Cervical"];
+const mitColunas = ["ADM","Resistência","Estabilidade","Movimento Completo","Movimento Incompleto","Movimento com Dor","Não Movimenta"];
+
+function normalizarId(texto){
+  return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_|_$/g, "").toLowerCase();
+}
+
+function montarTabelaMIT(prefixo){
+  const alvo = document.getElementById(`${prefixo}_mit_tabela`);
+  if(!alvo) return;
+  let html = '<table class="avaliacao-table"><thead><tr><th>Segmento</th>';
+  mitColunas.forEach(coluna => html += `<th>${coluna}</th>`);
+  html += '</tr></thead><tbody>';
+  mitLinhas.forEach(linha => {
+    html += `<tr><td>${linha}</td>`;
+    mitColunas.forEach(coluna => {
+      const id = `${prefixo}_mit_${normalizarId(linha)}_${normalizarId(coluna)}`;
+      html += `<td><input type="checkbox" id="${id}"></td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  alvo.innerHTML = html;
+}
+
+function coletarMIT(prefixo){
+  const resultado = {};
+  mitLinhas.forEach(linha => {
+    const linhaId = normalizarId(linha);
+    resultado[linhaId] = {};
+    mitColunas.forEach(coluna => {
+      const colunaId = normalizarId(coluna);
+      resultado[linhaId][colunaId] = campoMarcado(`${prefixo}_mit_${linhaId}_${colunaId}`);
+    });
+  });
+  return resultado;
+}
+
+function preencherMIT(prefixo, dados = {}){
+  mitLinhas.forEach(linha => {
+    const linhaId = normalizarId(linha);
+    mitColunas.forEach(coluna => {
+      const colunaId = normalizarId(coluna);
+      preencherCampo(`${prefixo}_mit_${linhaId}_${colunaId}`, dados?.[linhaId]?.[colunaId], "checked");
+    });
+  });
+}
+
+function rotularMIT(dados = {}){
+  const linhas = [];
+  mitLinhas.forEach(linha => {
+    const linhaId = normalizarId(linha);
+    const marcadas = mitColunas.filter(coluna => dados?.[linhaId]?.[normalizarId(coluna)]);
+    if(marcadas.length) linhas.push(`${linha}: ${marcadas.join(", ")}`);
+  });
+  return linhas.length ? linhas.join(" | ") : "-";
+}
+
+function prepararFotos(prefixo){
+  const input = document.getElementById(`${prefixo}_fotos_input`);
+  if(!input) return;
+  input.addEventListener("change", () => {
+    const arquivos = Array.from(input.files || []).filter(arquivo => arquivo.type.startsWith("image/"));
+    arquivos.forEach(arquivo => {
+      const leitor = new FileReader();
+      leitor.onload = evento => {
+        fotosAvaliacoes[prefixo].push({ nome: arquivo.name, dataUrl: evento.target.result });
+        renderizarFotos(prefixo);
+      };
+      leitor.readAsDataURL(arquivo);
+    });
+    input.value = "";
+  });
+}
+
+function renderizarFotos(prefixo){
+  const alvo = document.getElementById(`${prefixo}_fotos_preview`);
+  if(!alvo) return;
+  const fotos = fotosAvaliacoes[prefixo] || [];
+  if(!fotos.length){
+    alvo.innerHTML = "<small>Nenhuma foto anexada.</small>";
+    return;
+  }
+  alvo.innerHTML = fotos.map((foto, indice) => `
+    <div class="foto-card">
+      <img src="${foto.dataUrl}" alt="${foto.nome || 'Foto da avaliação'}" onclick="ampliarFoto('${prefixo}', ${indice})">
+      <small>${foto.nome || 'Foto'}</small>
+      <button type="button" onclick="removerFoto('${prefixo}', ${indice})">Excluir</button>
+    </div>
+  `).join("");
+}
+
+window.ampliarFoto = function(prefixo, indice){
+  const foto = fotosAvaliacoes[prefixo]?.[indice];
+  if(!foto) return;
+  modalFotoImagem.src = foto.dataUrl;
+  modalFoto.classList.remove("hidden");
+};
+
+window.ampliarFotoDataUrl = function(dataUrl){
+  modalFotoImagem.src = dataUrl;
+  modalFoto.classList.remove("hidden");
+};
+
+window.fecharFotoAmpliada = function(){
+  modalFoto.classList.add("hidden");
+  modalFotoImagem.src = "";
+};
+
+window.removerFoto = function(prefixo, indice){
+  fotosAvaliacoes[prefixo].splice(indice, 1);
+  renderizarFotos(prefixo);
+};
+
+function formatarFotosDetalhe(fotos = []){
+  if(!Array.isArray(fotos) || !fotos.length) return "-";
+  return fotos.map(foto => `
+    <span class="foto-detalhe">
+      <img src="${foto.dataUrl}" alt="${foto.nome || 'Foto da avaliação'}" onclick="ampliarFotoDataUrl('${foto.dataUrl}')">
+    </span>
+  `).join("");
+}
+
+function compararTexto(a,b){
+  return String(a || "").localeCompare(String(b || ""), "pt-BR", { sensitivity:"base" });
 }
 
 function formatarDataBR(valor){
@@ -1598,6 +1898,10 @@ return;
 telaInicial.classList.add("hidden");
 
 document.getElementById("tela"+tempTipo.replace("ç","c").replace("é","e")).classList.remove("hidden");
+if(!avaliacaoEmEdicaoId){
+  if(tempTipo === "Fisioterapia") { fotosAvaliacoes.fisio = []; renderizarFotos("fisio"); }
+  if(tempTipo === "Pilates") { fotosAvaliacoes.pilates = []; renderizarFotos("pilates"); }
+}
 };
 
 /* SALVAMENTOS */
@@ -1634,6 +1938,10 @@ pix: campoMarcado("fisio_pix"),
 parcelado: campoMarcado("fisio_parcelado"),
 parcelas: campoValor("fisio_parcelas"),
 parceria: campoValor("fisio_parceria"),
+totalpass: campoMarcado("fisio_totalpass"),
+mensalidade: campoMarcado("fisio_mensalidade"),
+outrosIdentificacao: campoMarcado("fisio_outros_identificacao"),
+outrosIdentificacaoTexto: campoValor("fisio_outros_identificacao_texto"),
 
 nomeCompleto: campoValor("fisio_nomeCompleto"),
 dataNascimento: campoValor("fisio_dataNascimento"),
@@ -1698,6 +2006,18 @@ tugMedio: campoMarcado("fisio_tug_medio"),
 tugAlto: campoMarcado("fisio_tug_alto"),
 laseguePos: campoMarcado("fisio_lasegue_pos"),
 lasegueNeg: campoMarcado("fisio_lasegue_neg"),
+tauMenor: campoMarcado("fisio_tau_menor"),
+tauMaior: campoMarcado("fisio_tau_maior"),
+lasegueInvPos: campoMarcado("fisio_lasegue_inv_pos"),
+lasegueInvNeg: campoMarcado("fisio_lasegue_inv_neg"),
+spurlingPos: campoMarcado("fisio_spurling_pos"),
+spurlingNeg: campoMarcado("fisio_spurling_neg"),
+mit: coletarMIT("fisio"),
+mitObservacoes: campoValor("fisio_mit_observacoes"),
+td2Subidas: campoValor("fisio_td2_subidas"),
+tme2Elevacoes: campoValor("fisio_tme2_elevacoes"),
+borgDispneia: campoValor("fisio_borg_dispneia"),
+fotos: fotosAvaliacoes.fisio,
 
 g0: campoMarcado("fisio_g0"),
 g1: campoMarcado("fisio_g1"),
@@ -1719,9 +2039,9 @@ window.salvarPilates = function(){
 salvarBase({
 
 totalpass: campoMarcado("pilates_totalpass"),
-gympass: campoMarcado("pilates_gympass"),
-gurupass: campoMarcado("pilates_gurupass"),
 mensalidade: campoMarcado("pilates_mensalidade"),
+outrosIdentificacao: campoMarcado("pilates_outros_identificacao"),
+outrosIdentificacaoTexto: campoValor("pilates_outros_identificacao_texto"),
 parceria: campoValor("pilates_parceria"),
 
 nomeCompleto: campoValor("pilates_nomeCompleto"),
@@ -1789,6 +2109,12 @@ adipometroBiceps: campoValor("pilates_adipometro_biceps"),
 adipometroAbdominal: campoValor("pilates_adipometro_abdominal"),
 adipometroCoxa: campoValor("pilates_adipometro_coxa"),
 escalaBorg: campoValor("pilates_escalaBorg"),
+mit: coletarMIT("pilates"),
+mitObservacoes: campoValor("pilates_mit_observacoes"),
+td2Subidas: campoValor("pilates_td2_subidas"),
+tme2Elevacoes: campoValor("pilates_tme2_elevacoes"),
+borgDispneia: campoValor("pilates_borg_dispneia"),
+fotos: fotosAvaliacoes.pilates,
 
 objetivos: campoValor("pilates_objetivos"),
 recursos: campoValor("pilates_recursos"),
@@ -1815,7 +2141,7 @@ pelvic_cirurgia_nao: campoMarcado("pelvic_cirurgia_nao"),
 pelvic_cirurgias_quais: campoValor("pelvic_cirurgias_quais")
 });
 };
-  
+
 window.salvarCondicionamento = function(){
 
 salvarBase({
@@ -1947,6 +2273,8 @@ mov_prog_fisioterapeuta: campoValor("mov_prog_fisioterapeuta")
 window.carregarAvaliacoes = function(){
 
 const filtro = filtroTipo.value;
+const busca = (document.getElementById("buscaAvaliacoes")?.value || "").toLowerCase().trim();
+const ordenacao = document.getElementById("ordenacaoAvaliacoes")?.value || "az";
 
 onValue(ref(db,"avaliacoes"),(snapshot)=>{
 
@@ -1957,14 +2285,32 @@ listaAvaliacoes.innerHTML="Nenhuma avaliação.";
 return;
 }
 
+const itens = [];
 snapshot.forEach((child)=>{
 const dados=child.val();
 if(filtro && dados.tipo !== filtro) return;
+const textoBusca = `${dados.nome || ""} ${dados.tipo || ""} ${formatarDataBR(dados.data || "")}`.toLowerCase();
+if(busca && !textoBusca.includes(busca)) return;
+itens.push({ id: child.key, dados });
+});
 
+itens.sort((a,b)=>{
+  if(ordenacao === "za") return compararTexto(b.dados.nome, a.dados.nome);
+  if(ordenacao === "dataRecente") return compararTexto(b.dados.data, a.dados.data);
+  if(ordenacao === "dataAntiga") return compararTexto(a.dados.data, b.dados.data);
+  return compararTexto(a.dados.nome, b.dados.nome);
+});
+
+if(!itens.length){
+  listaAvaliacoes.innerHTML="Nenhuma avaliação encontrada.";
+  return;
+}
+
+itens.forEach(({ id, dados })=>{
 const div=document.createElement("div");
 div.className="lista-item";
 div.innerHTML=`<strong>${dados.nome}</strong> - ${dados.tipo} <small>(${formatarDataBR(dados.data)})</small>`;
-div.onclick=()=>abrirDetalhe(child.key,dados);
+div.onclick=()=>abrirDetalhe(id,dados);
 listaAvaliacoes.appendChild(div);
 });
 });
@@ -1983,7 +2329,8 @@ let html=`<p><strong>Data:</strong> ${formatarDataBR(dados.data)}</p>`;
 
 for (const key in dados){
 if(!["nome","tipo","data","criadoEm"].includes(key)){
-html+=`<p><strong>${rotuloCampo(key)}:</strong> ${formatarValorExibicao(key,dados[key])}</p>`;
+const valorFormatado = key === "fotos" ? formatarFotosDetalhe(dados[key]) : key === "mit" ? rotularMIT(dados[key]) : formatarValorExibicao(key,dados[key]);
+html+=`<p><strong>${rotuloCampo(key)}:</strong> ${valorFormatado}</p>`;
 }
 }
 
@@ -2001,16 +2348,22 @@ else el.value=valor ?? "";
 
 function carregarDadosNaFicha(tipo,dados){
 if(tipo==="Fisioterapia"){
-const mapaValor={qtdSessoes:"fisio_qtdSessoes",parcelas:"fisio_parcelas",parceria:"fisio_parceria",nomeCompleto:"fisio_nomeCompleto",dataNascimento:"fisio_dataNascimento",cpf:"fisio_cpf",responsavel:"fisio_responsavel",parentesco:"fisio_parentesco",cpfResponsavel:"fisio_cpfResponsavel",profissao:"fisio_profissao",endereco:"fisio_endereco",telefone:"fisio_telefone",email:"fisio_email",dataAvaliacao:"fisio_dataAvaliacao",diagnosticoClinico:"fisio_diagClinico",diagnosticoFisio:"fisio_diagFisio",cbdf:"fisio_cbdf",queixaPrincipal:"fisio_queixaPrincipal",hpp:"fisio_hpp",antecedentesPessoais:"fisio_antecedentesPessoais",antecedentesFamiliares:"fisio_antecedentesFamiliares",tratamentos:"fisio_tratamentos",habitos:"fisio_habitos",especialidade:"fisio_especialidade",examesQuais:"fisio_examesQuais",medicamentosQuais:"fisio_medicamentosQuais",cirurgias:"fisio_cirurgias",inspecaoDetalhes:"fisio_inspecaoDetalhes",peso:"fisio_peso",altura:"fisio_altura",objetivos:"fisio_objetivos",recursos:"fisio_recursos",planoTratamento:"fisio_planoTratamento",profissional:"fisio_profissional"};
-const mapaCheck={sessao:"fisio_sessao",pacote:"fisio_pacote",pix:"fisio_pix",parcelado:"fisio_parcelado",masculino:"fisio_masculino",feminino:"fisio_feminino",acompanhamentoSim:"fisio_acompanhamentoSim",acompanhamentoNao:"fisio_acompanhamentoNao",orientado:"fisio_orientado",apoio:"fisio_apoio",confuso:"fisio_confuso",desorientado:"fisio_desorientado",examesSim:"fisio_examesSim",examesNao:"fisio_examesNao",medicamentoSim:"fisio_medicamentoSim",medicamentoNao:"fisio_medicamentoNao",cirurgiaSim:"fisio_cirurgiaSim",cirurgiaNao:"fisio_cirurgiaNao",normal:"fisio_normal",edema:"fisio_edema",cicatriz:"fisio_cicatriz",eritema:"fisio_eritema",outros:"fisio_outros",joelhoYSim:"fisio_joelhoY_sim",joelhoYNao:"fisio_joelhoY_nao",rombergPos:"fisio_romberg_pos",rombergNeg:"fisio_romberg_neg",tugNormal:"fisio_tug_normal",tugBaixo:"fisio_tug_baixo",tugMedio:"fisio_tug_medio",tugAlto:"fisio_tug_alto",laseguePos:"fisio_lasegue_pos",lasegueNeg:"fisio_lasegue_neg",g0:"fisio_g0",g1:"fisio_g1",g2:"fisio_g2",g3:"fisio_g3",g4:"fisio_g4",g5:"fisio_g5"};
+const mapaValor={qtdSessoes:"fisio_qtdSessoes",parcelas:"fisio_parcelas",parceria:"fisio_parceria",outrosIdentificacaoTexto:"fisio_outros_identificacao_texto",nomeCompleto:"fisio_nomeCompleto",dataNascimento:"fisio_dataNascimento",cpf:"fisio_cpf",responsavel:"fisio_responsavel",parentesco:"fisio_parentesco",cpfResponsavel:"fisio_cpfResponsavel",profissao:"fisio_profissao",endereco:"fisio_endereco",telefone:"fisio_telefone",email:"fisio_email",dataAvaliacao:"fisio_dataAvaliacao",diagnosticoClinico:"fisio_diagClinico",diagnosticoFisio:"fisio_diagFisio",cbdf:"fisio_cbdf",queixaPrincipal:"fisio_queixaPrincipal",hpp:"fisio_hpp",antecedentesPessoais:"fisio_antecedentesPessoais",antecedentesFamiliares:"fisio_antecedentesFamiliares",tratamentos:"fisio_tratamentos",habitos:"fisio_habitos",especialidade:"fisio_especialidade",examesQuais:"fisio_examesQuais",medicamentosQuais:"fisio_medicamentosQuais",cirurgias:"fisio_cirurgias",inspecaoDetalhes:"fisio_inspecaoDetalhes",peso:"fisio_peso",altura:"fisio_altura",objetivos:"fisio_objetivos",recursos:"fisio_recursos",planoTratamento:"fisio_planoTratamento",profissional:"fisio_profissional",mitObservacoes:"fisio_mit_observacoes",td2Subidas:"fisio_td2_subidas",tme2Elevacoes:"fisio_tme2_elevacoes",borgDispneia:"fisio_borg_dispneia"};
+const mapaCheck={sessao:"fisio_sessao",pacote:"fisio_pacote",pix:"fisio_pix",parcelado:"fisio_parcelado",totalpass:"fisio_totalpass",mensalidade:"fisio_mensalidade",outrosIdentificacao:"fisio_outros_identificacao",masculino:"fisio_masculino",feminino:"fisio_feminino",acompanhamentoSim:"fisio_acompanhamentoSim",acompanhamentoNao:"fisio_acompanhamentoNao",orientado:"fisio_orientado",apoio:"fisio_apoio",confuso:"fisio_confuso",desorientado:"fisio_desorientado",examesSim:"fisio_examesSim",examesNao:"fisio_examesNao",medicamentoSim:"fisio_medicamentoSim",medicamentoNao:"fisio_medicamentoNao",cirurgiaSim:"fisio_cirurgiaSim",cirurgiaNao:"fisio_cirurgiaNao",normal:"fisio_normal",edema:"fisio_edema",cicatriz:"fisio_cicatriz",eritema:"fisio_eritema",outros:"fisio_outros",joelhoYSim:"fisio_joelhoY_sim",joelhoYNao:"fisio_joelhoY_nao",rombergPos:"fisio_romberg_pos",rombergNeg:"fisio_romberg_neg",tugNormal:"fisio_tug_normal",tugBaixo:"fisio_tug_baixo",tugMedio:"fisio_tug_medio",tugAlto:"fisio_tug_alto",laseguePos:"fisio_lasegue_pos",lasegueNeg:"fisio_lasegue_neg",tauMenor:"fisio_tau_menor",tauMaior:"fisio_tau_maior",lasegueInvPos:"fisio_lasegue_inv_pos",lasegueInvNeg:"fisio_lasegue_inv_neg",spurlingPos:"fisio_spurling_pos",spurlingNeg:"fisio_spurling_neg",g0:"fisio_g0",g1:"fisio_g1",g2:"fisio_g2",g3:"fisio_g3",g4:"fisio_g4",g5:"fisio_g5"};
 for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
+preencherMIT("fisio", dados.mit);
+fotosAvaliacoes.fisio = Array.isArray(dados.fotos) ? dados.fotos : [];
+renderizarFotos("fisio");
 }
 if(tipo==="Pilates"){
-const mapaValor={parceria:"pilates_parceria",nomeCompleto:"pilates_nomeCompleto",dataNascimento:"pilates_dataNascimento",cpf:"pilates_cpf",responsavel:"pilates_responsavel",parentesco:"pilates_parentesco",cpfResponsavel:"pilates_cpfResponsavel",profissao:"pilates_profissao",endereco:"pilates_endereco",telefone:"pilates_telefone",email:"pilates_email",dataAvaliacao:"pilates_dataAvaliacao",diagnosticoClinico:"pilates_diagClinico",diagnosticoFisio:"pilates_diagFisio",cbdf:"pilates_cbdf",queixaPrincipal:"pilates_queixaPrincipal",hpp:"pilates_hpp",antecedentesPessoais:"pilates_antecedentesPessoais",antecedentesFamiliares:"pilates_antecedentesFamiliares",tratamentos:"pilates_tratamentos",habitos:"pilates_habitos",especialidade:"pilates_especialidade",tipoApoio:"pilates_tipoApoio",quaisExames:"pilates_quaisExames",quaisMedicamentos:"pilates_quaisMedicamentos",cirurgias:"pilates_cirurgias",inspecaoDetalhes:"pilates_inspecaoDetalhes",semiologia:"pilates_semiologia",pressao:"pilates_pressao",peso:"pilates_peso",altura:"pilates_altura",adipometroPeitoralToracica:"pilates_adipometro_peitoral_toracica",adipometroSubescapular:"pilates_adipometro_subescapular",adipometroSuprailiaca:"pilates_adipometro_suprailiaca",adipometroAxilarMedia:"pilates_adipometro_axilar_media",adipometroTriceps:"pilates_adipometro_triceps",adipometroBiceps:"pilates_adipometro_biceps",adipometroAbdominal:"pilates_adipometro_abdominal",adipometroCoxa:"pilates_adipometro_coxa",escalaBorg:"pilates_escalaBorg",objetivos:"pilates_objetivos",recursos:"pilates_recursos",planoTratamento:"pilates_planoTratamento",dataEvolucao:"pilates_dataEvolucao",procedimentos:"pilates_procedimentos",intercorrencia:"pilates_intercorrencia",evolucaoEstado:"pilates_evolucaoEstado",profissional:"pilates_profissional"};
-const mapaCheck={totalpass:"pilates_totalpass",gympass:"pilates_gympass",gurupass:"pilates_gurupass",mensalidade:"pilates_mensalidade",masculino:"pilates_masculino",feminino:"pilates_feminino",acompanhamentoSim:"pilates_acompanhamentoSim",acompanhamentoNao:"pilates_acompanhamentoNao",orientado:"pilates_orientado",apoio:"pilates_apoio",confuso:"pilates_confuso",desorientado:"pilates_desorientado",examesSim:"pilates_examesSim",examesNao:"pilates_examesNao",medicamentoSim:"pilates_medicamentoSim",medicamentoNao:"pilates_medicamentoNao",cirurgiaSim:"pilates_cirurgiaSim",cirurgiaNao:"pilates_cirurgiaNao",normal:"pilates_normal",edema:"pilates_edema",cicatriz:"pilates_cicatriz",eritema:"pilates_eritema",outros:"pilates_outros"};
+const mapaValor={parceria:"pilates_parceria",outrosIdentificacaoTexto:"pilates_outros_identificacao_texto",nomeCompleto:"pilates_nomeCompleto",dataNascimento:"pilates_dataNascimento",cpf:"pilates_cpf",responsavel:"pilates_responsavel",parentesco:"pilates_parentesco",cpfResponsavel:"pilates_cpfResponsavel",profissao:"pilates_profissao",endereco:"pilates_endereco",telefone:"pilates_telefone",email:"pilates_email",dataAvaliacao:"pilates_dataAvaliacao",diagnosticoClinico:"pilates_diagClinico",diagnosticoFisio:"pilates_diagFisio",cbdf:"pilates_cbdf",queixaPrincipal:"pilates_queixaPrincipal",hpp:"pilates_hpp",antecedentesPessoais:"pilates_antecedentesPessoais",antecedentesFamiliares:"pilates_antecedentesFamiliares",tratamentos:"pilates_tratamentos",habitos:"pilates_habitos",especialidade:"pilates_especialidade",tipoApoio:"pilates_tipoApoio",quaisExames:"pilates_quaisExames",quaisMedicamentos:"pilates_quaisMedicamentos",cirurgias:"pilates_cirurgias",inspecaoDetalhes:"pilates_inspecaoDetalhes",semiologia:"pilates_semiologia",pressao:"pilates_pressao",peso:"pilates_peso",altura:"pilates_altura",adipometroPeitoralToracica:"pilates_adipometro_peitoral_toracica",adipometroSubescapular:"pilates_adipometro_subescapular",adipometroSuprailiaca:"pilates_adipometro_suprailiaca",adipometroAxilarMedia:"pilates_adipometro_axilar_media",adipometroTriceps:"pilates_adipometro_triceps",adipometroBiceps:"pilates_adipometro_biceps",adipometroAbdominal:"pilates_adipometro_abdominal",adipometroCoxa:"pilates_adipometro_coxa",escalaBorg:"pilates_escalaBorg",objetivos:"pilates_objetivos",recursos:"pilates_recursos",planoTratamento:"pilates_planoTratamento",dataEvolucao:"pilates_dataEvolucao",procedimentos:"pilates_procedimentos",intercorrencia:"pilates_intercorrencia",evolucaoEstado:"pilates_evolucaoEstado",profissional:"pilates_profissional",mitObservacoes:"pilates_mit_observacoes",td2Subidas:"pilates_td2_subidas",tme2Elevacoes:"pilates_tme2_elevacoes",borgDispneia:"pilates_borg_dispneia"};
+const mapaCheck={totalpass:"pilates_totalpass",mensalidade:"pilates_mensalidade",outrosIdentificacao:"pilates_outros_identificacao",masculino:"pilates_masculino",feminino:"pilates_feminino",acompanhamentoSim:"pilates_acompanhamentoSim",acompanhamentoNao:"pilates_acompanhamentoNao",orientado:"pilates_orientado",apoio:"pilates_apoio",confuso:"pilates_confuso",desorientado:"pilates_desorientado",examesSim:"pilates_examesSim",examesNao:"pilates_examesNao",medicamentoSim:"pilates_medicamentoSim",medicamentoNao:"pilates_medicamentoNao",cirurgiaSim:"pilates_cirurgiaSim",cirurgiaNao:"pilates_cirurgiaNao",normal:"pilates_normal",edema:"pilates_edema",cicatriz:"pilates_cicatriz",eritema:"pilates_eritema",outros:"pilates_outros"};
 for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
+preencherMIT("pilates", dados.mit);
+fotosAvaliacoes.pilates = Array.isArray(dados.fotos) ? dados.fotos : [];
+renderizarFotos("pilates");
 }
 if(tipo==="Recovery"){
 const mapaValor={mov_nome:"mov_nome",mov_nascimento:"mov_nascimento",mov_telefone:"mov_telefone",mov_endereco:"mov_endereco",mov_fisioterapeuta:"mov_fisioterapeuta",mov_esporte:"mov_esporte",mov_frequencia:"mov_frequencia",mov_objetivos:"mov_objetivos",mov_medicamento_desc:"mov_medicamento_desc",mov_lesao_desc:"mov_lesao_desc",mov_cirurgia_desc:"mov_cirurgia_desc",mov_alergia_desc:"mov_alergia_desc",mov_profissao:"mov_profissao",mov_prog_esporte:"mov_prog_esporte",mov_prog_inicio:"mov_prog_inicio",mov_prog_queixaPrincipal:"mov_prog_queixaPrincipal",mov_prog_diagnosticoCinetico:"mov_prog_diagnosticoCinetico",mov_prog_objetivos:"mov_prog_objetivos",mov_prog_conduta:"mov_prog_conduta",mov_prog_fisioterapeuta:"mov_prog_fisioterapeuta"};
@@ -2103,6 +2456,12 @@ dadosAvaliacaoAtual = null;
 avaliacaoEmEdicaoId = null;
 };
 
+montarTabelaMIT("fisio");
+montarTabelaMIT("pilates");
+prepararFotos("fisio");
+prepararFotos("pilates");
+renderizarFotos("fisio");
+renderizarFotos("pilates");
 carregarAvaliacoes();
 
 </script>
