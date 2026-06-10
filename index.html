@@ -221,11 +221,19 @@ input[type="radio"]{
 <div class="card">
 <h3>Avaliações Salvas</h3>
 
-<div class="grid-2">
+<div style="background:#f0f0ff;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+    <span style="font-size:18px;">🔍</span>
+    <label style="font-weight:bold;font-size:15px;margin:0;">Buscar paciente</label>
+  </div>
+  <input type="search" id="buscaAvaliacoes" placeholder="🔎  Digite nome, tipo ou data..." oninput="carregarAvaliacoes()" style="margin-bottom:0;">
+</div>
+
+<div class="grid-2" style="margin-bottom:8px;">
   <div>
-    <label>Filtrar por tipo:</label>
+    <label style="font-weight:bold;">📂 Filtrar por tipo:</label>
     <select id="filtroTipo" onchange="carregarAvaliacoes()">
-      <option value="">Todas</option>
+      <option value="">Todos os tipos</option>
       <option value="Fisioterapia">Fisioterapia</option>
       <option value="Pilates">Pilates</option>
       <option value="Pélvica">Pélvica</option>
@@ -234,7 +242,7 @@ input[type="radio"]{
     </select>
   </div>
   <div>
-    <label>Ordenação:</label>
+    <label style="font-weight:bold;">↕️ Ordenar por:</label>
     <select id="ordenacaoAvaliacoes" onchange="carregarAvaliacoes()">
       <option value="az">Nome A → Z</option>
       <option value="za">Nome Z → A</option>
@@ -243,9 +251,6 @@ input[type="radio"]{
     </select>
   </div>
 </div>
-
-<label>Buscar paciente ou avaliação:</label>
-<input type="search" id="buscaAvaliacoes" placeholder="Digite nome, tipo ou data" oninput="carregarAvaliacoes()">
 
 <div id="listaAvaliacoes">Carregando...</div>
 </div>
@@ -282,6 +287,7 @@ input[type="radio"]{
     <div class="opcoes-grid">
       <label><input type="checkbox" id="fisio_totalpass"> Totalpass</label>
       <label><input type="checkbox" id="fisio_mensalidade"> Mensalidade</label>
+      <label><input type="checkbox" id="fisio_gympass"> Gympass</label>
       <label><input type="checkbox" id="fisio_outros_identificacao"> Outros</label>
     </div>
     <input type="text" id="fisio_outros_identificacao_texto" placeholder="Descreva Outros">
@@ -492,6 +498,7 @@ input[type="radio"]{
     <div class="opcoes-grid">
       <label><input type="checkbox" id="pilates_totalpass"> Totalpass</label>
       <label><input type="checkbox" id="pilates_mensalidade"> Mensalidade</label>
+      <label><input type="checkbox" id="pilates_gympass"> Gympass</label>
       <label><input type="checkbox" id="pilates_outros_identificacao"> Outros</label>
     </div>
     <input type="text" id="pilates_outros_identificacao_texto" placeholder="Descreva Outros">
@@ -855,19 +862,30 @@ input[type="radio"]{
 
     <div class="grid-2">
       <div>
-        <label>EVA:</label>
+        <label>EVA 1:</label>
         <input type="text" id="pilates_eva1">
-        <label>Região:</label>
+        <label>Região 1:</label>
         <input type="text" id="pilates_regiao1">
       </div>
-
+      <div>
+        <label>EVA 2:</label>
+        <input type="text" id="pilates_eva2">
+        <label>Região 2:</label>
+        <input type="text" id="pilates_regiao2">
+      </div>
+      <div>
+        <label>EVA 3:</label>
+        <input type="text" id="pilates_eva3">
+        <label>Região 3:</label>
+        <input type="text" id="pilates_regiao3">
+      </div>
+      <div>
+        <label>EVA 4:</label>
+        <input type="text" id="pilates_eva4">
+        <label>Região 4:</label>
+        <input type="text" id="pilates_regiao4">
+      </div>
     </div>
-
-    <!-- ================= ESCALA DE BORG ================= -->
-
-    <h4>⚕️ ESCALA DE BORG</h4>
-    <label>Observações / Pontuação:</label>
-    <input type="text" id="pilates_escalaBorg">
 
     <!-- ================= PLANO TERAPÊUTICO ================= -->
 
@@ -1940,6 +1958,7 @@ parcelas: campoValor("fisio_parcelas"),
 parceria: campoValor("fisio_parceria"),
 totalpass: campoMarcado("fisio_totalpass"),
 mensalidade: campoMarcado("fisio_mensalidade"),
+gympass: campoMarcado("fisio_gympass"),
 outrosIdentificacao: campoMarcado("fisio_outros_identificacao"),
 outrosIdentificacaoTexto: campoValor("fisio_outros_identificacao_texto"),
 
@@ -2040,6 +2059,7 @@ salvarBase({
 
 totalpass: campoMarcado("pilates_totalpass"),
 mensalidade: campoMarcado("pilates_mensalidade"),
+gympass: campoMarcado("pilates_gympass"),
 outrosIdentificacao: campoMarcado("pilates_outros_identificacao"),
 outrosIdentificacaoTexto: campoValor("pilates_outros_identificacao_texto"),
 parceria: campoValor("pilates_parceria"),
@@ -2108,7 +2128,14 @@ adipometroTriceps: campoValor("pilates_adipometro_triceps"),
 adipometroBiceps: campoValor("pilates_adipometro_biceps"),
 adipometroAbdominal: campoValor("pilates_adipometro_abdominal"),
 adipometroCoxa: campoValor("pilates_adipometro_coxa"),
-escalaBorg: campoValor("pilates_escalaBorg"),
+eva1: campoValor("pilates_eva1"),
+regiao1: campoValor("pilates_regiao1"),
+eva2: campoValor("pilates_eva2"),
+regiao2: campoValor("pilates_regiao2"),
+eva3: campoValor("pilates_eva3"),
+regiao3: campoValor("pilates_regiao3"),
+eva4: campoValor("pilates_eva4"),
+regiao4: campoValor("pilates_regiao4"),
 mit: coletarMIT("pilates"),
 mitObservacoes: campoValor("pilates_mit_observacoes"),
 td2Subidas: campoValor("pilates_td2_subidas"),
@@ -2281,7 +2308,7 @@ onValue(ref(db,"avaliacoes"),(snapshot)=>{
 listaAvaliacoes.innerHTML="";
 
 if(!snapshot.exists()){
-listaAvaliacoes.innerHTML="Nenhuma avaliação.";
+listaAvaliacoes.innerHTML="<p style='color:#888;text-align:center;padding:20px;'>Nenhuma avaliação cadastrada.</p>";
 return;
 }
 
@@ -2294,22 +2321,39 @@ if(busca && !textoBusca.includes(busca)) return;
 itens.push({ id: child.key, dados });
 });
 
+// Ordenação — padrão sempre alfabético A→Z
 itens.sort((a,b)=>{
   if(ordenacao === "za") return compararTexto(b.dados.nome, a.dados.nome);
   if(ordenacao === "dataRecente") return compararTexto(b.dados.data, a.dados.data);
   if(ordenacao === "dataAntiga") return compararTexto(a.dados.data, b.dados.data);
-  return compararTexto(a.dados.nome, b.dados.nome);
+  return compararTexto(a.dados.nome, b.dados.nome); // az (padrão)
 });
 
 if(!itens.length){
-  listaAvaliacoes.innerHTML="Nenhuma avaliação encontrada.";
+  const msgBusca = busca ? `Nenhum resultado para "<strong>${busca}</strong>".` : "Nenhuma avaliação encontrada para o filtro selecionado.";
+  listaAvaliacoes.innerHTML=`<p style='color:#888;text-align:center;padding:20px;'>${msgBusca}</p>`;
   return;
 }
+
+// Cabeçalho com contagem
+const totalDiv = document.createElement("div");
+totalDiv.style.cssText = "font-size:13px;color:#666;margin-bottom:8px;padding:4px 8px;";
+totalDiv.innerHTML = `<strong>${itens.length}</strong> avaliação(ões) encontrada(s)${busca ? ` para "<em>${busca}</em>"` : ""}${filtro ? ` · Tipo: <em>${filtro}</em>` : ""}`;
+listaAvaliacoes.appendChild(totalDiv);
 
 itens.forEach(({ id, dados })=>{
 const div=document.createElement("div");
 div.className="lista-item";
-div.innerHTML=`<strong>${dados.nome}</strong> - ${dados.tipo} <small>(${formatarDataBR(dados.data)})</small>`;
+// Tipo com badge colorido
+const corTipo = {Fisioterapia:"#7b6cf6",Pilates:"#00cfe8",Pélvica:"#e87a6c",Recovery:"#4caf79",Condicionamento:"#f59e0b"}[dados.tipo]||"#999";
+div.innerHTML=`
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+    <div>
+      <strong style="font-size:15px;">${dados.nome}</strong>
+      <small style="color:#888;display:block;">${formatarDataBR(dados.data)}</small>
+    </div>
+    <span style="background:${corTipo};color:white;border-radius:20px;padding:2px 10px;font-size:12px;white-space:nowrap;">${dados.tipo}</span>
+  </div>`;
 div.onclick=()=>abrirDetalhe(id,dados);
 listaAvaliacoes.appendChild(div);
 });
@@ -2349,7 +2393,7 @@ else el.value=valor ?? "";
 function carregarDadosNaFicha(tipo,dados){
 if(tipo==="Fisioterapia"){
 const mapaValor={qtdSessoes:"fisio_qtdSessoes",parcelas:"fisio_parcelas",parceria:"fisio_parceria",outrosIdentificacaoTexto:"fisio_outros_identificacao_texto",nomeCompleto:"fisio_nomeCompleto",dataNascimento:"fisio_dataNascimento",cpf:"fisio_cpf",responsavel:"fisio_responsavel",parentesco:"fisio_parentesco",cpfResponsavel:"fisio_cpfResponsavel",profissao:"fisio_profissao",endereco:"fisio_endereco",telefone:"fisio_telefone",email:"fisio_email",dataAvaliacao:"fisio_dataAvaliacao",diagnosticoClinico:"fisio_diagClinico",diagnosticoFisio:"fisio_diagFisio",cbdf:"fisio_cbdf",queixaPrincipal:"fisio_queixaPrincipal",hpp:"fisio_hpp",antecedentesPessoais:"fisio_antecedentesPessoais",antecedentesFamiliares:"fisio_antecedentesFamiliares",tratamentos:"fisio_tratamentos",habitos:"fisio_habitos",especialidade:"fisio_especialidade",examesQuais:"fisio_examesQuais",medicamentosQuais:"fisio_medicamentosQuais",cirurgias:"fisio_cirurgias",inspecaoDetalhes:"fisio_inspecaoDetalhes",peso:"fisio_peso",altura:"fisio_altura",objetivos:"fisio_objetivos",recursos:"fisio_recursos",planoTratamento:"fisio_planoTratamento",profissional:"fisio_profissional",mitObservacoes:"fisio_mit_observacoes",td2Subidas:"fisio_td2_subidas",tme2Elevacoes:"fisio_tme2_elevacoes",borgDispneia:"fisio_borg_dispneia"};
-const mapaCheck={sessao:"fisio_sessao",pacote:"fisio_pacote",pix:"fisio_pix",parcelado:"fisio_parcelado",totalpass:"fisio_totalpass",mensalidade:"fisio_mensalidade",outrosIdentificacao:"fisio_outros_identificacao",masculino:"fisio_masculino",feminino:"fisio_feminino",acompanhamentoSim:"fisio_acompanhamentoSim",acompanhamentoNao:"fisio_acompanhamentoNao",orientado:"fisio_orientado",apoio:"fisio_apoio",confuso:"fisio_confuso",desorientado:"fisio_desorientado",examesSim:"fisio_examesSim",examesNao:"fisio_examesNao",medicamentoSim:"fisio_medicamentoSim",medicamentoNao:"fisio_medicamentoNao",cirurgiaSim:"fisio_cirurgiaSim",cirurgiaNao:"fisio_cirurgiaNao",normal:"fisio_normal",edema:"fisio_edema",cicatriz:"fisio_cicatriz",eritema:"fisio_eritema",outros:"fisio_outros",joelhoYSim:"fisio_joelhoY_sim",joelhoYNao:"fisio_joelhoY_nao",rombergPos:"fisio_romberg_pos",rombergNeg:"fisio_romberg_neg",tugNormal:"fisio_tug_normal",tugBaixo:"fisio_tug_baixo",tugMedio:"fisio_tug_medio",tugAlto:"fisio_tug_alto",laseguePos:"fisio_lasegue_pos",lasegueNeg:"fisio_lasegue_neg",tauMenor:"fisio_tau_menor",tauMaior:"fisio_tau_maior",lasegueInvPos:"fisio_lasegue_inv_pos",lasegueInvNeg:"fisio_lasegue_inv_neg",spurlingPos:"fisio_spurling_pos",spurlingNeg:"fisio_spurling_neg",g0:"fisio_g0",g1:"fisio_g1",g2:"fisio_g2",g3:"fisio_g3",g4:"fisio_g4",g5:"fisio_g5"};
+const mapaCheck={sessao:"fisio_sessao",pacote:"fisio_pacote",pix:"fisio_pix",parcelado:"fisio_parcelado",totalpass:"fisio_totalpass",mensalidade:"fisio_mensalidade",gympass:"fisio_gympass",outrosIdentificacao:"fisio_outros_identificacao",masculino:"fisio_masculino",feminino:"fisio_feminino",acompanhamentoSim:"fisio_acompanhamentoSim",acompanhamentoNao:"fisio_acompanhamentoNao",orientado:"fisio_orientado",apoio:"fisio_apoio",confuso:"fisio_confuso",desorientado:"fisio_desorientado",examesSim:"fisio_examesSim",examesNao:"fisio_examesNao",medicamentoSim:"fisio_medicamentoSim",medicamentoNao:"fisio_medicamentoNao",cirurgiaSim:"fisio_cirurgiaSim",cirurgiaNao:"fisio_cirurgiaNao",normal:"fisio_normal",edema:"fisio_edema",cicatriz:"fisio_cicatriz",eritema:"fisio_eritema",outros:"fisio_outros",joelhoYSim:"fisio_joelhoY_sim",joelhoYNao:"fisio_joelhoY_nao",rombergPos:"fisio_romberg_pos",rombergNeg:"fisio_romberg_neg",tugNormal:"fisio_tug_normal",tugBaixo:"fisio_tug_baixo",tugMedio:"fisio_tug_medio",tugAlto:"fisio_tug_alto",laseguePos:"fisio_lasegue_pos",lasegueNeg:"fisio_lasegue_neg",tauMenor:"fisio_tau_menor",tauMaior:"fisio_tau_maior",lasegueInvPos:"fisio_lasegue_inv_pos",lasegueInvNeg:"fisio_lasegue_inv_neg",spurlingPos:"fisio_spurling_pos",spurlingNeg:"fisio_spurling_neg",g0:"fisio_g0",g1:"fisio_g1",g2:"fisio_g2",g3:"fisio_g3",g4:"fisio_g4",g5:"fisio_g5"};
 for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
 preencherMIT("fisio", dados.mit);
@@ -2357,8 +2401,8 @@ fotosAvaliacoes.fisio = Array.isArray(dados.fotos) ? dados.fotos : [];
 renderizarFotos("fisio");
 }
 if(tipo==="Pilates"){
-const mapaValor={parceria:"pilates_parceria",outrosIdentificacaoTexto:"pilates_outros_identificacao_texto",nomeCompleto:"pilates_nomeCompleto",dataNascimento:"pilates_dataNascimento",cpf:"pilates_cpf",responsavel:"pilates_responsavel",parentesco:"pilates_parentesco",cpfResponsavel:"pilates_cpfResponsavel",profissao:"pilates_profissao",endereco:"pilates_endereco",telefone:"pilates_telefone",email:"pilates_email",dataAvaliacao:"pilates_dataAvaliacao",diagnosticoClinico:"pilates_diagClinico",diagnosticoFisio:"pilates_diagFisio",cbdf:"pilates_cbdf",queixaPrincipal:"pilates_queixaPrincipal",hpp:"pilates_hpp",antecedentesPessoais:"pilates_antecedentesPessoais",antecedentesFamiliares:"pilates_antecedentesFamiliares",tratamentos:"pilates_tratamentos",habitos:"pilates_habitos",especialidade:"pilates_especialidade",tipoApoio:"pilates_tipoApoio",quaisExames:"pilates_quaisExames",quaisMedicamentos:"pilates_quaisMedicamentos",cirurgias:"pilates_cirurgias",inspecaoDetalhes:"pilates_inspecaoDetalhes",semiologia:"pilates_semiologia",pressao:"pilates_pressao",peso:"pilates_peso",altura:"pilates_altura",adipometroPeitoralToracica:"pilates_adipometro_peitoral_toracica",adipometroSubescapular:"pilates_adipometro_subescapular",adipometroSuprailiaca:"pilates_adipometro_suprailiaca",adipometroAxilarMedia:"pilates_adipometro_axilar_media",adipometroTriceps:"pilates_adipometro_triceps",adipometroBiceps:"pilates_adipometro_biceps",adipometroAbdominal:"pilates_adipometro_abdominal",adipometroCoxa:"pilates_adipometro_coxa",escalaBorg:"pilates_escalaBorg",objetivos:"pilates_objetivos",recursos:"pilates_recursos",planoTratamento:"pilates_planoTratamento",dataEvolucao:"pilates_dataEvolucao",procedimentos:"pilates_procedimentos",intercorrencia:"pilates_intercorrencia",evolucaoEstado:"pilates_evolucaoEstado",profissional:"pilates_profissional",mitObservacoes:"pilates_mit_observacoes",td2Subidas:"pilates_td2_subidas",tme2Elevacoes:"pilates_tme2_elevacoes",borgDispneia:"pilates_borg_dispneia"};
-const mapaCheck={totalpass:"pilates_totalpass",mensalidade:"pilates_mensalidade",outrosIdentificacao:"pilates_outros_identificacao",masculino:"pilates_masculino",feminino:"pilates_feminino",acompanhamentoSim:"pilates_acompanhamentoSim",acompanhamentoNao:"pilates_acompanhamentoNao",orientado:"pilates_orientado",apoio:"pilates_apoio",confuso:"pilates_confuso",desorientado:"pilates_desorientado",examesSim:"pilates_examesSim",examesNao:"pilates_examesNao",medicamentoSim:"pilates_medicamentoSim",medicamentoNao:"pilates_medicamentoNao",cirurgiaSim:"pilates_cirurgiaSim",cirurgiaNao:"pilates_cirurgiaNao",normal:"pilates_normal",edema:"pilates_edema",cicatriz:"pilates_cicatriz",eritema:"pilates_eritema",outros:"pilates_outros"};
+const mapaValor={parceria:"pilates_parceria",outrosIdentificacaoTexto:"pilates_outros_identificacao_texto",nomeCompleto:"pilates_nomeCompleto",dataNascimento:"pilates_dataNascimento",cpf:"pilates_cpf",responsavel:"pilates_responsavel",parentesco:"pilates_parentesco",cpfResponsavel:"pilates_cpfResponsavel",profissao:"pilates_profissao",endereco:"pilates_endereco",telefone:"pilates_telefone",email:"pilates_email",dataAvaliacao:"pilates_dataAvaliacao",diagnosticoClinico:"pilates_diagClinico",diagnosticoFisio:"pilates_diagFisio",cbdf:"pilates_cbdf",queixaPrincipal:"pilates_queixaPrincipal",hpp:"pilates_hpp",antecedentesPessoais:"pilates_antecedentesPessoais",antecedentesFamiliares:"pilates_antecedentesFamiliares",tratamentos:"pilates_tratamentos",habitos:"pilates_habitos",especialidade:"pilates_especialidade",tipoApoio:"pilates_tipoApoio",quaisExames:"pilates_quaisExames",quaisMedicamentos:"pilates_quaisMedicamentos",cirurgias:"pilates_cirurgias",inspecaoDetalhes:"pilates_inspecaoDetalhes",semiologia:"pilates_semiologia",pressao:"pilates_pressao",peso:"pilates_peso",altura:"pilates_altura",adipometroPeitoralToracica:"pilates_adipometro_peitoral_toracica",adipometroSubescapular:"pilates_adipometro_subescapular",adipometroSuprailiaca:"pilates_adipometro_suprailiaca",adipometroAxilarMedia:"pilates_adipometro_axilar_media",adipometroTriceps:"pilates_adipometro_triceps",adipometroBiceps:"pilates_adipometro_biceps",adipometroAbdominal:"pilates_adipometro_abdominal",adipometroCoxa:"pilates_adipometro_coxa",eva1:"pilates_eva1",regiao1:"pilates_regiao1",eva2:"pilates_eva2",regiao2:"pilates_regiao2",eva3:"pilates_eva3",regiao3:"pilates_regiao3",eva4:"pilates_eva4",regiao4:"pilates_regiao4",objetivos:"pilates_objetivos",recursos:"pilates_recursos",planoTratamento:"pilates_planoTratamento",dataEvolucao:"pilates_dataEvolucao",procedimentos:"pilates_procedimentos",intercorrencia:"pilates_intercorrencia",evolucaoEstado:"pilates_evolucaoEstado",profissional:"pilates_profissional",mitObservacoes:"pilates_mit_observacoes",td2Subidas:"pilates_td2_subidas",tme2Elevacoes:"pilates_tme2_elevacoes",borgDispneia:"pilates_borg_dispneia"};
+const mapaCheck={totalpass:"pilates_totalpass",mensalidade:"pilates_mensalidade",gympass:"pilates_gympass",outrosIdentificacao:"pilates_outros_identificacao",masculino:"pilates_masculino",feminino:"pilates_feminino",acompanhamentoSim:"pilates_acompanhamentoSim",acompanhamentoNao:"pilates_acompanhamentoNao",orientado:"pilates_orientado",apoio:"pilates_apoio",confuso:"pilates_confuso",desorientado:"pilates_desorientado",examesSim:"pilates_examesSim",examesNao:"pilates_examesNao",medicamentoSim:"pilates_medicamentoSim",medicamentoNao:"pilates_medicamentoNao",cirurgiaSim:"pilates_cirurgiaSim",cirurgiaNao:"pilates_cirurgiaNao",normal:"pilates_normal",edema:"pilates_edema",cicatriz:"pilates_cicatriz",eritema:"pilates_eritema",outros:"pilates_outros"};
 for(const k in mapaValor) preencherCampo(mapaValor[k],dados[k],"value");
 for(const k in mapaCheck) preencherCampo(mapaCheck[k],dados[k],"checked");
 preencherMIT("pilates", dados.mit);
@@ -2402,6 +2446,56 @@ const telaId="tela"+tempTipo.replace("ç","c").replace("é","e");
 const tela=document.getElementById(telaId);
 if(tela) tela.classList.remove("hidden");
 carregarDadosNaFicha(tempTipo,dadosAvaliacaoAtual);
+
+// ===== BLOQUEIO: apenas campos de evolução ficam editáveis =====
+// Campos de evolução permitidos por prefixo de tipo
+const camposEvolucaoPorTipo = {
+  "Pilates":       ["pilates_dataEvolucao","pilates_procedimentos","pilates_intercorrencia","pilates_evolucaoEstado","pilates_profissional"],
+  "Fisioterapia":  ["fisio_dataEvolucao","fisio_procedimentos","fisio_intercorrencia","fisio_evolucaoEstado","fisio_profissional"],
+};
+
+// Aguarda o DOM estar pronto para aplicar o bloqueio
+setTimeout(()=>{
+  const telaEl = document.getElementById(telaId);
+  if(!telaEl) return;
+
+  const camposPermitidos = camposEvolucaoPorTipo[tempTipo] || [];
+
+  // Seleciona todos os inputs, selects e textareas da tela
+  const campos = telaEl.querySelectorAll("input, select, textarea, button[type!='button']");
+  campos.forEach(campo => {
+    if(!campo.id) return; // sem id, ignora
+    if(camposPermitidos.includes(campo.id)){
+      // Campo de evolução: deixa editável e destaca
+      campo.removeAttribute("disabled");
+      campo.removeAttribute("readonly");
+      campo.style.background = "#fffbe6";
+      campo.style.border = "2px solid #f0c040";
+    } else {
+      // Demais campos: somente leitura
+      if(campo.type === "checkbox" || campo.type === "radio"){
+        campo.disabled = true;
+      } else {
+        campo.setAttribute("readonly", true);
+        campo.style.background = "#f5f5f5";
+        campo.style.color = "#888";
+        campo.style.cursor = "not-allowed";
+      }
+    }
+  });
+
+  // Adiciona aviso visual na tela
+  let aviso = telaEl.querySelector(".aviso-edicao-evolucao");
+  if(!aviso){
+    aviso = document.createElement("div");
+    aviso.className = "aviso-edicao-evolucao";
+    aviso.style.cssText = "background:#fffbe6;border:2px solid #f0c040;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#7a6000;";
+    aviso.innerHTML = "✏️ <strong>Modo de edição de evolução:</strong> somente os campos de Evolução estão habilitados para edição. Os demais campos são somente leitura.";
+    const primeiroCard = telaEl.querySelector(".card");
+    if(primeiroCard) primeiroCard.insertBefore(aviso, primeiroCard.children[1]);
+    else telaEl.insertBefore(aviso, telaEl.firstChild);
+  }
+}, 50);
 };
 
 window.apagarAvaliacaoAtual = async function(){
